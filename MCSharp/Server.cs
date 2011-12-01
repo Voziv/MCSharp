@@ -24,7 +24,6 @@ namespace MCSharp
         public delegate void PlayerListHandler(List<Player> playerList);
         public delegate void VoidHandler();
 
-        public event HeartBeatHandler HeartBeatFail;
         public event MessageEventHandler OnURLChange;
         public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
@@ -580,16 +579,15 @@ namespace MCSharp
             if (Server.s.OnPlayerListChange != null) Server.s.OnPlayerListChange(Player.players);
         }
 
-        public void FailBeat()
-        {
-            if (HeartBeatFail != null) HeartBeatFail();
-        }
-
         public void UpdateUrl(string url)
         {
             if (OnURLChange != null) OnURLChange(url);
         }
 
+        /// <summary>
+        /// This function parses input from the server console. In reality the server console should handle the wait for input
+        /// and call a function within the library to parse a specific command.
+        /// </summary>
         public void ParseInput()        //Handle console commands
         {
             string cmd;

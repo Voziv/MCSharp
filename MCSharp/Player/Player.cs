@@ -13,8 +13,10 @@ namespace MCSharp
 {
     public  sealed partial class Player
     {
-        // Static Variables
+        // Current Developers. Thinking this should be removed now.
         private static List<string> developers = new List<string>(new string[] { "voziv" });
+
+        // Previous Developers
         private static List<string> supporters = new List<string>(new string[] { "howimineforfish", "merlin33069", "descention", "kakashisuno" });
 
         public static List<Player> players = new List<Player>(64);
