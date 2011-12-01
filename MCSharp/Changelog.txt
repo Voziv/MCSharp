@@ -1,5 +1,6 @@
 ﻿MCSharp 0.94
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Now open source with cookies!
 
 MCSharp 0.93
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
