@@ -61,14 +61,7 @@ namespace MCSharp
                                         }
                                     }
 
-                                    //Kills current bot list for player
-                                    foreach (PlayerBot b in PlayerBot.playerbots)
-                                    {
-                                        if (pl.level == b.level)
-                                        {
-                                            pl.SendDie(b.id);   
-                                        }
-                                    }
+                                    
 
                                     pl.ClearBlockchange();
                                     pl.BlockAction = 0;
@@ -94,13 +87,7 @@ namespace MCSharp
                                             pl.SendSpawn(pl2.id, pl2.color + pl2.name, pl2.pos[0], pl2.pos[1], pl2.pos[2], pl2.rot[0], pl2.rot[1]);
                                         }
                                     }
-                                    foreach (PlayerBot b in PlayerBot.playerbots)   //Send bots to the player
-                                    {
-                                        if (b.level == pl.level)
-                                        {
-                                            pl.SendSpawn(b.id, b.color + b.name, b.pos[0], b.pos[1], b.pos[2], b.rot[0], b.rot[1]);
-                                        }
-                                    }
+                                    
                                     pl.Loading = false;
                                 }
                                 GC.Collect();

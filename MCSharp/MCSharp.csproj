@@ -103,7 +103,6 @@
     <Compile Include="Level\Blocks\Block.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Bots\BotScripts.cs" />
     <Compile Include="Level\Blocks\BlockFlag.cs" />
     <Compile Include="Level\LevelPermission.cs" />
     <Compile Include="Log\Logger.cs" />
@@ -120,9 +119,6 @@
     <Compile Include="Commands\Administrative\CmdBanned.cs" />
     <Compile Include="Commands\Administrative\CmdBannedip.cs" />
     <Compile Include="Commands\Block\CmdBind.cs" />
-    <Compile Include="Commands\Bot\CmdBotAdd.cs" />
-    <Compile Include="Commands\Bot\CmdBotRemove.cs" />
-    <Compile Include="Commands\Bot\CmdBotSummon.cs" />
     <Compile Include="Commands\Block\CmdCircle.cs" />
     <Compile Include="Commands\Information\CmdClones.cs" />
     <Compile Include="Commands\Chat\CmdColor.cs" />
@@ -194,10 +190,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Player\Player.cs" />
-    <Compile Include="Player\PlayerBot.cs" />
-    <Compile Include="Player\PlayerData.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Player\PlayerList.cs" />
     <Compile Include="Properties.cs">
       <SubType>Code</SubType>
@@ -211,7 +203,6 @@
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Database\sql\IPBans.sql" />
     <Content Include="Level\fCraftLevelSpecs.txt" />
     <Content Include="Level\MCSharpLevel.txt" />
     <Content Include="Level\NewFcraft-MCSHarp Specs.txt" />

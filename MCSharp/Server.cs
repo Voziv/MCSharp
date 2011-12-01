@@ -261,7 +261,6 @@ namespace MCSharp
             updateTimer.Elapsed += delegate
             {
                 Player.GlobalUpdate();
-                PlayerBot.GlobalUpdatePosition();
             };
             updateTimer.Start();
 

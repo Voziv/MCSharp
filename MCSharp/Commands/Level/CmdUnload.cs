@@ -43,14 +43,7 @@ namespace MCSharp
                         }
                     });
 
-                    // Destroy any bots on the level
-                    PlayerBot.playerbots.ForEach(delegate(PlayerBot b)
-                    {
-                        if (b.level == targetLevel)
-                        {
-                            b.GlobalDie();
-                        }
-                    });
+                   
 
                     Player.players.ForEach(delegate(Player pl) { if (pl.level == targetLevel) { pl.SendMotd(); } });
                     ushort x = (ushort)((0.5 + Server.mainLevel.spawnx) * 32);
@@ -114,15 +107,6 @@ namespace MCSharp
                         if (pl.level == targetLevel)
                         {
                             Player.GlobalDie(pl, true);
-                        }
-                    });
-
-                    // Destroy any bots on the level
-                    PlayerBot.playerbots.ForEach(delegate(PlayerBot b)
-                    {
-                        if (b.level == targetLevel)
-                        {
-                            b.GlobalDie();
                         }
                     });
 

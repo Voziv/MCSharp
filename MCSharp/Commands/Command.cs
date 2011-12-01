@@ -108,13 +108,6 @@ namespace MCSharp
             all.Add(new CmdUnban(CommandGroup.Admin, GroupEnum.Moderator, "unban"));
             all.Add(new CmdUnbanip(CommandGroup.Admin, GroupEnum.Moderator, "unbanip"));
 
-            // Bot Related
-            all.Add(new CmdBotAdd(CommandGroup.Bot, GroupEnum.Disabled, "botadd")); // Disabled
-            all.Add(new CmdBotRemove(CommandGroup.Bot, GroupEnum.Disabled, "botremove")); // Disabled
-            all.Add(new CmdBotSummon(CommandGroup.Bot, GroupEnum.Disabled, "botsummon")); // Disabled
-
-
-
             // Chat
             all.Add(new CmdAfk(CommandGroup.Chat, GroupEnum.Guest, "afk"));
             all.Add(new CmdColor(CommandGroup.Chat, GroupEnum.Operator, "color"));

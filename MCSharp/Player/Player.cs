@@ -186,16 +186,7 @@ namespace MCSharp
                 }
             }
 
-            // Clear out bots from the list too
-            foreach (PlayerBot bot in PlayerBot.playerbots)
-            {
-                if (this.level == bot.level)
-                {
-                    this.SendDie(bot.id);
-                }       //Kills current bot list for player
-            }
-
-            this.ClearBlockchange();
+              this.ClearBlockchange();
             this.BlockAction = 0;
             this.painting = false;
             Player.GlobalDie(this, true);
@@ -218,13 +209,6 @@ namespace MCSharp
                 if (this.level == pl.level && this != pl && !pl.hidden)
                 {
                     this.SendSpawn(pl.id, pl.color + pl.name, pl.pos[0], pl.pos[1], pl.pos[2], pl.rot[0], pl.rot[1]);
-                }
-            }
-            foreach (PlayerBot bot in PlayerBot.playerbots)   //Send bots to the player
-            {
-                if (bot.level == this.level)
-                {
-                    this.SendSpawn(bot.id, bot.color + bot.name, bot.pos[0], bot.pos[1], bot.pos[2], bot.rot[0], bot.rot[1]);
                 }
             }
             this.Loading = false;
