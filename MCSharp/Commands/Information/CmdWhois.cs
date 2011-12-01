@@ -47,15 +47,6 @@ namespace MCSharp
                 }
 
                 p.SendMessage(message);
-
-                if (Player.checkDev(target))
-                {
-                    p.SendMessage(target.name + " is a developer of MCSharp.");
-                }
-                else if (Player.checkSupporter(target))
-                {
-                    p.SendMessage(target.name + " is a supporter of MCSharp.");
-                }
             }
             else
             {

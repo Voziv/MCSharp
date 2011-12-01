@@ -108,7 +108,6 @@ namespace MCSharp
 
                     // Init Heartbeat
                     MinecraftHeartbeat.Init();
-                    MCSharpHeartbeat.Init();
                     MCSharpUpdateHeartbeat.Init();
                     WOMHeartbeat.Init();
 

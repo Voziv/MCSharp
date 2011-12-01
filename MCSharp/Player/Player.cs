@@ -13,12 +13,6 @@ namespace MCSharp
 {
     public  sealed partial class Player
     {
-        // Current Developers. Thinking this should be removed now.
-        private static List<string> developers = new List<string>(new string[] { "voziv" });
-
-        // Previous Developers
-        private static List<string> supporters = new List<string>(new string[] { "howimineforfish", "merlin33069", "descention", "kakashisuno" });
-
         public static List<Player> players = new List<Player>(64);
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Properties.MaxPlayers);
@@ -663,45 +657,6 @@ namespace MCSharp
         }
 
         #endregion
-
-
-
-        public static bool checkDev(Player p)
-        {
-            return checkDev(p.name);
-        }
-
-        public static bool checkDev(string strName)
-        {
-            bool blnIsDeveloper = false;
-            foreach (string developer in developers)
-            {
-                if (strName == developer)
-                {
-                    blnIsDeveloper = true;
-                    break;
-                }
-            }
-            return blnIsDeveloper;
-        }
-
-        public static bool checkSupporter(Player p)
-        {
-            return checkSupporter(p.name);
-        }
-        public static bool checkSupporter(string strName)
-        {
-            bool blnIsSupporter = false;
-            foreach (string supporter in supporters)
-            {
-                if (strName == supporter)
-                {
-                    blnIsSupporter = true;
-                    break;
-                }
-            }
-            return blnIsSupporter;
-        }
 
 
         bool CheckBlockSpam()

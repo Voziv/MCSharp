@@ -204,22 +204,7 @@ namespace MCSharp
 
                 Server.s.PlayerListUpdate();
 
-
-                if (!checkDev(this))
-                {
-                    if (!checkSupporter(this))
-                    {
-                        GlobalChat(this, "&a+ " + color + name + "&e joined the game.", false);
-                    }
-                    else
-                    {
-                        GlobalChat(this, "&a+ " + color + name + "&e MCSharp supporter appeared!", false);
-                    }
-                }
-                else
-                {
-                    GlobalChat(this, "&a+ " + color + name + "&e MCSharp developer appeared!", false);
-                }
+                GlobalChat(this, "&a+ " + color + name + "&e joined the game.", false);
 
                 /*
                 if (!Server.console && Server.win != null)

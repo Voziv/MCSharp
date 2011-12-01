@@ -39,31 +39,23 @@ namespace MCSharp
                     {
                         if (p.Rank > Player.GetRank(message))
                         {
-                            // If the player is a developer, make a witty comment -.-
-                            if (Player.checkDev(message))
-                            {
-                                Player.GlobalMessage("[Server]:" + p.color + p.name + "&e has banned " + message + ". So much for being thankful..");
-                            }
-                            else
-                            {
-                                // Check to see if the player is online
-                                // Send appropriate message based on status and stealth option
-                                if (Player.IsOnline(message))
-                                {
-                                    if (stealth)
-                                    {
 
-                                    }
-                                    else
-                                    {
-                                        Player.GlobalMessage("[Server]:" + p.color + p.name + "&e has banned " + message);
-                                    }
+                            // Check to see if the player is online
+                            // Send appropriate message based on status and stealth option
+                            if (Player.IsOnline(message))
+                            {
+                                if (stealth)
+                                {
+
                                 }
                                 else
                                 {
-                                    Player.GlobalMessage("[Server]:" + p.color + p.name + "&e has banned " + message + "(offline)");
+                                    Player.GlobalMessage("[Server]:" + p.color + p.name + "&e has banned " + message);
                                 }
-
+                            }
+                            else
+                            {
+                                Player.GlobalMessage("[Server]:" + p.color + p.name + "&e has banned " + message + "(offline)");
                             }
 
                             // Actually get around to banning the player
