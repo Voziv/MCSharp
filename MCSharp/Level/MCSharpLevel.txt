@@ -1,0 +1,131 @@
+﻿// .lvl format - Last Edited (10/24/2010)
+// All integer types are little-endian
+
+
+Header ( 18 bytes )
+{
+	ushort Version;			// Map version number
+	ushort x;				// Horizontal "Width" Dimension
+	ushort y;				// Map Height Dimension
+	ushort z;				// Map Length dimension
+	ushort spawnx;			// Spawn X
+	ushort spawnz;			// Spawn Z
+	ushort spawny;			// Spawn Y
+	byte spawnRotX;			// Spawn Rotation X
+	byte spawnRotY;			// Spawn Rotation Y
+	byte permissionVisit;	// Map Visit Permission
+	byte permissionBuild;	// Map Build Permission
+}
+
+
+struct Map {
+    int FormatID;   // 0xFC000003
+
+    ushort DimX;    // 1st horizontal ("width") map dimension
+    ushort DimY;    // vertical ("depth") map dimension
+    ushort DimZ;    // 2nd horizontal ("height") map dimension
+
+    ushort SpawnX;  // in player coordinates. Divide by 32 to get block coordinates.
+    ushort SpawnY;
+    ushort SpawnZ;
+    byte SpawnR;    // rotation
+    byte SpawnL;    // look
+
+    int Modified;   // UTC unix timestamp (time of last save)
+    int Created;    // UTC unix timestamp (time of initial generation/import)
+    long MapGUID;   // random identifier (created at generation/import time)
+
+    long DataLayerFlags;    // 1 bit for each reserved DataLayerType, only bits 0 & 1 are currently used
+    byte DataLayerCount;    // how many layers are used total (reserved+custom)
+    IndexRecord[] Index;    // collection of IndexRecords, ALL 256 MUST BE LISTED to ensure a fixed length
+
+    uint MetadataRecordCount;   // (changed since FCMv2: int instead of short)
+    // === Fixed size header ends here ===
+    // First metadata record is located at offset = 3117
+
+    MetadataRecord[] Metadata;
+
+    DataLayer[] DataLayers;
+
+}
+// end of file
+
+
+
+/*===========================================================================*/
+
+// same as FCM v1-v2
+struct PrefixedString {
+    ushort StringLength;    // can be 0 (meaning "empty string")
+    byte[] StrigBytes;      // UTF-8 encoded
+} // 2+ bytes
+
+
+/*===========================================================================*/
+
+//
+struct IndexRecord {
+    long Offset;            // if 0, means "not defined"
+    int CompressedLength;   // length of data INCLUDING 9-byte DataLayer header
+} // 12 bytes
+
+/*===========================================================================*/
+
+struct MetadataRecord {
+    PrefixedString KeyGroup;    // Can be empty (implies global group). Also see "ReservedKeyGroups" below
+    PrefixedString Key;
+    PrefixedString Value;
+} // 6+ bytes
+
+
+/*===========================================================================*/
+
+// one layer of binary data 
+struct DataLayer {
+    DataLayerType Type;     // see "DataLayerType" below
+    DataLayerCompressionType CompressionType;   // see "DataLayerCompressionType" below
+    int GeneralPurposeField;                    // 32 bits that can be used in implementation-specific ways
+    int ElementSize;        // size of each data element (if elements are variable-size, set this to 1)
+    int ElementCount;       // number of fixed-sized elements (if elements are variable-size, set this to total number of bytes)
+    // uncompressed length = (element size * element count)
+    byte[] CompressedData;
+} // 14+ bytes
+
+
+/*===========================================================================*/
+
+// type of block - allows storing multiple layers of information about blocks
+enum DataLayerType : byte {
+    Blocks       = 0,   // blocktypes
+    BlocksUndo   = 1     // last change (per-block)
+    // 2-63 reserved
+    // 64-255 custom
+} // 1 byte
+
+/*===========================================================================*/
+
+enum DataLayerCompressionType : byte {
+    None = 0,           // raw, uncompressed data
+    Deflate = 1,        // deflate with no header
+    DeflateGZip = 2     // deflate with gzip header
+    // 3-255 reserved
+} // 1 byte
+
+/*===========================================================================*/
+
+/* Reserved metadata keys names. These are not required, but suggested.
+ * All non-server-specific reserved groups start with an underscore.
+ * 
+ *      Group           Key                 Purpose
+ *      ----------------------------------------------------------------------------------
+ *      _Origin         Author              Name of the person/group/organization who created the map
+ *      _Origin         Server              Name of the server (not server software) where map originated
+ *      _Origin         FileName            Filename from which this map was converted (if any)
+ *      _Origin         WorldName           Name of a world/level from which this map was saved (if any)
+ *      _Origin         GeneratorName       Identifier of the software that generated this map (if any)
+ *      _Origin         GeneratorVersion    Version of the software that generated this map
+ *      _Origin         GeneratorParams     Serialized generation parameters. Format is generator-specific
+ *      _CustomBlocks   "0" - "255"         list of custom blocks and their mappings to standard types
+ *      fCraft.*        (all)               Reserved for fCraft custom server
+ *      SpaceCraft.*    (all)               Reserved for SpaceCraft custom server
+ */

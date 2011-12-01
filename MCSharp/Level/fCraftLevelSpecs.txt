@@ -1,0 +1,279 @@
+﻿map {
+	int magicNumber;
+	unsigned short dimX;   // Notch's width/x
+	unsigned short dimY;   // Notch's depth/z
+	unsigned short dimH;   // Notch's height/y
+	unsigned short spawnX;
+	unsigned short spawnY;
+	unsigned short spawnH;
+	byte spawnRotation;
+	byte spawnLook;
+	unsigned short metadataPairCount;
+	pair* metadata;
+	byte* compressedMap;
+}
+
+// Appendix A: pair struct
+pair {
+	prefixedString key;
+	prefixedString value;
+}
+
+// Appendix B: prefixedString struct
+prefixedString {
+	int length;
+	char* string;
+}
+
+
+
+
+
+=======================================================================
+
+        byte[] blocks;
+        public int widthX, widthY, height;
+        public Position spawn;
+        public Dictionary<string, string> meta = new Dictionary<string, string>();
+
+
+        public Map( World _world) {
+            world = _world;
+        }
+
+        public Map( World _world, int _widthX, int _widthY, int _height ) : this(_world) {
+            widthX = _widthX;
+            widthY = _widthY;
+            height = _height;
+
+            int blockCount = widthX * widthY * height;
+
+            blocks = new byte[blockCount];
+            for( int i = 0; i < blocks.Length; i++ ) {
+                blocks[i] = 0;
+            }
+        }
+
+
+        // ==== Saving ========================================================
+
+        public bool Save( string fileName ) {
+            string tempFileName = fileName + "." + (new Random().Next().ToString());
+
+            using( FileStream fs = File.Create( tempFileName ) ) {
+                try {
+                    WriteHeader( fs );
+                    WriteMetadata( fs );
+                    WriteBlocks( fs );
+                } catch( IOException ex ) {
+                    world.log.Log( "Map.Save: Unable to open file \"{0}\" for writing: {1}", LogType.Error, tempFileName, ex.Message );
+                    if( File.Exists( tempFileName ) ) {
+                        File.Delete( tempFileName );
+                    }
+                    return false;
+                }
+            }
+            if( File.Exists( fileName ) ) {
+                File.Delete( fileName );
+            }
+            File.Move( tempFileName, fileName );
+            world.log.Log( "Saved map succesfully to {0}", LogType.SystemActivity, fileName );
+            return true;
+        }
+
+
+        void WriteHeader( FileStream fs ) {
+            BinaryWriter writer = new BinaryWriter( fs );
+            writer.Write( Config.LevelFormatID );
+            writer.Write( (ushort)widthX );
+            writer.Write( (ushort)widthY );
+            writer.Write( (ushort)height );
+            writer.Write( (ushort)spawn.x );
+            writer.Write( (ushort)spawn.y );
+            writer.Write( (ushort)spawn.h );
+            writer.Write( (byte)spawn.r );
+            writer.Write( (byte)spawn.l );
+            writer.Flush();
+        }
+
+
+        void WriteMetadata( FileStream fs ) {
+            BinaryWriter writer = new BinaryWriter( fs );
+            writer.Write( (ushort)meta.Count );
+            foreach( KeyValuePair<string, string> pair in meta ) {
+                WriteLengthPrefixedString( writer, pair.Key );
+                WriteLengthPrefixedString( writer, pair.Value );
+            }
+            writer.Flush();
+        }
+
+
+        void WriteBlocks( FileStream fs ) {
+            byte[] compressedMap = GetCompressedCopy( false );
+            fs.Write( compressedMap, 0, compressedMap.Length );
+        }
+
+
+        void WriteLengthPrefixedString( BinaryWriter writer, string s ) {
+            byte[] stringData = ASCIIEncoding.ASCII.GetBytes( s );
+            writer.Write( (uint)stringData.Length );
+            writer.Write( stringData );
+        }
+
+
+        // ==== Loading =======================================================
+
+
+        public static Map Load( World _world, string fileName ) {
+            FileStream fs = null;
+            if( !File.Exists( fileName ) ) {
+                _world.log.Log( "Map.Load: Specified file does not exist: {0}", LogType.Warning, fileName );
+                return null;
+            }
+
+            Map map = new Map( _world );
+            try {
+                fs = File.OpenRead( fileName );
+                if( map.ReadHeader( fs ) ) {
+                    map.ReadMetadata( fs );
+                    map.ReadBlocks( fs );
+                    _world.log.Log( "Loaded map succesfully from {0}", LogType.Warning, fileName );
+                    return map;
+                } else {
+                    return null;
+                }
+            } catch( EndOfStreamException ) {
+                _world.log.Log( "Map.Load: Unexpected end of file - possible corruption!", LogType.Error );
+                return null;
+            } catch( Exception ex ) {
+                _world.log.Log( "Map.Load: Error trying to read from \"{0}\": {1}", LogType.Error, fileName, ex.Message );
+                return null;
+            } finally {
+                if( fs != null ) {
+                    fs.Close();
+                }
+            }
+        }
+
+
+        // Parse the level header
+        bool ReadHeader( FileStream fs ) {
+            BinaryReader reader = new BinaryReader( fs );
+            try {
+                // TODO: reevaluate whether i need these restrictions or not
+                if( reader.ReadUInt32() != 0xFC000001 ) {
+                    world.log.Log( "Map.ReadHeader: Incorrect level format id (expected: {0}).", LogType.Error, Config.LevelFormatID );
+                    return false;
+                }
+
+                widthX = reader.ReadUInt16();
+                widthY = reader.ReadUInt16();
+                height = reader.ReadUInt16();
+
+                spawn.x = reader.ReadInt16();
+                spawn.y = reader.ReadInt16();
+                spawn.h = reader.ReadInt16();
+                spawn.r = reader.ReadByte();
+                spawn.l = reader.ReadByte();
+
+                if( spawn.x > widthX * 32 || spawn.y > widthY * 32 || spawn.h > height * 32 ||
+                    spawn.x < 0 || spawn.y < 0 || spawn.h < 0 ) {
+                    world.log.Log( "Map.ReadHeader: Spawn coordinates are outside the valid range! Using center of the map instead.", LogType.Warning );
+                    spawn.Set( widthX / 2 * 32, widthY / 2 * 32, height / 2 * 32, 0, 0 );
+                }
+
+            } catch( FormatException ex ) {
+                world.log.Log( "Map.ReadHeader: Cannot parse one or more of the header entries: {0}", LogType.Error, ex.Message );
+                return false;
+            }
+            return true;
+
+        }
+
+
+        void ReadBlocks( FileStream fs ) {
+            int blockCount = widthX * widthY * height;
+            blocks = new byte[blockCount];
+
+            GZipStream decompressor = new GZipStream( fs, CompressionMode.Decompress );
+            decompressor.Read( blocks, 0, blockCount );
+            decompressor.Flush();
+        }
+
+
+        void ReadMetadata( FileStream fs ) {
+            BinaryReader reader = new BinaryReader( fs );
+            try {
+                int metaSize = (int)reader.ReadUInt16();
+
+                for( int i = 0; i < metaSize; i++ ) {
+                    string key = ReadLengthPrefixedString( reader );
+                    string value = ReadLengthPrefixedString( reader );
+                    meta.Add( key, value );
+                }
+            } catch( FormatException ex ) {
+                world.log.Log( "Map.ReadHeader: Cannot parse one or more of the metadata entries: {0}", LogType.Error, ex.Message );
+            }
+        }
+
+
+        string ReadLengthPrefixedString( BinaryReader reader ) {
+            int length = (int)reader.ReadUInt32();
+            byte[] stringData = reader.ReadBytes( length );
+            return ASCIIEncoding.ASCII.GetString( stringData );
+        }
+
+
+        // zips a copy of the block array
+        public byte[] GetCompressedCopy( bool legacyOrder ) {
+            byte[] compressedData;
+
+            using( MemoryStream stream = new MemoryStream() ) {
+                using( GZipStream compressor = new GZipStream( stream, CompressionMode.Compress ) ) {
+
+                    // for compatibility with client and MinerCPP
+                    if( legacyOrder ) {
+                        // convert block count to big-endian
+                        int convertedBlockCount = IPAddress.HostToNetworkOrder( blocks.Length );
+
+                        // write block count to gzip stream
+                        compressor.Write( BitConverter.GetBytes( convertedBlockCount ), 0, sizeof( int ) );
+
+                        byte[] buffer = new byte[4096];
+                        int offset = 0;
+                        for( int h = 0; h < height; h++ ) {
+                            for( int y = 0; y < widthY; y++ ) {
+                                for( int x = 0; x < widthX; x++ ) {
+                                    if( offset == buffer.Length ) {
+                                        compressor.Write( buffer, 0, buffer.Length );
+                                        offset = 0;
+                                    }
+                                    buffer[offset] = GetBlock( x, y, h );
+                                    offset++;
+                                }
+                            }
+                        }
+                        compressor.Write( buffer, 0, offset );
+
+                        // for internal use
+                    } else {
+                        compressor.Write( blocks, 0, blocks.Length );
+                    }
+                }
+                compressedData = stream.ToArray();
+            }
+
+            return compressedData;
+        }
+
+
+        // ==== Simulation ====================================================
+
+        public int Index( int x, int y, int h ) {
+            return (x * widthY + y) * height + h;
+        }
+
+        public void SetBlock( int x, int y, int h, Blocks type ) {
+            if( x < widthX && y < widthY && h < height && x >= 0 && y >= 0 && h >= 0 )
+                blocks[Index( x, y, h )] = (byte)type;
+        }

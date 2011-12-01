@@ -1,0 +1,2 @@
+﻿This server is running MCSharp!
+http://mcsharp.voziv.com

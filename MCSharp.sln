@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSharp", "MCSharp\MCSharp.csproj", "{B0F49025-8505-4FE2-A873-3A7E6B1EF693}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSharp CLI", "MCSharp CLI\MCSharp CLI.csproj", "{D2EC0E7C-AEB1-4013-9BCA-6B29857B8667}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MCSharp Database Editor", "MCSharp Database Editor\MCSharp Database Editor.vbproj", "{C5351982-444C-4F05-8B9F-A9A91EB6738A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0F49025-8505-4FE2-A873-3A7E6B1EF693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0F49025-8505-4FE2-A873-3A7E6B1EF693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0F49025-8505-4FE2-A873-3A7E6B1EF693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0F49025-8505-4FE2-A873-3A7E6B1EF693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2EC0E7C-AEB1-4013-9BCA-6B29857B8667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2EC0E7C-AEB1-4013-9BCA-6B29857B8667}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2EC0E7C-AEB1-4013-9BCA-6B29857B8667}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2EC0E7C-AEB1-4013-9BCA-6B29857B8667}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5351982-444C-4F05-8B9F-A9A91EB6738A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5351982-444C-4F05-8B9F-A9A91EB6738A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5351982-444C-4F05-8B9F-A9A91EB6738A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5351982-444C-4F05-8B9F-A9A91EB6738A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

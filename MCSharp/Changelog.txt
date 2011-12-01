@@ -1,0 +1,232 @@
+﻿MCSharp 0.94
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MCSharp 0.93
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Updated the WOM Heartbeat so that it now writes to womurl.txt instead of overwriting the external url
+
+MCSharp 0.92
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed /banip
+- Added WOM Heartbeat
+- Fixed Heartbeats not working in MONO by switching to normal http protocol instead of https
+- Changed the duplicate login kick message to "Someone else logged in as PLAYERNAME. Duplicate logins are not allowed!"
+- MCSharp now kicks SMP players with a useful message
+
+MCSharp 0.91
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Updated heartbeat code to work with recent changes
+- Changed the Default IRC server to irc.example.com
+- A few minor bug fixes
+- Added /color back
+
+MCSharp 0.90
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Updated heartbeat code to find the new external url
+
+MCSharp 0.89
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Server will now let you know if you have your port forwarded properly (Thanks to fragmer <me at matvei dot org>)
+- Added directory checking
+- Fixed an issue with directory checking which caused certain mono and windows clients to crash
+
+MCSharp 0.88
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed the heartbeat issue once again
+- Added errors for different heartbeat issues. Timeouts to the site will now appear correctly.
+
+MCSharp 0.87
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed more error logging. Error messages were being logged as just errors
+- Fixed Administrators not being able to build in maps that are admin permissions
+- Fixed the log date having minutes in the wrong place
+- Fixed private chat logging
+- Fixed opchat logging
+
+MCSharp 0.86
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed heartbeat not reporting the number of users on a server
+
+MCSharp 0.85
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Removed a bunch of redundant code
+- Added dat to level converter as part of mcsharp package
+- Fixed servers disappearing from the minecraft.net list
+- Added an beta flag so people can test experimental functions of the server. By default it will be disabled
+- Added EXPERIMENTAL copy/paste support. It works, but it's not great yet
+- Fixed error message in the autosaver catch being displayed as informational
+- Added a more useful error message when a heartbeat fails
+- Added a rough draft of copy and paste
+- Slowed down /cuboid
+
+MCSharp 0.84
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed update notification to only appear on a new version
+- Adjusted console backcolor
+
+MCSharp 0.83
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed avbuildercuboidlimit setting and saving properly in server.properties
+- Fixed heartbeat with issues with some localizations
+- Added a colorful console
+- Added more notifications of updates
+- Increased heartbeat rate
+
+MCSharp 0.82
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed AdvBuilders cuboid in a case where sometimes they couldn't use the command to cuboid existing active_water
+- Added options for a cuboid limit on all ranks that can use it. This can be found in server.properties
+- Fixed player changing ranks. Now bindings and other actions are cleared on rank change, as well players are respawned if access to adminium changes due to the change
+- New logging method
+- Server administrators will now be forced to set the administrator rank in the server.properties file
+- Added a heartbeat to crafted to allow the server to check for updates. Administrators will be notified on login if there is an update
+
+- Fixed mods being able to teleport to hidden ops...Also fixed hidden players not being able to teleport
+- Fixed /ops and /mods to add colour on usernames
+- Added griefExempted.txt to stop players from being kicked. (ranks folder)
+
+- Added /exempt <name> (moderator+) for adding / removing names from griefExemption.txt
+- Added /moderators (/mods) to show online moderators
+
+MCSharp 0.8.1b
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Fixed /ban to work properly and check for ranks
+- Fixed an issue that would allow certain banned players to continue building/destroying blocks on a map
+- Fixed a case where using /setrank <player> mod when the play is offline, would crash all clients on the server
+
+MCSharp 0.8.1a
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Removed Debug Messages from the physics code
+
+MCSharp 0.8.1 (r215) // revision numbers are now deprecated in favor of git tagging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Operator is now called Moderator, and Super Operator is now called Operator. YOU MUST REDO YOUR RANKS TO USE THIS VERSION!
+- Slowed physics down to 1 change per millisecond. Seems to have solved the lag issues.
+
+- Rewrote every single command except the following. 
+- : TODO : /cuboid /circle /door /doorview /jail /lock /opview /replace /undoor /undoorview /unlock /unopview were only reorganized.
+- Deleted scriptedcommand.cs due to it's non-implementation
+
+
+- Changed door1, door2, door3 to door_tree, door_glass, and door_obsidian respectively.
+- Fixed /bind to disable /buildop and /builddoor
+- Fixed /ratio (operator+)
+- Fixed door physics code. Now loops over an array instead of using a switch/case.
+- Deprecated: /opglass  /dna is now removed
+- Added a try catch on the console as a temporary fix to catch errors that haven't been properly encased already.
+- Redid backup system again. Now backups are properly skipped, and properly backed up when needed.
+- Fixed /newlvl not working because of the new backup system
+- Added an op material for every block
+- Added a door material for every block
+- Fixed /tp to allow superops to teleport to hidden operators and superops. Operators cannot teleport to hidden players.
+- Added Descention and KakashiSuno to the Supporters list until that part of the code gets redone
+- Server will announce when a spawn block has been changed (ie: Griefer messing with level spawn block)
+
+- Added /tree command until physics handles are improved (advbuilder+)
+- Added /lock command (/l) (operator+)
+- Added /unlock command (/u) (operator+)
+- Added /buildop command (/bo) (operator+)
+- Added /builddoor command (/bd) (advbuilder+) 
+- Added /opview command (/ov) (operator+)
+- Added /unopview to turn it off (/uov) (operator+)
+- Added /door command (/d) (operator+)
+- Added /undoor command (/ud) (operator+)
+- Added /doorview command (/dv) (operator+)
+- Added /undoorview command (/udv) (operator+)
+- Added /opchat command (operator+) - Activate / deactivate operator-only chat. All text is sent to operators and superops only.
+- Added /whisper <name> command (/w) (guest+)
+- Added /aid (guest+)
+
+
+
+WHISPER / OPCHAT USAGE
+~~~~~~~~~~~~~
+/whisper										# Disables whisper mode
+
+/whisper george									# All text is whispered to george
+
+/whisper james (after using /whisper george)	# All text is whispered to james, not george
+
+* Cannot whisper hidden admins / operators
+* If user disconnects, must use /whisper to disable     (maybe they dced) 
+* If already whispering someone and /whisper james....if james invalid, cancel all whispering
+* If opchat is active, cannot use /whisper   (can still manually @whisper)
+* If whisper is active, cannot use /opchat   (can still manually #opchat)
+
+
+OPVIEW / LOCK / UNOPVIEW / UNLOCK USAGE
+	All these commands follow the same general method for use.
+~~~~~~~~~~~~
+/opview									# allows you to select 2 points and all op_mats in that area turn pink, even air
+
+/opview op_air op_red op_black			# allows you to select 2 blocks and all op_mats in that area turn pink, but not op_air, op_red, or op_black...up to 7 blocks can be ignored. can't type much more anyway
+
+/opview all								# processes entire map, all blocks show up
+
+/opview all op_air op_grass op_water	# processes entire map and ignores op_air, op_grass, op_water.
+
+/opview air red black					# exactly the same as using /opview op_air op_red op_black, allows both types of logical thinking
+
+
+
+
+Revision 214 (June 21st, 2010)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Updated code to be compatible with MONO (Linux/Mac)
+- Changed IRC bot commands to include setrank
+- Fix: Added name validation to /newlvl to ensure level name does not have characters that will break the server.
+
+- Big thanks to bman for the following commands:
+Active
+- New CMD: /reveal <player> - Reveals map to banned user.
+- New CMD: /mute <player> - Toggles Mute on a player so they cannot chat
+- New CMD: /hidden - Displays the hidden players.
+- New CMD: /follow <player> - Follow someone.
+- New CMD: /sendlevel <player> <level> - Forces a player to another level
+- New CMD: /joker <player> - Replaces user messages with funny messages.
+
+Not implemented yet:
+- New CMD: /jail <cmd> <player> - Jails a banned user. (Commands: set, add, free)
+- New CMD: /fakemsg <player> <message> - Fake a player message
+- New CMD: /plevels - Shows name and level of all players
+- New CMD: /clones - Displays the players on the same IP.
+- New CMD: /ratio <name> - Displays the block ratio of a player (Placed/Removed)
+- New CMD: /news - Displays the latest changes and additions
+- New CMD: /lastseen <player> - Display last time player was connected
+
+
+Revision 213 (June 20th, 2010)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Updated console commands.
+
+- Fix: /unload now saves the level before unloading
+- Fix: /deletelvl now deletes the correct map
+
+Revision 212 (June 19th, 2010)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Raised Level Hard Cap to 200
+- When restoring a map, all players reload the map instead of being kicked.
+- The way /hide works is a bit different now. While hidden you cannot recieve 
+private messages, get summoned, be teleported to, and so on.
+
+- Added a fallback for minecraft heartbeat
+- Added /deletelvl <lvlname> for superops
+- Added a "banana split" clause
+
+- Removed useless dependancies
+- Removed unsused heartbeats
+- Removed the old rank commands
+
+- Fix: Added variables for cuboid block limit in the server properties
+- Fix: Unloading a map moves players to main instead of kicking them
+- Fix: Restoring a map reloads the map for players instead of getting kicked
+- Fix: Backups are now created successfully
+- Fix: /setrank now saves ranks properly.
+- Fix: No more "Incremental Backup Failed" Upon new level generation
+- Fix: Players can no longer do /whois on hidden admin's and superops
+- Fix: Players can no longer teleport to hidden admins
+- Fix: Playerlist now reflects the right number of players
+- Fix: Fixed banip kicking to work on multiple players with the same ip
+- Fix: Only superOps can banip due to the powerful nature of banip
+- Fix: Other minor bugs in commands are now fixed.
+- Fix: Fixed operators being able to demote superOps

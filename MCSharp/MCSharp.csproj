@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B0F49025-8505-4FE2-A873-3A7E6B1EF693}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MCSharp</RootNamespace>
+    <AssemblyName>MCSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>mcsharp.ico</ApplicationIcon>
+    <StartupObject>
+    </StartupObject>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="Commands\Block\CmdCopy.cs" />
+    <Compile Include="Commands\Block\CmdPaste.cs" />
+    <Compile Include="Database\CraftedDatabase.cs" />
+    <Compile Include="Global\BlockBuffer.cs" />
+    <Compile Include="Global\BlockPos.cs" />
+    <Compile Include="Global\CatchPos.cs" />
+    <Compile Include="Global\GlobalFunctions.cs" />
+    <Compile Include="Global\Pos.cs" />
+    <Compile Include="Global\SolidType.cs" />
+    <Compile Include="Global\UndoBuffer.cs" />
+    <Compile Include="Heartbeat\MCSharpUpdateHeartbeat.cs" />
+    <Compile Include="Heartbeat\WOMHeartbeat.cs" />
+    <Compile Include="Heartbeat\MCSharpHeartbeat.cs" />
+    <Compile Include="Heartbeat\Heartbeat.cs" />
+    <Compile Include="Heartbeat\MinecraftHeartbeat.cs" />
+    <Compile Include="Player\Player.Networking.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Commands\Administrative\CmdExempt.cs" />
+    <Compile Include="Commands\Chat\CmdOpChat.cs" />
+    <Compile Include="Commands\Chat\CmdWhisperChat.cs" />
+    <Compile Include="Commands\CommandEnums.cs" />
+    <Compile Include="Commands\Block\CmdAid.cs" />
+    <Compile Include="Commands\Block\CmdBuildDoor.cs" />
+    <Compile Include="Commands\Block\CmdBuildOp.cs" />
+    <Compile Include="Commands\Block\CmdDoor.cs" />
+    <Compile Include="Commands\Block\CmdDoorView.cs" />
+    <Compile Include="Commands\Block\CmdLock.cs" />
+    <Compile Include="Commands\Block\CmdOpView.cs" />
+    <Compile Include="Commands\Block\CmdTree.cs" />
+    <Compile Include="Commands\Block\CmdUnDoor.cs" />
+    <Compile Include="Commands\Block\CmdUnDoorView.cs" />
+    <Compile Include="Commands\Block\CmdUnlock.cs" />
+    <Compile Include="Commands\Block\CmdUnOpView.cs" />
+    <Compile Include="Commands\Information\CmdMods.cs" />
+    <Compile Include="Groups\GroupEnum.cs" />
+    <Compile Include="Language\LanguageString.cs" />
+    <Compile Include="Level\AutoSaver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Level\Blocks\Block.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bots\BotScripts.cs" />
+    <Compile Include="Level\Blocks\BlockFlag.cs" />
+    <Compile Include="Level\LevelPermission.cs" />
+    <Compile Include="Log\Logger.cs" />
+    <Compile Include="Log\LogSource.cs" />
+    <Compile Include="Log\LogType.cs" />
+    <Compile Include="Commands\Block\CmdAbort.cs" />
+    <Compile Include="Commands\Block\CmdAbout.cs" />
+    <Compile Include="Commands\Block\CmdActiveLava.cs" />
+    <Compile Include="Commands\Block\CmdActiveWater.cs" />
+    <Compile Include="Commands\Information\CmdAdmins.cs" />
+    <Compile Include="Commands\Chat\CmdAfk.cs" />
+    <Compile Include="Commands\Administrative\CmdBan.cs" />
+    <Compile Include="Commands\Administrative\CmdBanip.cs" />
+    <Compile Include="Commands\Administrative\CmdBanned.cs" />
+    <Compile Include="Commands\Administrative\CmdBannedip.cs" />
+    <Compile Include="Commands\Block\CmdBind.cs" />
+    <Compile Include="Commands\Bot\CmdBotAdd.cs" />
+    <Compile Include="Commands\Bot\CmdBotRemove.cs" />
+    <Compile Include="Commands\Bot\CmdBotSummon.cs" />
+    <Compile Include="Commands\Block\CmdCircle.cs" />
+    <Compile Include="Commands\Information\CmdClones.cs" />
+    <Compile Include="Commands\Chat\CmdColor.cs" />
+    <Compile Include="Commands\Block\CmdCuboid.cs" />
+    <Compile Include="Commands\Level\CmdDeleteLvl.cs" />
+    <Compile Include="Commands\Chat\CmdFakeMsg.cs" />
+    <Compile Include="Commands\Administrative\CmdFollow.cs" />
+    <Compile Include="Commands\Level\CmdGoto.cs" />
+    <Compile Include="Commands\Information\CmdHelp.cs" />
+    <Compile Include="Commands\Information\CmdHidden.cs" />
+    <Compile Include="Commands\Administrative\CmdHide.cs" />
+    <Compile Include="Commands\Information\CmdInfo.cs" />
+    <Compile Include="Commands\Block\CmdJail.cs" />
+    <Compile Include="Commands\Chat\CmdJoker.cs" />
+    <Compile Include="Commands\Administrative\CmdKick.cs" />
+    <Compile Include="Commands\Administrative\CmdKickban.cs" />
+    <Compile Include="Commands\Information\CmdLastSeen.cs" />
+    <Compile Include="Commands\Block\CmdLava.cs" />
+    <Compile Include="Commands\Level\CmdLevels.cs" />
+    <Compile Include="Commands\Level\CmdLoad.cs" />
+    <Compile Include="Commands\Level\CmdMapInfo.cs" />
+    <Compile Include="Commands\Chat\CmdMe.cs" />
+    <Compile Include="Commands\Administrative\CmdMute.cs" />
+    <Compile Include="Commands\Level\CmdNewLvl.cs" />
+    <Compile Include="Commands\Information\CmdNews.cs" />
+    <Compile Include="Commands\Information\CmdOps.cs" />
+    <Compile Include="Commands\Block\CmdPaint.cs" />
+    <Compile Include="Commands\Level\CmdPermissionBuild.cs" />
+    <Compile Include="Commands\Level\CmdPermissionVisit.cs" />
+    <Compile Include="Commands\Level\CmdPhysics.cs" />
+    <Compile Include="Commands\Information\CmdPlayers.cs" />
+    <Compile Include="Commands\Information\CmdPLevels.cs" />
+    <Compile Include="Commands\Information\CmdRatio.cs" />
+    <Compile Include="Commands\Block\CmdReplace.cs" />
+    <Compile Include="Commands\IRC\CmdResetBot.cs" />
+    <Compile Include="Commands\Level\CmdRestore.cs" />
+    <Compile Include="Commands\Administrative\CmdReveal.cs" />
+    <Compile Include="Commands\Information\CmdRules.cs" />
+    <Compile Include="Commands\Level\CmdSave.cs" />
+    <Compile Include="Commands\Chat\CmdSay.cs" />
+    <Compile Include="Commands\Level\CmdSendLevel.cs" />
+    <Compile Include="Commands\Information\CmdServerReport.cs" />
+    <Compile Include="Commands\Administrative\CmdSetRank.cs" />
+    <Compile Include="Commands\Level\CmdSetspawn.cs" />
+    <Compile Include="Commands\Block\CmdSolid.cs" />
+    <Compile Include="Commands\Administrative\CmdSpawn.cs" />
+    <Compile Include="Commands\Administrative\CmdSummon.cs" />
+    <Compile Include="Commands\Information\CmdTime.cs" />
+    <Compile Include="Commands\Administrative\CmdTp.cs" />
+    <Compile Include="Commands\Administrative\CmdUnban.cs" />
+    <Compile Include="Commands\Administrative\CmdUnbanip.cs" />
+    <Compile Include="Commands\Level\CmdUnload.cs" />
+    <Compile Include="Commands\Block\CmdWater.cs" />
+    <Compile Include="Commands\Information\CmdWhois.cs" />
+    <Compile Include="Commands\Information\CmdWhowas.cs" />
+    <Compile Include="Color.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandList.cs" />
+    <Compile Include="Level\fCraftLevel.cs" />
+    <Compile Include="Groups\Group.cs" />
+    <Compile Include="IRC\IRCBot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Level\Level.cs" />
+    <Compile Include="Level\MapGenerator.cs" />
+    <Compile Include="Misc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Player\Player.cs" />
+    <Compile Include="Player\PlayerBot.cs" />
+    <Compile Include="Player\PlayerData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Player\PlayerList.cs" />
+    <Compile Include="Properties.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Server.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Changelog.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Database\sql\IPBans.sql" />
+    <Content Include="Level\fCraftLevelSpecs.txt" />
+    <Content Include="Level\MCSharpLevel.txt" />
+    <Content Include="Level\NewFcraft-MCSHarp Specs.txt" />
+    <Content Include="mcsharp.ico" />
+    <Content Include="_TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Meebey.SmartIrc4net, Version=0.4.0.34161, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Meebey.SmartIrc4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.67.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Database\sql\bans.sql" />
+    <None Include="Database\sql\commands.sql" />
+    <None Include="Database\sql\groups.sql" />
+    <None Include="Database\sql\players.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+</Project>

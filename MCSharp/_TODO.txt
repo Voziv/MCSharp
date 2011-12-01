@@ -1,0 +1,52 @@
+﻿****************************
+***		 TODO LIST		 ***
+****************************
+
+Another Test
+
+1. We need to redefine two things, the player model, and the way logs are kept.
+
+Steps Necessary:
+
+Migrate player database into an actual database file, containing columns that are necessary for the players.
+
+Tables would look like this:
+
+Player {
+		id
+		UserName VarChar(16)
+		Last Login DateTime
+		Rank TinyInt?
+}
+
+PlayerSessions {
+	id
+	PlayerID
+	BlocksCreated
+	BlocksDeleted
+	Date and time logged in
+	Date and time logged out
+}
+
+
+2. Proper Logging Facilities
+
+Quick fix is to add dates, and possibly have a new log at midnight each night.
+
+Long term will be logging to a database of choice, defaulting to something like SQLite. Including Fields like:
+
+LogEntry {
+	id
+	CategoryID
+	Log Message
+	Log DateTime
+	LoggingEntity (Server, Player.name, or whereever the log came from)
+}
+
+Categories {
+	id
+	name
+}
+
+
+- Deletelvl needs to be able to delete unloaded levels
