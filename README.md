@@ -15,3 +15,14 @@ History
 =======
 MCSharp is a minecraft classic software originally developed by a group of developers (Descention, KakashiSuno, and NekoBaron). I, Voziv, picked up the project in May 2010 and had help during the summer of 2010 from howimineforfish. MCSharp was released in May 2010 under the MIT License, however I kept maintaining it without a repository. 
 
+Special Thanks (Contributers)
+=============================
+- bman
+- clone1018
+- Descention
+- fragmer <me at matvei dot org>
+- howimineforfish
+- KakashiSuno
+- NekoBaron
+
+Anyone who I missed, just let me know and you will be added!
