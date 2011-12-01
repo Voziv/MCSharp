@@ -73,7 +73,6 @@
     <Compile Include="Global\UndoBuffer.cs" />
     <Compile Include="Heartbeat\MCSharpUpdateHeartbeat.cs" />
     <Compile Include="Heartbeat\WOMHeartbeat.cs" />
-    <Compile Include="Heartbeat\MCSharpHeartbeat.cs" />
     <Compile Include="Heartbeat\Heartbeat.cs" />
     <Compile Include="Heartbeat\MinecraftHeartbeat.cs" />
     <Compile Include="Player\Player.Networking.cs" />
