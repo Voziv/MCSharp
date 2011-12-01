@@ -178,7 +178,6 @@
     </Compile>
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandList.cs" />
-    <Compile Include="Level\fCraftLevel.cs" />
     <Compile Include="Groups\Group.cs" />
     <Compile Include="IRC\IRCBot.cs">
       <SubType>Code</SubType>
@@ -202,9 +201,6 @@
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Level\fCraftLevelSpecs.txt" />
-    <Content Include="Level\MCSharpLevel.txt" />
-    <Content Include="Level\NewFcraft-MCSHarp Specs.txt" />
     <Content Include="mcsharp.ico" />
     <Content Include="_TODO.txt" />
   </ItemGroup>
