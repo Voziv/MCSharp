@@ -1,16 +1,118 @@
 ﻿using System;
+using System.Timers;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Text;
+using System.Security.Cryptography;
 
 
 namespace MCSharp
 {
     public sealed partial class Player
     {
+        // Variables
+        Socket socket;
+        public string ip;
+
+        public static List<Player> connections = new List<Player>(Properties.MaxPlayers);
+
+        System.Timers.Timer loginTimer = new System.Timers.Timer(20000);
+        System.Timers.Timer pingTimer = new System.Timers.Timer(500);
+
+        byte[] buffer = new byte[0];
+        byte[] tempbuffer = new byte[0xFF];
+
+        public bool disconnected = false;
+
+        void initNetworking (Socket s)
+        {
+            try
+            {
+                socket = s;
+                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
+                Logger.Log(ip + " connected.", LogType.Information);
+
+                // Check to see if they are IP Banned
+                if (!Server.bannedIP.Contains(ip))
+                {
+                    // Check to see if we already have too many connections
+                    if (connections.Count < 5)
+                    {
+                        socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None,
+                                        new AsyncCallback(Receive), this);
+                        loginTimer.Elapsed += loginTimerCallback;
+                        loginTimer.Start();
+
+                        // Start pinging the client
+                        pingTimer.Elapsed += delegate { SendPing(); };
+                        pingTimer.Start();
+
+                        connections.Add(this);
+                    }
+                    else
+                    {
+                        Kick("Too many connections!");
+                    }
+                }
+                else
+                {
+                    Kick("You're banned!");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Log("Error while initializing the player networking", LogType.Error);
+                Logger.Log(e.Message, LogType.ErrorMessage);
+                Kick("Server Error!");
+            }
+        }
+
+        void loginTimerCallback (Object sender, ElapsedEventArgs e)
+        {
+            loginTimer.Stop();
+            if (!loggedIn)
+            {
+                Kick("You must login to play. Please try again.");
+            }
+            else if (Rank >= GroupEnum.Operator)
+            {
+                SendMessage("Welcome " + name + "! You rule!");
+                if (Server.LatestVersion > Server.VersionNumber)
+                {
+                    SendMessage("[Console]: &cImportant!!! A MCSharp update is available!!");
+                }
+            }
+            else
+            {
+                SendMessage("Welcome " + name + "! Please use /rules");
+            }
+            _color = MCSharp.Group.Find(Rank).Color;
+            if (File.Exists("welcome.txt"))
+            {
+                try
+                {
+                    List<string> Welcome = new List<string>();
+                    StreamReader wm = File.OpenText("welcome.txt");
+                    while (!wm.EndOfStream)
+                    {
+                        Welcome.Add(wm.ReadLine());
+                    }
+                    wm.Close();
+
+                    foreach (string w in Welcome)
+                        SendMessage(w);
+                }
+                catch
+                {
+
+                }
+            }
+        }
 
 
         #region == INCOMING ==
@@ -137,8 +239,8 @@ namespace MCSharp
                     return;
 
                 byte version = message[0];
-                name = enc.GetString(message, 1, 64).Trim();
-                string verify = enc.GetString(message, 65, 32).Trim();
+                name = Encoding.ASCII.GetString(message, 1, 64).Trim();
+                string verify = Encoding.ASCII.GetString(message, 65, 32).Trim();
                 byte type = message[129];
 
                 if (Server.banned.Contains(name)) { Kick("You're banned!"); return; }
@@ -149,7 +251,8 @@ namespace MCSharp
                 if (Properties.VerifyNames)
                 {
                     if (verify == "--" || verify != BitConverter.ToString(
-                        md5.ComputeHash(enc.GetBytes(Server.salt + name))).
+
+                        MD5.Create().ComputeHash(Encoding.ASCII.GetBytes(Server.salt + name))).
                         Replace("-", "").ToLower().TrimStart('0'))
                     {
                         if (ip != "127.0.0.1")
@@ -949,7 +1052,7 @@ namespace MCSharp
                     return;
 
                 //byte[] message = (byte[])m;
-                string text = enc.GetString(message, 1, 64).Trim();
+                string text = Encoding.ASCII.GetString(message, 1, 64).Trim();
 
                 //added by bman
                 if (this.isMuted)

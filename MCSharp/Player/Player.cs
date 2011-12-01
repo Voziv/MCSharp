@@ -4,36 +4,27 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
 
 namespace MCSharp
 {
-    public  sealed partial class Player
+    public sealed partial class Player
     {
         public static List<Player> players = new List<Player>(64);
+
+        /// <summary>
+        /// This needs a better description. What does left do?
+        /// </summary>
         public static Dictionary<string, string> left = new Dictionary<string, string>();
-        public static List<Player> connections = new List<Player>(Properties.MaxPlayers);
-        public static byte number { get { return (byte)players.Count; } }
-        static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
-        static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+
+        public static byte number { get { return (byte) players.Count; } }
 
         // Properties
         public GroupEnum Rank { get { return Player.GetRank(name); } }
-        public string color { get { return _color; } set { _color = value;  } }
+        public string color { get { return _color; } set { _color = value; } }
         private string _color;
-
-        // Variables
-        Socket socket;
-        System.Timers.Timer loginTimer = new System.Timers.Timer(20000);
-        System.Timers.Timer pingTimer = new System.Timers.Timer(500);
-        byte[] buffer = new byte[0];
-        byte[] tempbuffer = new byte[0xFF];
-        public bool disconnected = false;
-        public BlockBuffer copyBuffer = new BlockBuffer();
-        public UndoBuffer undoPasteBuffer = new UndoBuffer();
 
         // Bman Additions
         Random rand = new Random();
@@ -41,197 +32,39 @@ namespace MCSharp
         public bool isJailed = false;
         public bool isMuted = false;
         public bool isJoker = false;
-        public int deletedBlocks = 0;
-        public int placedBlocks = 0;
+
+        /// <summary>
+        /// This keeps track of when a player was last seen. Resets when the server is reset.
+        /// </summary>
         public static Dictionary<string, DateTime> lastSeen = new Dictionary<string, DateTime>();
 
         public string name;
-        public string ip;
+
         public byte id;
         public Group group;
         public bool hidden = false;
-        public bool painting = false;
-        public byte BlockAction = 0;  //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass
-        //public List<Edit> actions = new List<Edit>(128);
+
         public byte[] bindings = new byte[128];
-        public Level level = Server.mainLevel;
+
+        
+
         public bool Loading = true;     //True if player is loading a map.
-
-        public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
-        public event BlockchangeEventHandler Blockchange = null;
-        public void ClearBlockchange() { Blockchange = null; }
-        public bool HasBlockchange() { return (Blockchange == null); }
-        public object blockchangeObject = null;
-
-        public ushort[] pos = new ushort[3] { 0, 0, 0 };
-        ushort[] oldpos = new ushort[3] { 0, 0, 0 };
-        ushort[] basepos = new ushort[3] { 0, 0, 0 };
-        public byte[] rot = new byte[2] { 0, 0 };
-        byte[] oldrot = new byte[2] { 0, 0 };
-
-        // grief/spam detection
-        public static int spamBlockCount = 55;
-        public static int spamBlockTimer = 5;
-        Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
-
-        public static int spamChatCount = 3;
-        public static int spamChatTimer = 4;
-        Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
 
         bool loggedIn = false;
 
-        public Block doors = new Block();
-        public bool isOpChat = false;
-        public bool isWhisperChat = false;
-        public string whisperTarget = "";
-
-        public Player(Socket s)
+        public Player (Socket s)
         {
-            try
-            {
-                socket = s;
-                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
-                Logger.Log(ip + " connected.", LogType.Information);
+            initNetworking(s);
 
-                if (Server.bannedIP.Contains(ip)) { Kick("You're banned!"); return; }
-                if (connections.Count >= 5) { Kick("Too many connections!"); return; }
-
-                for (byte i = 0; i < 128; ++i)
-                    bindings[i] = i;
-
-                socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None,
-                                    new AsyncCallback(Receive), this);
-
-                loginTimer.Elapsed += delegate
-                {
-                    loginTimer.Stop();
-                    if (!loggedIn)
-                    {
-                        Kick("You must login! Try again.");
-                    }
-                    else if (Rank >= GroupEnum.Operator)
-                    {
-                        SendMessage("Welcome " + name + "! You rule!");
-                        if (Server.LatestVersion > Server.VersionNumber)
-                        {
-                            SendMessage("[Console]: &cImportant!!! A MCSharp update is available!!");
-                        }
-                    }
-                    else
-                    {
-                        SendMessage("Welcome " + name + "! Please use /rules");
-                    }
-                    _color = MCSharp.Group.Find(Rank).Color;
-                    if (File.Exists("welcome.txt"))
-                    {
-                        try
-                        {
-                            List<string> Welcome = new List<string>();
-                            StreamReader wm = File.OpenText("welcome.txt");
-                            while (!wm.EndOfStream)
-                            {
-                                Welcome.Add(wm.ReadLine());
-                            }
-                            wm.Close();
-
-                            foreach (string w in Welcome)
-                                SendMessage(w);
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                }; loginTimer.Start();
-                pingTimer.Elapsed += delegate { SendPing(); };
-                pingTimer.Start();
-                connections.Add(this);
-
-            }
-            catch (Exception e)
-            {
-                Logger.Log("Error while in the player constructor", LogType.Error);
-                Logger.Log(e.Message, LogType.ErrorMessage);
-            }
-        }
-
-        public void ChangeLevel(string strLevel)
-        {
-            foreach (Level level in Server.levels)
-            {
-                if (level.name.ToLower() == strLevel.ToLower())
-                {
-                    ChangeLevel(level);
-                    break;
-                }
-            }
-        }
-
-        public void ChangeLevel(Level lvlLevel)
-        {
-            Loading = true;
-
-            // Clear the players player list
-            foreach (Player pl in Player.players)
-            {
-                if (this.level == pl.level && this != pl)
-                {
-                    this.SendDie(pl.id);
-                }
-            }
-
-              this.ClearBlockchange();
-            this.BlockAction = 0;
-            this.painting = false;
-            Player.GlobalDie(this, true);
-            this.level = lvlLevel;
-            this.SendMotd();
-            this.SendMap();
-            ushort x = (ushort)((0.5 + level.spawnx) * 32);
-            ushort y = (ushort)((1 + level.spawny) * 32);
-            ushort z = (ushort)((0.5 + level.spawnz) * 32);
-            if (!this.hidden)
-            {
-                Player.GlobalSpawn(this, x, y, z, level.rotx, level.roty, true);
-            }
-            else unchecked
-                {
-                    this.SendPos((byte)-1, x, y, z, level.rotx, level.roty);
-                }
-            foreach (Player pl in Player.players)
-            {
-                if (this.level == pl.level && this != pl && !pl.hidden)
-                {
-                    this.SendSpawn(pl.id, pl.color + pl.name, pl.pos[0], pl.pos[1], pl.pos[2], pl.rot[0], pl.rot[1]);
-                }
-            }
-            this.Loading = false;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-
-        public void ClearActions()
-        {
-            ClearBlockchange();
-            ClearBindings();
-            painting = false;
-        }
-
-        public int ClearBindings()
-        {
-            int bindCount = 0;
+            // Set up bindings
             for (byte i = 0; i < 128; ++i)
-            {
-                if (Block.Placable(i) && bindings[i] != i)
-                {
-                    bindings[i] = i;
-                    bindCount += 1;
-                }
-            }
-            return bindCount;
+                bindings[i] = i;
         }
+             
 
-        public static GroupEnum GetRank(string name)
+        
+
+        public static GroupEnum GetRank (string name)
         {
             GroupEnum g = GroupEnum.Guest;
 
@@ -251,7 +84,7 @@ namespace MCSharp
             return g;
         }
 
-        public static void ChangeRank(Player p, GroupEnum g)
+        public static void ChangeRank (Player p, GroupEnum g)
         {
             bool blnResendMap = ((p.checkOp() && g <= GroupEnum.Moderator) || (!p.checkOp() && g >= GroupEnum.Moderator));
             p.group = Group.Find(g);
@@ -269,7 +102,7 @@ namespace MCSharp
             }
         }
 
-        public static void ChangeRank(string name, GroupEnum g)
+        public static void ChangeRank (string name, GroupEnum g)
         {
 
             if (Server.operators.Contains(name)) { Server.operators.Remove(name); }
@@ -308,13 +141,15 @@ namespace MCSharp
             }
         }
 
-        public static void Ban(string name)
+
+        public static void Ban (string name)
         {
             Player.ChangeRank(name, GroupEnum.Banned);
             Logger.Log("BANNED: " + name.ToLower());
         }
 
-        public static bool IsOnline(string name)
+
+        public static bool IsOnline (string name)
         {
             bool blnOnline = false;
             foreach (Player p in players)
@@ -329,85 +164,10 @@ namespace MCSharp
         }
 
 
-        #region == GLOBAL MESSAGES ==
-
-        public static void GlobalBlockchange(Level level, ushort x, ushort y, ushort z, byte type)
-        {
-            players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
-        }
-        public static void GlobalChat(Player from, string message) { GlobalChat(from, message, true); }
-        public static void GlobalChat(Player from, string message, bool showname)
-        {
-            if (showname) { message = from.color + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { p.SendChat(from, message); });
-        }
-        public static void GlobalChatLevel(Player from, string message, bool showname)
-        {
-            if (showname) { message = "<Level>" + from.color + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level)p.SendChat(from, message); });
-        }
-        public static void GlobalChatWorld(Player from, string message, bool showname)
-        {
-            if (showname) { message = "<World>" + from.color + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { p.SendChat(from, message); });
-        }
-        public static void GlobalMessage(string message)
-        {
-            players.ForEach(delegate(Player p) { p.SendMessage(message); });
-        }
-        public static void GlobalMessageLevel(Level l, string message)
-        {
-            players.ForEach(delegate(Player p) { if (p.level == l) p.SendMessage(message); });
-        }
-        public static void GlobalMessageOps(string message)     //Send a global messege to ops only
-        {
-            players.ForEach(delegate(Player p)
-            {
-                if (p.Rank >= GroupEnum.Moderator)
-                {
-                    p.SendMessage(message);
-                }
-            });
-        }
-
-        public static void GlobalRespawn(Player respawnTarget)
-        {
-            GlobalSpawn(respawnTarget, respawnTarget.pos[0], respawnTarget.pos[1], respawnTarget.pos[2], respawnTarget.rot[0], respawnTarget.rot[1], false);
-        }
-
-
-        public static void GlobalSpawn(Player from, ushort x, ushort y, ushort z, byte rotx, byte roty, bool self)
-        {
-            players.ForEach(delegate(Player p)
-            {
-                if (p.Loading && p != from) { return; }
-                if (p.level != from.level || (from.hidden && !self)) { return; }
-                if (p != from) { p.SendSpawn(from.id, from.color + from.name, x, y, z, rotx, roty); }
-                else if (self)
-                {
-                    p.pos = new ushort[3] { x, y, z }; p.rot = new byte[2] { rotx, roty };
-                    p.oldpos = p.pos; p.basepos = p.pos; p.oldrot = p.rot;
-                    unchecked { p.SendSpawn((byte)-1, from.color + from.name, x, y, z, rotx, roty); }
-                }
-            });
-        }
-        public static void GlobalDie(Player from, bool self)
-        {
-            players.ForEach(delegate(Player p)
-            {
-                if (p.level != from.level || (from.hidden && !self)) { return; }
-                if (p != from) { p.SendDie(from.id); }
-                else if (self) { unchecked { p.SendDie((byte)-1); } }
-            });
-        }
-        public static void GlobalUpdate() { players.ForEach(delegate(Player p) { if (!p.hidden) { p.UpdatePosition(); } }); }
-
-        #endregion
-
 
         #region == DISCONNECTING ==
 
-        public void Disconnect()
+        public void Disconnect ()
         {
             if (disconnected)
             {
@@ -453,7 +213,7 @@ namespace MCSharp
             //Removes from afk list on disconnect
         }
 
-        public void Kick(string message)
+        public void Kick (string message)
         {
             if (disconnected)
             {
@@ -484,7 +244,7 @@ namespace MCSharp
             }//Removes from afk list on disconnect
         }
 
-        public void SMPKick(string message)
+        public void SMPKick (string message)
         {
             if (disconnected)
             {
@@ -503,14 +263,14 @@ namespace MCSharp
 
             // Make a new array to hold the message and the length prefix
             byte[] bytes = new byte[messageBytes.Length + 2];
-            
+
             // Get the length of the string
             byte[] length = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short) message.Length));
-            
+
             // Merge the arrays
             Buffer.BlockCopy(length, 0, bytes, 0, length.Length);
             Buffer.BlockCopy(messageBytes, 0, bytes, 2, messageBytes.Length);
-            
+
             // Send the Kick packet
             SendRaw(255, bytes);
 
@@ -541,54 +301,76 @@ namespace MCSharp
 
         #region == CHECKING ==
 
-        public static List<Player> GetPlayers() { return new List<Player>(players); }
-        public static bool Exists(string name)
+        public static List<Player> GetPlayers () { return new List<Player>(players); }
+        public static bool Exists (string name)
         {
             foreach (Player p in players)
             { if (p.name.ToLower() == name.ToLower()) { return true; } } return false;
         }
-        public static bool Exists(byte id)
+        public static bool Exists (byte id)
         {
             foreach (Player p in players)
             { if (p.id == id) { return true; } } return false;
         }
-        public static Player Find(string name)
+        public static Player Find (string name)
         {
             foreach (Player p in players)
             { if (p.name.ToLower() == name.ToLower()) { return p; } } return null;
         }
-        public static Group GetGroup(string name)
+        public static Group GetGroup (string name)
         {
             Player who = Player.Find(name); if (who != null) { return who.group; }
             if (Server.banned.All().Contains(name.ToLower())) { return Group.Find("banned"); }
             if (Server.operators.All().Contains(name.ToLower())) { return Group.Find("operator"); }
             return Group.standard;
         }
-        public static string GetColor(string name) { return GetGroup(name).Color; }
+        public static string GetColor (string name) { return GetGroup(name).Color; }
 
         #endregion
 
 
         #region == OTHER ==
 
-        static byte FreeId()
+        static byte FreeId ()
         {
-            for (byte i = 0; i < Properties.MaxPlayers; ++i)
+            byte freeId = 0;
+            bool isFree = false;
+            for (freeId = 0; freeId < Properties.MaxPlayers; ++freeId)
             {
+                isFree = true;
                 foreach (Player p in players)
                 {
-                    if (p.id == i) { goto Next; }
-                } return i;
-            Next: continue;
-            } unchecked { return (byte)-1; }
+                    if (p.id == freeId)
+                    {
+                        isFree = false;
+                        break;
+                    }
+                }
+
+                if (isFree)
+                {
+                    break;
+                }
+            }
+
+            if (isFree)
+            {
+                return freeId;
+            }
+            else
+            {
+                unchecked { return (byte) -1; }
+            }
         }
-        static byte[] StringFormat(string str, int size)
+
+        static byte[] StringFormat (string str, int size)
         {
             byte[] bytes = new byte[size];
-            bytes = enc.GetBytes(str.PadRight(size).Substring(0, size));
+            bytes = Encoding.ASCII.GetBytes(str.PadRight(size).Substring(0, size));
+
             return bytes;
         }
-        static List<string> Wordwrap(string message)
+        static List<string> Wordwrap (string message)
         {
             List<string> lines = new List<string>();
             message = Regex.Replace(message, @"(&[0-9a-f])+(&[0-9a-f])", "$2");
@@ -606,7 +388,7 @@ namespace MCSharp
                     }
                 }
                 lines.Add(message.Substring(0, limit));
-            Next: message = message.Substring(lines[lines.Count - 1].Length);
+Next: message = message.Substring(lines[lines.Count - 1].Length);
                 if (lines.Count == 1)
                 {
                     limit = 60;
@@ -638,12 +420,12 @@ namespace MCSharp
                 }
             } return lines;
         }
-        public static bool ValidName(string name)
+        public static bool ValidName (string name)
         {
             string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
             foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
         }
-        public static byte[] GZip(byte[] bytes)
+        public static byte[] GZip (byte[] bytes)
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             GZipStream gs = new GZipStream(ms, CompressionMode.Compress, true);
@@ -651,7 +433,7 @@ namespace MCSharp
             gs.Close();
             ms.Position = 0;
             bytes = new byte[ms.Length];
-            ms.Read(bytes, 0, (int)ms.Length);
+            ms.Read(bytes, 0, (int) ms.Length);
             ms.Close();
             return bytes;
         }
@@ -659,7 +441,7 @@ namespace MCSharp
         #endregion
 
 
-        bool CheckBlockSpam()
+        bool CheckBlockSpam ()
         {
             if (!Server.griefExempted.Contains(name))
             {
