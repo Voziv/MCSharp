@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Commands\Block\CmdCopy.cs" />
     <Compile Include="Commands\Block\CmdPaste.cs" />
-    <Compile Include="Database\CraftedDatabase.cs" />
     <Compile Include="Global\BlockBuffer.cs" />
     <Compile Include="Global\BlockPos.cs" />
     <Compile Include="Global\CatchPos.cs" />
@@ -272,14 +271,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Database\sql\bans.sql" />
-    <None Include="Database\sql\commands.sql" />
-    <None Include="Database\sql\groups.sql" />
-    <None Include="Database\sql\players.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup />
 </Project>
