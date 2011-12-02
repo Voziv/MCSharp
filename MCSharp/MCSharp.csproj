@@ -76,7 +76,9 @@
     <Compile Include="Heartbeat\Heartbeat.cs" />
     <Compile Include="Heartbeat\MinecraftHeartbeat.cs" />
     <Compile Include="Player\Player.Chat.cs" />
+    <Compile Include="Player\Player.Commands.cs" />
     <Compile Include="Player\Player.Level.cs" />
+    <Compile Include="Player\Player.Locomotion.cs" />
     <Compile Include="Player\Player.Networking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\Administrative\CmdExempt.cs" />

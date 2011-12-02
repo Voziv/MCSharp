@@ -64,6 +64,23 @@ namespace MCSharp
                 bindings[i] = i;
         }
 
+        /// <summary>
+        /// Checks to see if the player has operator permissions
+        /// </summary>
+        /// <returns></returns>
+        private bool checkOp ()
+        {
+            bool isOp = false;
+            switch (Rank)
+            {
+                case GroupEnum.Administrator:
+                case GroupEnum.Operator:
+                case GroupEnum.Moderator:
+                    isOp = true;
+                    break;
+            }
+            return isOp;
+        }
 
         /// <summary>
         /// Gets a players rank
@@ -187,154 +204,6 @@ namespace MCSharp
             return blnOnline;
         }
 
-
-
-        #region == DISCONNECTING ==
-
-        /// <summary>
-        /// Handles a player disconnection. Cleans up the player from other players on the server
-        /// as well as handles cleaning up the player from the system.
-        /// </summary>
-        public void Disconnect ()
-        {
-            if (disconnected)
-            {
-                if (connections.Contains(this))
-                    connections.Remove(this);
-                return;
-            }
-            disconnected = true;
-            pingTimer.Stop();
-            SendKick("Disconnected.");
-            if (loggedIn)
-            {
-                GlobalDie(this, false);
-                if (!hidden) { GlobalChat(this, "&c- " + color + name + "&e disconnected.", false); }
-                IRCBot.Say(name + " left the game.");
-                Logger.Log(name + " disconnected.");
-                players.Remove(this);
-                Server.s.PlayerListUpdate();
-                /*if (!Server.console && Server.win != null)
-                    Server.win.UpdateClientList(players);*/
-                left.Add(this.name.ToLower(), this.ip);
-                //Added by bman for lastseen command
-                if (!lastSeen.ContainsKey(this.name.ToLower()))
-                {
-                    lastSeen.Add(this.name.ToLower(), DateTime.Now);
-                    Server.SaveLastSeen();
-                }
-                else
-                {
-                    lastSeen[this.name.ToLower()] = DateTime.Now;
-                    Server.SaveLastSeen();
-                }
-            }
-            else
-            {
-                connections.Remove(this);
-                Logger.Log(ip + " disconnected.");
-            }
-            if (Server.afkset.Contains(name))
-            {
-                Server.afkset.Remove(name);
-            }
-            //Removes from afk list on disconnect
-        }
-
-        /// <summary>
-        /// Kicks the player with a given message
-        /// </summary>
-        /// <param name="message">The reason the player was kicked</param>
-        public void Kick (string message)
-        {
-            if (disconnected)
-            {
-                if (connections.Contains(this))
-                    connections.Remove(this);
-                return;
-            }
-            disconnected = true;
-            pingTimer.Stop();
-            SendKick(message);
-            if (loggedIn)
-            {
-                GlobalDie(this, false);
-                GlobalChat(this, "&c- " + color + name + "&e kicked (" + message + ").", false);
-                Logger.Log(name + " was kicked. (" + message + ").");
-                players.Remove(this);
-                Server.s.PlayerListUpdate();
-                left.Add(this.name.ToLower(), this.ip);
-            }
-            else
-            {
-                connections.Remove(this);
-                Logger.Log(ip + " was kicked (" + message + ").");
-            }
-            if (Server.afkset.Contains(name))
-            {
-                Server.afkset.Remove(name);
-            }//Removes from afk list on disconnect
-        }
-
-        /// <summary>
-        /// A kick function that works for the new SMP clients. That way they
-        /// have a friendly way of being removed from the server instead of
-        /// "Invalid packet id 2"
-        /// </summary>
-        /// <param name="message">The message to kick a SMP player with</param>
-        public void SMPKick (string message)
-        {
-            if (disconnected)
-            {
-                if (connections.Contains(this))
-                    connections.Remove(this);
-                return;
-            }
-            disconnected = true;
-            pingTimer.Stop();
-
-
-
-            // Send Kick
-            // Get the bytes in UTF16
-            byte[] messageBytes = Encoding.BigEndianUnicode.GetBytes(message);
-
-            // Make a new array to hold the message and the length prefix
-            byte[] bytes = new byte[messageBytes.Length + 2];
-
-            // Get the length of the string
-            byte[] length = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short) message.Length));
-
-            // Merge the arrays
-            Buffer.BlockCopy(length, 0, bytes, 0, length.Length);
-            Buffer.BlockCopy(messageBytes, 0, bytes, 2, messageBytes.Length);
-
-            // Send the Kick packet
-            SendRaw(255, bytes);
-
-            if (connections.Contains(this))
-                connections.Remove(this);
-            if (loggedIn)
-            {
-                GlobalDie(this, false);
-                GlobalChat(this, "&c- " + color + name + "&e kicked (" + message + ").", false);
-                Logger.Log(name + " was kicked. (" + message + ").");
-                players.Remove(this);
-                Server.s.PlayerListUpdate();
-                left.Add(this.name.ToLower(), this.ip);
-            }
-            else
-            {
-                connections.Remove(this);
-                Logger.Log(ip + " was kicked (" + message + ").");
-            }
-            if (Server.afkset.Contains(name))
-            {
-                Server.afkset.Remove(name);
-            }//Removes from afk list on disconnect
-        }
-
-        #endregion
 
 
         #region == CHECKING ==

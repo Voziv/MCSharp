@@ -130,7 +130,518 @@ namespace MCSharp
             return bindCount;
         }
 
+        /// <summary>
+        /// Processes deleting a block from the world
+        /// </summary>
+        /// <param name="b">The block</param>
+        /// <param name="type">The type</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        private void deleteBlock (byte b, byte type, ushort x, ushort y, ushort z)
+        {
+            // Don't bother with buildop here yet, deleted op_material should not turn into op_air.
+            // That would be annoying. 
+
+            /*switch (b)
+            {
+                case Block.door_tree: //Door
+                    if (level.physics != 0)
+                    { level.Blockchange(this, x, y, z, (byte)(Block.doorair_tree)); }
+                    else
+                    { SendBlockchange(x, y, z, b); }
+                    break;
+                case Block.door_obsidian:   //Door2
+                    if (level.physics != 0)
+                    { level.Blockchange(this, x, y, z, (byte)(Block.doorair_obsidian)); }
+                    else
+                    { SendBlockchange(x, y, z, b); }
+                    break;
+                case Block.door_glass:   //Door3
+                    if (level.physics != 0)
+                    { level.Blockchange(this, x, y, z, (byte)(Block.doorair_glass)); }
+                    else
+                    { SendBlockchange(x, y, z, b); }
+                    break;
+                case Block.door_white:
+                    if (level.physics != 0)
+                    { level.Blockchange(this, x, y, z, (byte)(Block.doorair_white)); }
+                    else
+                    { SendBlockchange(x, y, z, b); }
+                    break;
+                case Block.doorair_tree:   //Door_air
+                case Block.doorair_obsidian:
+                case Block.doorair_glass:
+                case Block.doorair_white:
+                    break;
+                default:
+                    level.Blockchange(this, x, y, z, (byte)(Block.air));
+                    deletedBlocks += 1;
+                    break;
+            }*/
+            bool doorCheck = false;
+            for (int i = 0; i < doors.doorBlocks.Length; i++)
+            {
+                if (b.Equals(doors.doorBlocks[i]))
+                {
+                    //this.SendMessage("block checked ok");
+                    doorCheck = true;
+                    if (level.physics != 0)
+                    { level.Blockchange(this, x, y, z, (doors.doorAirBlocks[i])); }
+                    else
+                    { SendBlockchange(x, y, z, b); /*this.SendMessage("break1 out of loop");*/ }
+                }
+                else if (b.Equals(doors.doorAirBlocks[i]))
+                {
+                    doorCheck = true;
+                    break;
+                }
+
+            }
+            if (!doorCheck) //if the block hasn't been changed, add air
+            {
+                //this.SendMessage("loop failed, regular delete");
+                level.Blockchange(this, x, y, z, (byte) (Block.air));
+                deletedBlocks += 1;
+            }
+        }
+
+        /// <summary>
+        /// Handles a player adding a block to the world
+        /// </summary>
+        /// <param name="b">The block type</param>
+        /// <param name="type">The block type</param>
+        /// <param name="x">The x coordinate of the block</param>
+        /// <param name="y">The t coordinate of the block</param>
+        /// <param name="z">The z coordinate of the block</param>
+        private void placeBlock (byte b, byte type, ushort x, ushort y, ushort z)
+        {
+            switch (BlockAction)
+            {
+                case 0:     //normal
+                    if (level.physics == 0)
+                    {
+                        switch (type)
+                        {
+                            case Block.dirt: //instant dirt to grass
+                                level.Blockchange(this, x, y, z, (byte) (Block.grass));
+                                break;
+                            case Block.staircasestep:    //stair handler
+                                if (level.GetTile(x, (ushort) (y - 1), z) == Block.staircasestep)
+                                {
+                                    SendBlockchange(x, y, z, Block.air);    //send the air block back only to the user.
+                                    //level.Blockchange(this, x, y, z, (byte)(Block.air));
+                                    level.Blockchange(this, x, (ushort) (y - 1), z, (byte) (Block.staircasefull));
+                                    break;
+                                }
+                                //else
+                                level.Blockchange(this, x, y, z, type);
+                                break;
+                            default:
+                                level.Blockchange(this, x, y, z, type);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        level.Blockchange(this, x, y, z, type);
+                    }
+                    if (!Block.LightPass(type))
+                    {
+                        if (level.GetTile(x, (ushort) (y - 1), z) == Block.grass)
+                        {
+                            level.Blockchange(x, (ushort) (y - 1), z, Block.dirt);
+                        }
+                    }
+
+                    break;
+                case 1:     //solid
+                    if (b == Block.blackrock) { SendBlockchange(x, y, z, b); return; }
+                    level.Blockchange(this, x, y, z, (byte) (Block.blackrock));
+                    break;
+                case 2:     //lava
+                    if (b == Block.lavastill) { SendBlockchange(x, y, z, b); return; }
+                    level.Blockchange(this, x, y, z, (byte) (Block.lavastill));
+                    break;
+                case 3:     //water
+                    if (b == Block.waterstill) { SendBlockchange(x, y, z, b); return; }
+                    level.Blockchange(this, x, y, z, (byte) (Block.waterstill));
+                    break;
+                case 4:     //ACTIVE lava
+                    if (b == Block.lava) { SendBlockchange(x, y, z, b); return; }
+                    level.Blockchange(this, x, y, z, (byte) (Block.lava));
+                    BlockAction = 0;
+                    break;
+                case 5:     //ACTIVE water
+                    if (b == Block.water) { SendBlockchange(x, y, z, b); return; }
+                    level.Blockchange(this, x, y, z, (byte) (Block.water));
+                    BlockAction = 0;
+                    break;
+                case 6:     //OpGlass
+                    if (b == Block.op_glass) { SendBlockchange(x, y, z, b); return; }
+                    level.Blockchange(this, x, y, z, (byte) (Block.op_glass));
+                    break;
+                case 7:    // sapling >> tree
+                    if (type == Block.shrub)
+                    {
+                        Random rand = new System.Random();
+                        AddTree2(this.level, x, y, z, rand);
+                    }
+                    else
+                    {
+                        goto case 0;
+                    }
+                    break;
+                case 8:
+                    // BuildOP
+                    break;
+                case 9:
+                    // BuildDoor
+                    break;
+                default:
+                    if (BlockAction != 8 && BlockAction != 9) // Yea it's ugly, I know.
+                    {
+                        Logger.Log(name + " is breaking something", LogType.Debug);   // Should fix annoying log spam with buildop + builddoor
+                        BlockAction = 0;
+                    }
+                    break;
+            }
+            #region === Buildop + Builddoor ===
+            if (BlockAction == 8) //buildop
+            {
+                switch (type)
+                {
+                    case Block.air:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_air));
+                        break;
+                    case Block.rock:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_stone));
+                        break;
+                    case Block.dirt:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_dirt));
+                        break;
+                    case Block.stone:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_cobblestone));
+                        break;
+                    case Block.wood:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_wood));
+                        break;
+                    case Block.shrub:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_shrub));
+                        break;
+                    case Block.sand:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_sand));
+                        break;
+                    case Block.gravel:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_gravel));
+                        break;
+                    case Block.goldrock:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_goldrock));
+                        break;
+                    case Block.ironrock:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_ironrock));
+                        break;
+                    case Block.coal:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_coal));
+                        break;
+                    case Block.trunk:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_trunk));
+                        break;
+                    case Block.leaf:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_leaf));
+                        break;
+                    case Block.sponge:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_sponge));
+                        break;
+                    case Block.glass:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_glass));
+                        break;
+                    case Block.red:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_red));
+                        break;
+                    case Block.orange:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_orange));
+                        break;
+                    case Block.yellow:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_yellow));
+                        break;
+                    case Block.lightgreen:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_lightgreen));
+                        break;
+                    case Block.green:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_green));
+                        break;
+                    case Block.aquagreen:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_aquagreen));
+                        break;
+                    case Block.cyan:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_cyan));
+                        break;
+                    case Block.lightblue:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_lightblue));
+                        break;
+                    case Block.blue:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_blue));
+                        break;
+                    case Block.purple:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_purple));
+                        break;
+                    case Block.lightpurple:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_lightpurple));
+                        break;
+                    case Block.pink:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_pink));
+                        break;
+                    case Block.darkpink:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_darkpink));
+                        break;
+                    case Block.darkgrey:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_darkgrey));
+                        break;
+                    case Block.lightgrey:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_lightgrey));
+                        break;
+                    case Block.white:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_white));
+                        break;
+                    case Block.yellowflower:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_yellowflower));
+                        break;
+                    case Block.redflower:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_redflower));
+                        break;
+                    case Block.mushroom:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_mushroom));
+                        break;
+                    case Block.redmushroom:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_redmushroom));
+                        break;
+                    case Block.goldsolid:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_goldsolid));
+                        break;
+                    case Block.iron:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_iron));
+                        break;
+                    case Block.staircasefull:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_staircasefull));
+                        break;
+                    case Block.staircasestep:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_staircasestep));
+                        break;
+                    case Block.brick:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_brick));
+                        break;
+                    case Block.tnt:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_tnt));
+                        break;
+                    case Block.bookcase:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_bookcase));
+                        break;
+                    case Block.stonevine:
+                        level.Blockchange(this, x, y, z, (byte) (Block.op_stonevine));
+                        break;
+                    case Block.obsidian:
+                        level.Blockchange(this, x, y, z, (byte) (Block.opsidian));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (BlockAction == 9) //builddoor
+            {
+                switch (type)
+                {
+                    case Block.air:
+                        break;
+                    case Block.rock:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_stone));
+                        break;
+                    case Block.dirt:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_dirt));
+                        break;
+                    case Block.stone:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_cobblestone));
+                        break;
+                    case Block.wood:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_wood));
+                        break;
+                    case Block.shrub:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_shrub));
+                        break;
+                    case Block.sand:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_sand));
+                        break;
+                    case Block.gravel:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_gravel));
+                        break;
+                    case Block.goldrock:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_goldrock));
+                        break;
+                    case Block.ironrock:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_ironrock));
+                        break;
+                    case Block.coal:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_coal));
+                        break;
+                    case Block.trunk:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_tree));
+                        break;
+                    case Block.leaf:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_leaf));
+                        break;
+                    case Block.sponge:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_sponge));
+                        break;
+                    case Block.glass:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_glass));
+                        break;
+                    case Block.red:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_red));
+                        break;
+                    case Block.orange:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_orange));
+                        break;
+                    case Block.yellow:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_yellow));
+                        break;
+                    case Block.lightgreen:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_lightgreen));
+                        break;
+                    case Block.green:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_green));
+                        break;
+                    case Block.aquagreen:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_aquagreen));
+                        break;
+                    case Block.cyan:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_cyan));
+                        break;
+                    case Block.lightblue:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_lightblue));
+                        break;
+                    case Block.blue:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_blue));
+                        break;
+                    case Block.purple:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_purple));
+                        break;
+                    case Block.lightpurple:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_lightpurple));
+                        break;
+                    case Block.pink:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_pink));
+                        break;
+                    case Block.darkpink:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_darkpink));
+                        break;
+                    case Block.darkgrey:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_darkgrey));
+                        break;
+                    case Block.lightgrey:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_lightgrey));
+                        break;
+                    case Block.white:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_white));
+                        break;
+                    case Block.yellowflower:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_yellowflower));
+                        break;
+                    case Block.redflower:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_redflower));
+                        break;
+                    case Block.mushroom:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_mushroom));
+                        break;
+                    case Block.redmushroom:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_redmushroom));
+                        break;
+                    case Block.goldsolid:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_goldsolid));
+                        break;
+                    case Block.iron:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_iron));
+                        break;
+                    case Block.staircasefull:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_staircasefull));
+                        break;
+                    case Block.staircasestep:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_staircasestep));
+                        break;
+                    case Block.brick:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_brick));
+                        break;
+                    case Block.tnt:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_tnt));
+                        break;
+                    case Block.bookcase:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_bookcase));
+                        break;
+                    case Block.stonevine:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_stonevine));
+                        break;
+                    case Block.obsidian:
+                        level.Blockchange(this, x, y, z, (byte) (Block.door_obsidian));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            #endregion === Buildop + Builddoor ===  // (blockaction 8 and 9)
+
+            placedBlocks += 1;
+        }
+
+        /// <summary>
+        /// Handles adding a tree to the world when using the tree command
+        /// </summary>
+        /// <param name="Lvl">The level the tree is being added to</param>
+        /// <param name="x">The x coordinate of the block</param>
+        /// <param name="y">The t coordinate of the block</param>
+        /// <param name="z">The z coordinate of the block</param>
+        /// <param name="Rand">A random number generator?</param>
+        void AddTree2 (Level Lvl, ushort x, ushort z, ushort y, Random Rand)
+        {
+            byte height = (byte) Rand.Next(4, 7);
+            for (ushort zz = 0; zz < height; zz++)
+            {
+                if (Lvl.GetTile(x, (ushort) (z + zz), y) == Block.air)   //Not likly to trigger anyway
+                {
+                    Lvl.Blockchange(x, (ushort) (z + zz), y, Block.trunk);
+                }
+                else
+                {
+                    height = (byte) zz;
+                }
+            }
+
+            short top = (short) (height - 3);
+
+            for (short xx = (short) -top; xx <= top; ++xx)
+            {
+                for (short yy = (short) -top; yy <= top; ++yy)
+                {
+                    for (short zz = (short) -top; zz <= top; ++zz)
+                    {
+                        if (Lvl.GetTile((ushort) (x + xx), (ushort) (z + zz + height), (ushort) (y + yy)) == Block.air)   //Not likly to trigger anyway
+                        {
+                            //short Dist = (short)(Math.Abs(xx) + Math.Abs(yy) + Math.Abs(zz));
+                            short Dist = (short) (Math.Sqrt(xx * xx + yy * yy + zz * zz));
+                            if (Dist < top + 1)
+                            {
+                                if (Rand.Next((int) (Dist)) < 2)
+                                {
+                                    Lvl.Blockchange((ushort) (x + xx), (ushort) (z + zz + height), (ushort) (y + yy), Block.leaf);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } // taken from map generator
+
+
         #region == GLOBAL MESSAGES ==
+
         public static void GlobalBlockchange (Level level, ushort x, ushort y, ushort z, byte type)
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
