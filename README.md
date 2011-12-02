@@ -24,5 +24,6 @@ Special Thanks (Contributers)
 - howimineforfish
 - KakashiSuno
 - NekoBaron
+- Spartian101
 
 Anyone who I missed, just let me know and you will be added!
