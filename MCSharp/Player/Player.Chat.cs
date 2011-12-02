@@ -13,6 +13,8 @@ namespace MCSharp
         public bool isOpChat = false;
         public bool isWhisperChat = false;
         public string whisperTarget = "";
+        public string color { get { return _color; } set { _color = value; } }
+        private string _color;
 
 
         #region == GLOBAL MESSAGES ==

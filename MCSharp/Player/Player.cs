@@ -23,8 +23,7 @@ namespace MCSharp
 
         // Properties
         public GroupEnum Rank { get { return Player.GetRank(name); } }
-        public string color { get { return _color; } set { _color = value; } }
-        private string _color;
+
 
         // Bman Additions
         Random rand = new Random();
@@ -46,12 +45,16 @@ namespace MCSharp
 
         public byte[] bindings = new byte[128];
 
-        
+
 
         public bool Loading = true;     //True if player is loading a map.
 
         bool loggedIn = false;
 
+        /// <summary>
+        /// The main constructor for the player.
+        /// </summary>
+        /// <param name="s">The incoming socket connection for the player to bind to</param>
         public Player (Socket s)
         {
             initNetworking(s);
@@ -60,10 +63,13 @@ namespace MCSharp
             for (byte i = 0; i < 128; ++i)
                 bindings[i] = i;
         }
-             
 
-        
 
+        /// <summary>
+        /// Gets a players rank
+        /// </summary>
+        /// <param name="name">The player name to get the rank for</param>
+        /// <returns>The group that the player belongs to</returns>
         public static GroupEnum GetRank (string name)
         {
             GroupEnum g = GroupEnum.Guest;
@@ -84,6 +90,11 @@ namespace MCSharp
             return g;
         }
 
+        /// <summary>
+        /// Changes a players rank
+        /// </summary>
+        /// <param name="p">The player object to change</param>
+        /// <param name="g">The rank to change the player to</param>
         public static void ChangeRank (Player p, GroupEnum g)
         {
             bool blnResendMap = ((p.checkOp() && g <= GroupEnum.Moderator) || (!p.checkOp() && g >= GroupEnum.Moderator));
@@ -102,6 +113,11 @@ namespace MCSharp
             }
         }
 
+        /// <summary>
+        /// Changes the given players rank
+        /// </summary>
+        /// <param name="name">The name of the player</param>
+        /// <param name="g">The players new rank</param>
         public static void ChangeRank (string name, GroupEnum g)
         {
 
@@ -141,7 +157,10 @@ namespace MCSharp
             }
         }
 
-
+        /// <summary>
+        /// Changes the players rank to banned.
+        /// </summary>
+        /// <param name="name">The player's name to ban</param>
         public static void Ban (string name)
         {
             Player.ChangeRank(name, GroupEnum.Banned);
@@ -149,6 +168,11 @@ namespace MCSharp
         }
 
 
+        /// <summary>
+        /// Determines if the user is online
+        /// </summary>
+        /// <param name="name">The player's name</param>
+        /// <returns>True if the player is online, otherwise false.</returns>
         public static bool IsOnline (string name)
         {
             bool blnOnline = false;
@@ -167,6 +191,10 @@ namespace MCSharp
 
         #region == DISCONNECTING ==
 
+        /// <summary>
+        /// Handles a player disconnection. Cleans up the player from other players on the server
+        /// as well as handles cleaning up the player from the system.
+        /// </summary>
         public void Disconnect ()
         {
             if (disconnected)
@@ -213,6 +241,10 @@ namespace MCSharp
             //Removes from afk list on disconnect
         }
 
+        /// <summary>
+        /// Kicks the player with a given message
+        /// </summary>
+        /// <param name="message">The reason the player was kicked</param>
         public void Kick (string message)
         {
             if (disconnected)
@@ -244,6 +276,12 @@ namespace MCSharp
             }//Removes from afk list on disconnect
         }
 
+        /// <summary>
+        /// A kick function that works for the new SMP clients. That way they
+        /// have a friendly way of being removed from the server instead of
+        /// "Invalid packet id 2"
+        /// </summary>
+        /// <param name="message">The message to kick a SMP player with</param>
         public void SMPKick (string message)
         {
             if (disconnected)
@@ -301,36 +339,111 @@ namespace MCSharp
 
         #region == CHECKING ==
 
-        public static List<Player> GetPlayers () { return new List<Player>(players); }
+        /// <summary>
+        /// Returns the list of players.
+        /// </summary>
+        /// <returns>The list of players</returns>
+        public static List<Player> GetPlayers ()
+        {
+            return new List<Player>(players);
+        }
+
+        /// <summary>
+        /// Checks to see if a player exists in the list
+        /// </summary>
+        /// <param name="name">the players name</param>
+        /// <returns>True if the player exists, else false</returns>
         public static bool Exists (string name)
         {
             foreach (Player p in players)
-            { if (p.name.ToLower() == name.ToLower()) { return true; } } return false;
+            {
+                if (p.name.ToLower() == name.ToLower())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
+
+        /// <summary>
+        /// Checks to see if a player exists in the list
+        /// </summary>
+        /// <param name="id">The id of the player</param>
+        /// <returns>True if the player exists, else false</returns>
         public static bool Exists (byte id)
         {
             foreach (Player p in players)
-            { if (p.id == id) { return true; } } return false;
+            {
+                if (p.id == id)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
+
+        /// <summary>
+        /// Finds a player in the list
+        /// </summary>
+        /// <param name="name">The name of the player</param>
+        /// <returns>The Player object with that name, or null if no player was found</returns>
         public static Player Find (string name)
         {
             foreach (Player p in players)
-            { if (p.name.ToLower() == name.ToLower()) { return p; } } return null;
+            {
+                if (p.name.ToLower() == name.ToLower())
+                {
+                    return p;
+                }
+            }
+            return null;
         }
+
+        /// <summary>
+        /// Get the group of a given player
+        /// </summary>
+        /// <param name="name">The players name</param>
+        /// <returns>The group object the player belongs to</returns>
         public static Group GetGroup (string name)
         {
-            Player who = Player.Find(name); if (who != null) { return who.group; }
-            if (Server.banned.All().Contains(name.ToLower())) { return Group.Find("banned"); }
-            if (Server.operators.All().Contains(name.ToLower())) { return Group.Find("operator"); }
+            // Try to find the player in the active list
+            Player who = Player.Find(name);
+            if (who != null)
+            {
+                return who.group;
+            }
+
+            // If the player isn't in the active list, have a look in the banned or operator
+            if (Server.banned.All().Contains(name.ToLower()))
+            {
+                return Group.Find("banned");
+            }
+            if (Server.operators.All().Contains(name.ToLower()))
+            {
+                return Group.Find("operator");
+            }
             return Group.standard;
         }
-        public static string GetColor (string name) { return GetGroup(name).Color; }
+
+        /// <summary>
+        /// Gets the color for a given player
+        /// </summary>
+        /// <param name="name">The player to get the color for</param>
+        /// <returns></returns>
+        public static string GetColor (string name)
+        {
+            return GetGroup(name).Color;
+        }
 
         #endregion
 
 
         #region == OTHER ==
 
+        /// <summary>
+        /// Find the next free id available
+        /// </summary>
+        /// <returns>The next available id or -1 if none were available</returns>
         static byte FreeId ()
         {
             byte freeId = 0;
@@ -363,6 +476,12 @@ namespace MCSharp
             }
         }
 
+        /// <summary>
+        /// Formats a string
+        /// </summary>
+        /// <param name="str">The string to format</param>
+        /// <param name="size">How large the end string should be</param>
+        /// <returns>The ASCII bytes of a right padded string</returns>
         static byte[] StringFormat (string str, int size)
         {
             byte[] bytes = new byte[size];
@@ -370,6 +489,12 @@ namespace MCSharp
 
             return bytes;
         }
+
+        /// <summary>
+        /// Performs wordwrap on a string
+        /// </summary>
+        /// <param name="message">The message to wrap</param>
+        /// <returns>A list of wrapped messages</returns>
         static List<string> Wordwrap (string message)
         {
             List<string> lines = new List<string>();
@@ -378,7 +503,10 @@ namespace MCSharp
             int limit = 64; string color = "";
             while (message.Length > 0)
             {
-                if (lines.Count > 0) { message = "> " + color + message.Trim(); }
+                if (lines.Count > 0)
+                {
+                    message = "> " + color + message.Trim();
+                }
                 if (message.Length <= limit) { lines.Add(message); break; }
                 for (int i = limit - 1; i > limit - 9; --i)
                 {
@@ -399,7 +527,10 @@ Next: message = message.Substring(lines[lines.Count - 1].Length);
                     if (index < lines[lines.Count - 1].Length - 1)
                     {
                         char next = lines[lines.Count - 1][index + 1];
-                        if ("0123456789abcdef".IndexOf(next) != -1) { color = "&" + next; }
+                        if ("0123456789abcdef".IndexOf(next) != -1)
+                        {
+                            color = "&" + next;
+                        }
                         if (index == lines[lines.Count - 1].Length - 1)
                         {
                             lines[lines.Count - 1] = lines[lines.Count - 1].
@@ -420,11 +551,29 @@ Next: message = message.Substring(lines[lines.Count - 1].Length);
                 }
             } return lines;
         }
+
+        /// <summary>
+        /// Checks to see if a players name is valid
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static bool ValidName (string name)
         {
             string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
-            foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
+            foreach (char ch in name)
+            {
+                if (allowedchars.IndexOf(ch) == -1)
+                {
+                    return false;
+                }
+            } return true;
         }
+
+        /// <summary>
+        /// Zips an array of bytes using gzip
+        /// </summary>
+        /// <param name="bytes">The bytes to zip</param>
+        /// <returns>A gzipped array of bytes</returns>
         public static byte[] GZip (byte[] bytes)
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
@@ -440,7 +589,10 @@ Next: message = message.Substring(lines[lines.Count - 1].Length);
 
         #endregion
 
-
+        /// <summary>
+        /// Detects whether or not a player is spamming blocks around the map
+        /// </summary>
+        /// <returns>True if the player is spamming. False if the player is not spamming.</returns>
         bool CheckBlockSpam ()
         {
             if (!Server.griefExempted.Contains(name))
