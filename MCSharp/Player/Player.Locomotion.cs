@@ -8,23 +8,23 @@ namespace MCSharp
     public sealed partial class Player
     {
         /// <summary>
-        /// Handles a players movement. Not sure what M is at the moment.
+        /// Handles a players movement.
         /// </summary>
-        /// <param name="m">THIS NEEDS TO BE DOCUMENTED!!</param>
-        void HandleInput (object m)
+        /// <param name="packet">A byte array containing the input packet information</param>
+        void HandleInput (byte[] packet)
         {
-            byte[] message = (byte[]) m;
-            if (!loggedIn)
-                return;
-
-            byte thisid = message[0];
-            ushort x = NTHO(message, 1);
-            ushort y = NTHO(message, 3);
-            ushort z = NTHO(message, 5);
-            byte rotx = message[7];
-            byte roty = message[8];
-            pos = new ushort[3] { x, y, z };
-            rot = new byte[2] { rotx, roty };
+            // Only process the movement packet if the user is logged in
+            if (loggedIn)
+            {
+                byte thisid = packet[0];
+                ushort x = NTHO(packet, 1);
+                ushort y = NTHO(packet, 3);
+                ushort z = NTHO(packet, 5);
+                byte rotx = packet[7];
+                byte roty = packet[8];
+                pos = new ushort[3] { x, y, z };
+                rot = new byte[2] { rotx, roty };
+            }
         }
 
     }
