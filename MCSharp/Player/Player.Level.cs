@@ -133,12 +133,12 @@ namespace MCSharp
         /// <summary>
         /// Processes deleting a block from the world
         /// </summary>
-        /// <param name="b">The block</param>
-        /// <param name="type">The type</param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        private void deleteBlock (byte b, byte type, ushort x, ushort y, ushort z)
+        /// <param name="targetBlockType">The type of block we will be replacing</param>
+        /// <param name="newBlockType">The type of block we're trying to place</param>
+        /// <param name="x">The x coordinate of the block</param>
+        /// <param name="y">The t coordinate of the block</param>
+        /// <param name="z">The z coordinate of the block</param>
+        private void deleteBlock (byte targetBlockType, byte newBlockType, ushort x, ushort y, ushort z)
         {
             // Don't bother with buildop here yet, deleted op_material should not turn into op_air.
             // That would be annoying. 
@@ -182,16 +182,16 @@ namespace MCSharp
             bool doorCheck = false;
             for (int i = 0; i < doors.doorBlocks.Length; i++)
             {
-                if (b.Equals(doors.doorBlocks[i]))
+                if (targetBlockType.Equals(doors.doorBlocks[i]))
                 {
                     //this.SendMessage("block checked ok");
                     doorCheck = true;
                     if (level.physics != 0)
                     { level.Blockchange(this, x, y, z, (doors.doorAirBlocks[i])); }
                     else
-                    { SendBlockchange(x, y, z, b); /*this.SendMessage("break1 out of loop");*/ }
+                    { SendBlockchange(x, y, z, targetBlockType); /*this.SendMessage("break1 out of loop");*/ }
                 }
-                else if (b.Equals(doors.doorAirBlocks[i]))
+                else if (targetBlockType.Equals(doors.doorAirBlocks[i]))
                 {
                     doorCheck = true;
                     break;
@@ -209,19 +209,19 @@ namespace MCSharp
         /// <summary>
         /// Handles a player adding a block to the world
         /// </summary>
-        /// <param name="b">The block type</param>
-        /// <param name="type">The block type</param>
+        /// <param name="targetBlockType">The type of block we will be replacing</param>
+        /// <param name="newBlockType">The type of block we're trying to place</param>
         /// <param name="x">The x coordinate of the block</param>
         /// <param name="y">The t coordinate of the block</param>
         /// <param name="z">The z coordinate of the block</param>
-        private void placeBlock (byte b, byte type, ushort x, ushort y, ushort z)
+        private void placeBlock (byte targetBlockType, byte newBlockType, ushort x, ushort y, ushort z)
         {
             switch (BlockAction)
             {
                 case 0:     //normal
                     if (level.physics == 0)
                     {
-                        switch (type)
+                        switch (newBlockType)
                         {
                             case Block.dirt: //instant dirt to grass
                                 level.Blockchange(this, x, y, z, (byte) (Block.grass));
@@ -235,18 +235,18 @@ namespace MCSharp
                                     break;
                                 }
                                 //else
-                                level.Blockchange(this, x, y, z, type);
+                                level.Blockchange(this, x, y, z, newBlockType);
                                 break;
                             default:
-                                level.Blockchange(this, x, y, z, type);
+                                level.Blockchange(this, x, y, z, newBlockType);
                                 break;
                         }
                     }
                     else
                     {
-                        level.Blockchange(this, x, y, z, type);
+                        level.Blockchange(this, x, y, z, newBlockType);
                     }
-                    if (!Block.LightPass(type))
+                    if (!Block.LightPass(newBlockType))
                     {
                         if (level.GetTile(x, (ushort) (y - 1), z) == Block.grass)
                         {
@@ -256,33 +256,33 @@ namespace MCSharp
 
                     break;
                 case 1:     //solid
-                    if (b == Block.blackrock) { SendBlockchange(x, y, z, b); return; }
+                    if (targetBlockType == Block.blackrock) { SendBlockchange(x, y, z, targetBlockType); return; }
                     level.Blockchange(this, x, y, z, (byte) (Block.blackrock));
                     break;
                 case 2:     //lava
-                    if (b == Block.lavastill) { SendBlockchange(x, y, z, b); return; }
+                    if (targetBlockType == Block.lavastill) { SendBlockchange(x, y, z, targetBlockType); return; }
                     level.Blockchange(this, x, y, z, (byte) (Block.lavastill));
                     break;
                 case 3:     //water
-                    if (b == Block.waterstill) { SendBlockchange(x, y, z, b); return; }
+                    if (targetBlockType == Block.waterstill) { SendBlockchange(x, y, z, targetBlockType); return; }
                     level.Blockchange(this, x, y, z, (byte) (Block.waterstill));
                     break;
                 case 4:     //ACTIVE lava
-                    if (b == Block.lava) { SendBlockchange(x, y, z, b); return; }
+                    if (targetBlockType == Block.lava) { SendBlockchange(x, y, z, targetBlockType); return; }
                     level.Blockchange(this, x, y, z, (byte) (Block.lava));
                     BlockAction = 0;
                     break;
                 case 5:     //ACTIVE water
-                    if (b == Block.water) { SendBlockchange(x, y, z, b); return; }
+                    if (targetBlockType == Block.water) { SendBlockchange(x, y, z, targetBlockType); return; }
                     level.Blockchange(this, x, y, z, (byte) (Block.water));
                     BlockAction = 0;
                     break;
                 case 6:     //OpGlass
-                    if (b == Block.op_glass) { SendBlockchange(x, y, z, b); return; }
+                    if (targetBlockType == Block.op_glass) { SendBlockchange(x, y, z, targetBlockType); return; }
                     level.Blockchange(this, x, y, z, (byte) (Block.op_glass));
                     break;
                 case 7:    // sapling >> tree
-                    if (type == Block.shrub)
+                    if (newBlockType == Block.shrub)
                     {
                         AddTree(x, y, z);
                     }
@@ -308,7 +308,7 @@ namespace MCSharp
             #region === Buildop + Builddoor ===
             if (BlockAction == 8) //buildop
             {
-                switch (type)
+                switch (newBlockType)
                 {
                     case Block.air:
                         level.Blockchange(this, x, y, z, (byte) (Block.op_air));
@@ -448,7 +448,7 @@ namespace MCSharp
             }
             if (BlockAction == 9) //builddoor
             {
-                switch (type)
+                switch (newBlockType)
                 {
                     case Block.air:
                         break;

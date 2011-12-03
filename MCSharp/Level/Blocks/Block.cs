@@ -6,208 +6,208 @@ namespace MCSharp
 {
     public class Block
     {
-        public const byte air = (byte)0;
-        public const byte rock = (byte)1;
-        public const byte grass = (byte)2;
-        public const byte dirt = (byte)3;
-        public const byte stone = (byte)4;
-        public const byte wood = (byte)5;
-        public const byte shrub = (byte)6;
-        public const byte blackrock = (byte)7;
-        public const byte water = (byte)8;
-        public const byte waterstill = (byte)9;
-        public const byte lava = (byte)10;
-        public const byte lavastill = (byte)11;
-        public const byte sand = (byte)12;
-        public const byte gravel = (byte)13;
-        public const byte goldrock = (byte)14;
-        public const byte ironrock = (byte)15;
-        public const byte coal = (byte)16;
-        public const byte trunk = (byte)17;
-        public const byte leaf = (byte)18;
-        public const byte sponge = (byte)19;
-        public const byte glass = (byte)20;
-        public const byte red = (byte)21;
-        public const byte orange = (byte)22;
-        public const byte yellow = (byte)23;
-        public const byte lightgreen = (byte)24;
-        public const byte green = (byte)25;
-        public const byte aquagreen = (byte)26;
-        public const byte cyan = (byte)27;
-        public const byte lightblue = (byte)28;
-        public const byte blue = (byte)29;
-        public const byte purple = (byte)30;
-        public const byte lightpurple = (byte)31;
-        public const byte pink = (byte)32;
-        public const byte darkpink = (byte)33;
-        public const byte darkgrey = (byte)34;
-        public const byte lightgrey = (byte)35;
-        public const byte white = (byte)36;
-        public const byte yellowflower = (byte)37;
-        public const byte redflower = (byte)38;
-        public const byte mushroom = (byte)39;
-        public const byte redmushroom = (byte)40;
-        public const byte goldsolid = (byte)41;
-        public const byte iron = (byte)42;
-        public const byte staircasefull = (byte)43;
-        public const byte staircasestep = (byte)44;
-        public const byte brick = (byte)45;
-        public const byte tnt = (byte)46;
-        public const byte bookcase = (byte)47;
-        public const byte stonevine = (byte)48;
-        public const byte obsidian = (byte)49;
+        public const byte air = (byte) 0;
+        public const byte rock = (byte) 1;
+        public const byte grass = (byte) 2;
+        public const byte dirt = (byte) 3;
+        public const byte stone = (byte) 4;
+        public const byte wood = (byte) 5;
+        public const byte shrub = (byte) 6;
+        public const byte blackrock = (byte) 7;
+        public const byte water = (byte) 8;
+        public const byte waterstill = (byte) 9;
+        public const byte lava = (byte) 10;
+        public const byte lavastill = (byte) 11;
+        public const byte sand = (byte) 12;
+        public const byte gravel = (byte) 13;
+        public const byte goldrock = (byte) 14;
+        public const byte ironrock = (byte) 15;
+        public const byte coal = (byte) 16;
+        public const byte trunk = (byte) 17;
+        public const byte leaf = (byte) 18;
+        public const byte sponge = (byte) 19;
+        public const byte glass = (byte) 20;
+        public const byte red = (byte) 21;
+        public const byte orange = (byte) 22;
+        public const byte yellow = (byte) 23;
+        public const byte lightgreen = (byte) 24;
+        public const byte green = (byte) 25;
+        public const byte aquagreen = (byte) 26;
+        public const byte cyan = (byte) 27;
+        public const byte lightblue = (byte) 28;
+        public const byte blue = (byte) 29;
+        public const byte purple = (byte) 30;
+        public const byte lightpurple = (byte) 31;
+        public const byte pink = (byte) 32;
+        public const byte darkpink = (byte) 33;
+        public const byte darkgrey = (byte) 34;
+        public const byte lightgrey = (byte) 35;
+        public const byte white = (byte) 36;
+        public const byte yellowflower = (byte) 37;
+        public const byte redflower = (byte) 38;
+        public const byte mushroom = (byte) 39;
+        public const byte redmushroom = (byte) 40;
+        public const byte goldsolid = (byte) 41;
+        public const byte iron = (byte) 42;
+        public const byte staircasefull = (byte) 43;
+        public const byte staircasestep = (byte) 44;
+        public const byte brick = (byte) 45;
+        public const byte tnt = (byte) 46;
+        public const byte bookcase = (byte) 47;
+        public const byte stonevine = (byte) 48;
+        public const byte obsidian = (byte) 49;
         public const byte Zero = 0xff;
 
         //Custom blocks
-        public const byte door_brick = (byte)50;
-        public const byte door_stone = (byte)51;
-        public const byte door_cobblestone = (byte)52;
+        public const byte door_brick = (byte) 50;
+        public const byte door_stone = (byte) 51;
+        public const byte door_cobblestone = (byte) 52;
         //public const byte door_rock = (byte)53;
-        public const byte door_grass = (byte)54;
-        public const byte door_dirt = (byte)55;
-        public const byte door_wood = (byte)56;
-        public const byte door_shrub = (byte)57;
-        public const byte door_sand = (byte)58;
-        public const byte door_gravel = (byte)59;
-        public const byte door_goldrock = (byte)60;
-        public const byte door_ironrock = (byte)61;
-        public const byte door_coal = (byte)62;
-        public const byte door_leaf = (byte)63;
-        public const byte door_sponge = (byte)64;
-        public const byte door_red = (byte)65;
-        public const byte door_orange = (byte)66;
-        public const byte door_yellow = (byte)67;
-        public const byte door_lightgreen = (byte)68;
-        public const byte door_green = (byte)69;
-        public const byte door_aquagreen = (byte)70;
-        public const byte door_cyan = (byte)71;
-        public const byte door_lightblue = (byte)72;
-        public const byte door_blue = (byte)73;
-        public const byte door_purple = (byte)74;
-        public const byte door_lightpurple = (byte)75;
-        public const byte door_pink = (byte)76;
-        public const byte door_darkpink = (byte)77;
-        public const byte door_darkgrey = (byte)78;
-        public const byte door_lightgrey = (byte)79;
-        public const byte door_yellowflower = (byte)80;
-        public const byte door_redflower = (byte)81;
-        public const byte door_mushroom = (byte)82;
-        public const byte door_redmushroom = (byte)83;
-        public const byte door_goldsolid = (byte)84;
-        public const byte door_iron = (byte)85;
-        public const byte door_staircasestep = (byte)87;
-        public const byte door_staircasefull = (byte)86;
-        public const byte door_tnt = (byte)88;
-        public const byte door_bookcase = (byte)89;
-        public const byte door_stonevine = (byte)90;
+        public const byte door_grass = (byte) 54;
+        public const byte door_dirt = (byte) 55;
+        public const byte door_wood = (byte) 56;
+        public const byte door_shrub = (byte) 57;
+        public const byte door_sand = (byte) 58;
+        public const byte door_gravel = (byte) 59;
+        public const byte door_goldrock = (byte) 60;
+        public const byte door_ironrock = (byte) 61;
+        public const byte door_coal = (byte) 62;
+        public const byte door_leaf = (byte) 63;
+        public const byte door_sponge = (byte) 64;
+        public const byte door_red = (byte) 65;
+        public const byte door_orange = (byte) 66;
+        public const byte door_yellow = (byte) 67;
+        public const byte door_lightgreen = (byte) 68;
+        public const byte door_green = (byte) 69;
+        public const byte door_aquagreen = (byte) 70;
+        public const byte door_cyan = (byte) 71;
+        public const byte door_lightblue = (byte) 72;
+        public const byte door_blue = (byte) 73;
+        public const byte door_purple = (byte) 74;
+        public const byte door_lightpurple = (byte) 75;
+        public const byte door_pink = (byte) 76;
+        public const byte door_darkpink = (byte) 77;
+        public const byte door_darkgrey = (byte) 78;
+        public const byte door_lightgrey = (byte) 79;
+        public const byte door_yellowflower = (byte) 80;
+        public const byte door_redflower = (byte) 81;
+        public const byte door_mushroom = (byte) 82;
+        public const byte door_redmushroom = (byte) 83;
+        public const byte door_goldsolid = (byte) 84;
+        public const byte door_iron = (byte) 85;
+        public const byte door_staircasestep = (byte) 87;
+        public const byte door_staircasefull = (byte) 86;
+        public const byte door_tnt = (byte) 88;
+        public const byte door_bookcase = (byte) 89;
+        public const byte door_stonevine = (byte) 90;
 
-        public const byte op_glass = (byte)100;
-        public const byte opsidian = (byte)101;
-        public const byte op_brick = (byte)102;
-        public const byte op_stone = (byte)103;
-        public const byte op_cobblestone = (byte)104;
-        public const byte op_air = (byte)105;
-        public const byte op_water = (byte)106;
+        public const byte op_glass = (byte) 100;
+        public const byte opsidian = (byte) 101;
+        public const byte op_brick = (byte) 102;
+        public const byte op_stone = (byte) 103;
+        public const byte op_cobblestone = (byte) 104;
+        public const byte op_air = (byte) 105;
+        public const byte op_water = (byte) 106;
 
-        public const byte wood_float = (byte)110;
-        public const byte door_tree = (byte)111;
-        public const byte lava_fast = (byte)112;
-        public const byte door_obsidian = (byte)113;
-        public const byte door_glass = (byte)114;
+        public const byte wood_float = (byte) 110;
+        public const byte door_tree = (byte) 111;
+        public const byte lava_fast = (byte) 112;
+        public const byte door_obsidian = (byte) 113;
+        public const byte door_glass = (byte) 114;
 
         // Op materials   (incl: 100 ~ 106)
-        public const byte op_white = (byte)115;
-        public const byte op_grass = (byte)116;
-        public const byte op_dirt = (byte)117;
-        public const byte op_wood = (byte)118;
-        public const byte op_shrub = (byte)119;
-        public const byte op_lava = (byte)120;
-        public const byte op_sand = (byte)121;
-        public const byte op_gravel = (byte)122;
-        public const byte op_goldrock = (byte)123;
-        public const byte op_ironrock = (byte)124;
-        public const byte op_coal = (byte)125;
-        public const byte op_trunk = (byte)126;
-        public const byte op_leaf = (byte)127;
-        public const byte op_sponge = (byte)128;
-        public const byte op_red = (byte)129;
-        public const byte op_orange = (byte)130;
-        public const byte op_yellow = (byte)131;
-        public const byte op_lightgreen = (byte)132;
-        public const byte op_green = (byte)133;
-        public const byte op_aquagreen = (byte)134;
-        public const byte op_cyan = (byte)135;
-        public const byte op_lightblue = (byte)136;
-        public const byte op_blue = (byte)137;
-        public const byte op_purple = (byte)138;
-        public const byte op_lightpurple = (byte)139;
-        public const byte op_pink = (byte)140;
-        public const byte op_darkpink = (byte)141;
-        public const byte op_darkgrey = (byte)142;
-        public const byte op_lightgrey = (byte)143;
-        public const byte op_yellowflower = (byte)144;
-        public const byte op_redflower = (byte)145;
-        public const byte op_mushroom = (byte)146;
-        public const byte op_redmushroom = (byte)147;
-        public const byte op_goldsolid = (byte)148;
-        public const byte op_iron = (byte)149;
-        public const byte op_staircasefull = (byte)150;
-        public const byte op_staircasestep = (byte)151;
-        public const byte op_tnt = (byte)152;
-        public const byte op_bookcase = (byte)153;
-        public const byte op_stonevine = (byte)154;
+        public const byte op_white = (byte) 115;
+        public const byte op_grass = (byte) 116;
+        public const byte op_dirt = (byte) 117;
+        public const byte op_wood = (byte) 118;
+        public const byte op_shrub = (byte) 119;
+        public const byte op_lava = (byte) 120;
+        public const byte op_sand = (byte) 121;
+        public const byte op_gravel = (byte) 122;
+        public const byte op_goldrock = (byte) 123;
+        public const byte op_ironrock = (byte) 124;
+        public const byte op_coal = (byte) 125;
+        public const byte op_trunk = (byte) 126;
+        public const byte op_leaf = (byte) 127;
+        public const byte op_sponge = (byte) 128;
+        public const byte op_red = (byte) 129;
+        public const byte op_orange = (byte) 130;
+        public const byte op_yellow = (byte) 131;
+        public const byte op_lightgreen = (byte) 132;
+        public const byte op_green = (byte) 133;
+        public const byte op_aquagreen = (byte) 134;
+        public const byte op_cyan = (byte) 135;
+        public const byte op_lightblue = (byte) 136;
+        public const byte op_blue = (byte) 137;
+        public const byte op_purple = (byte) 138;
+        public const byte op_lightpurple = (byte) 139;
+        public const byte op_pink = (byte) 140;
+        public const byte op_darkpink = (byte) 141;
+        public const byte op_darkgrey = (byte) 142;
+        public const byte op_lightgrey = (byte) 143;
+        public const byte op_yellowflower = (byte) 144;
+        public const byte op_redflower = (byte) 145;
+        public const byte op_mushroom = (byte) 146;
+        public const byte op_redmushroom = (byte) 147;
+        public const byte op_goldsolid = (byte) 148;
+        public const byte op_iron = (byte) 149;
+        public const byte op_staircasefull = (byte) 150;
+        public const byte op_staircasestep = (byte) 151;
+        public const byte op_tnt = (byte) 152;
+        public const byte op_bookcase = (byte) 153;
+        public const byte op_stonevine = (byte) 154;
 
-        public const byte air_flood = (byte)200;
-        public const byte doorair_tree = (byte)201;
-        public const byte air_flood_layer = (byte)202;
-        public const byte air_flood_down = (byte)203;
-        public const byte air_flood_up = (byte)204;
-        public const byte doorair_obsidian = (byte)205;
-        public const byte doorair_glass = (byte)206;
-        public const byte door_white = (byte)207;
-        public const byte doorair_white = (byte)208;
+        public const byte air_flood = (byte) 200;
+        public const byte doorair_tree = (byte) 201;
+        public const byte air_flood_layer = (byte) 202;
+        public const byte air_flood_down = (byte) 203;
+        public const byte air_flood_up = (byte) 204;
+        public const byte doorair_obsidian = (byte) 205;
+        public const byte doorair_glass = (byte) 206;
+        public const byte door_white = (byte) 207;
+        public const byte doorair_white = (byte) 208;
 
-        public const byte doorair_brick = (byte)209;
-        public const byte doorair_stone = (byte)210;
-        public const byte doorair_cobblestone = (byte)211;
+        public const byte doorair_brick = (byte) 209;
+        public const byte doorair_stone = (byte) 210;
+        public const byte doorair_cobblestone = (byte) 211;
         //public const byte doorair_rock = (byte)212;
-        public const byte doorair_grass = (byte)213;
-        public const byte doorair_dirt = (byte)214;
-        public const byte doorair_wood = (byte)215;
-        public const byte doorair_shrub = (byte)216;
-        public const byte doorair_sand = (byte)217;
-        public const byte doorair_gravel = (byte)218;
-        public const byte doorair_goldrock = (byte)219;
-        public const byte doorair_ironrock = (byte)220;
-        public const byte doorair_coal = (byte)221;
-        public const byte doorair_leaf = (byte)222;
-        public const byte doorair_sponge = (byte)223;
-        public const byte doorair_red = (byte)224;
-        public const byte doorair_orange = (byte)225;
-        public const byte doorair_yellow = (byte)226;
-        public const byte doorair_lightgreen = (byte)227;
-        public const byte doorair_green = (byte)228;
-        public const byte doorair_aquagreen = (byte)229;
-        public const byte doorair_cyan = (byte)230;
-        public const byte doorair_lightblue = (byte)231;
-        public const byte doorair_blue = (byte)232;
-        public const byte doorair_purple = (byte)233;
-        public const byte doorair_lightpurple = (byte)234;
-        public const byte doorair_pink = (byte)235;
-        public const byte doorair_darkpink = (byte)236;
-        public const byte doorair_darkgrey = (byte)237;
-        public const byte doorair_lightgrey = (byte)238;
-        public const byte doorair_yellowflower = (byte)239;
-        public const byte doorair_redflower = (byte)240;
-        public const byte doorair_mushroom = (byte)241;
-        public const byte doorair_redmushroom = (byte)242;
-        public const byte doorair_goldsolid = (byte)243;
-        public const byte doorair_iron = (byte)244;
-        public const byte doorair_staircasestep = (byte)245;
-        public const byte doorair_staircasefull = (byte)246;
-        public const byte doorair_tnt = (byte)247;
-        public const byte doorair_bookcase = (byte)248;
-        public const byte doorair_stonevine = (byte)249;
+        public const byte doorair_grass = (byte) 213;
+        public const byte doorair_dirt = (byte) 214;
+        public const byte doorair_wood = (byte) 215;
+        public const byte doorair_shrub = (byte) 216;
+        public const byte doorair_sand = (byte) 217;
+        public const byte doorair_gravel = (byte) 218;
+        public const byte doorair_goldrock = (byte) 219;
+        public const byte doorair_ironrock = (byte) 220;
+        public const byte doorair_coal = (byte) 221;
+        public const byte doorair_leaf = (byte) 222;
+        public const byte doorair_sponge = (byte) 223;
+        public const byte doorair_red = (byte) 224;
+        public const byte doorair_orange = (byte) 225;
+        public const byte doorair_yellow = (byte) 226;
+        public const byte doorair_lightgreen = (byte) 227;
+        public const byte doorair_green = (byte) 228;
+        public const byte doorair_aquagreen = (byte) 229;
+        public const byte doorair_cyan = (byte) 230;
+        public const byte doorair_lightblue = (byte) 231;
+        public const byte doorair_blue = (byte) 232;
+        public const byte doorair_purple = (byte) 233;
+        public const byte doorair_lightpurple = (byte) 234;
+        public const byte doorair_pink = (byte) 235;
+        public const byte doorair_darkpink = (byte) 236;
+        public const byte doorair_darkgrey = (byte) 237;
+        public const byte doorair_lightgrey = (byte) 238;
+        public const byte doorair_yellowflower = (byte) 239;
+        public const byte doorair_redflower = (byte) 240;
+        public const byte doorair_mushroom = (byte) 241;
+        public const byte doorair_redmushroom = (byte) 242;
+        public const byte doorair_goldsolid = (byte) 243;
+        public const byte doorair_iron = (byte) 244;
+        public const byte doorair_staircasestep = (byte) 245;
+        public const byte doorair_staircasefull = (byte) 246;
+        public const byte doorair_tnt = (byte) 247;
+        public const byte doorair_bookcase = (byte) 248;
+        public const byte doorair_stonevine = (byte) 249;
 
 
 
@@ -279,7 +279,7 @@ namespace MCSharp
 
         // convertDoor also converts from door depending on the input. If a door is input, a reg_block is returned.
         // If a reg_block is entered, a door_block is returned.
-        public static byte convertDoor(byte block)
+        public static byte convertDoor (byte block)
         {
             switch (block)
             {
@@ -308,67 +308,67 @@ namespace MCSharp
 
                 case grass: return door_grass;
                 case door_grass: return grass;
-                
+
                 case dirt: return door_dirt;
-                case door_dirt: return dirt;                
+                case door_dirt: return dirt;
 
                 case wood: return door_wood;
                 case door_wood: return wood;
 
                 case shrub: return door_shrub;
                 case door_shrub: return shrub;
-                
+
                 case sand: return door_sand;
                 case door_sand: return sand;
-                
+
                 case gravel: return door_gravel;
                 case door_gravel: return gravel;
-                
+
                 case goldrock: return door_goldrock;
                 case door_goldrock: return goldrock;
 
                 case ironrock: return door_ironrock;
                 case door_ironrock: return ironrock;
-                
+
                 case coal: return door_coal;
                 case door_coal: return coal;
-                
+
                 case leaf: return door_leaf;
                 case door_leaf: return leaf;
-                
+
                 case sponge: return door_sponge;
                 case door_sponge: return sponge;
-                
+
                 case red: return door_red;
                 case door_red: return red;
 
                 case orange: return door_orange;
                 case door_orange: return orange;
-                
+
                 case yellow: return door_yellow;
                 case door_yellow: return yellow;
 
                 case lightgreen: return door_lightgreen;
                 case door_lightgreen: return lightgreen;
-                
+
                 case green: return door_green;
                 case door_green: return green;
 
                 case aquagreen: return door_aquagreen;
                 case door_aquagreen: return aquagreen;
-                
+
                 case cyan: return door_cyan;
                 case door_cyan: return cyan;
-                
+
                 case lightblue: return door_lightblue;
                 case door_lightblue: return lightblue;
-                
+
                 case blue: return door_blue;
                 case door_blue: return blue;
-                
+
                 case purple: return door_purple;
                 case door_purple: return purple;
-                
+
                 case lightpurple: return door_lightpurple;
                 case door_lightpurple: return lightpurple;
 
@@ -383,10 +383,10 @@ namespace MCSharp
 
                 case lightgrey: return door_lightgrey;
                 case door_lightgrey: return lightgrey;
-                
+
                 case yellowflower: return door_yellowflower;
                 case door_yellowflower: return yellowflower;
-                
+
                 case redflower: return door_redflower;
                 case door_redflower: return redflower;
 
@@ -395,19 +395,19 @@ namespace MCSharp
 
                 case redmushroom: return door_redmushroom;
                 case door_redmushroom: return redmushroom;
-                
+
                 case goldsolid: return door_goldsolid;
                 case door_goldsolid: return goldsolid;
-                
+
                 case iron: return door_iron;
                 case door_iron: return iron;
-                
+
                 case staircasefull: return door_staircasefull;
                 case door_staircasefull: return staircasefull;
-                
+
                 case staircasestep: return door_staircasestep;
                 case door_staircasestep: return staircasestep;
-                
+
                 case tnt: return door_tnt;
                 case door_tnt: return tnt;
 
@@ -421,7 +421,7 @@ namespace MCSharp
             }
         }
 
-        public static bool Placable(byte type)
+        public static bool Placable (byte type)
         {
             switch (type)
             {
@@ -439,7 +439,7 @@ namespace MCSharp
             return true;
         }
 
-        public static int convertOp(byte block) // return opposite of op or reg mats
+        public static int convertOp (byte block) // return opposite of op or reg mats
         {
             switch (block)
             {
@@ -451,7 +451,7 @@ namespace MCSharp
 
                 case Block.grass: return Block.op_grass;
                 case Block.op_grass: return Block.grass;
-                    
+
                 case Block.dirt: return Block.op_dirt;
                 case Block.op_dirt: return Block.dirt;
 
@@ -473,13 +473,13 @@ namespace MCSharp
                 case Block.op_lava: return Block.lavastill;
 
                 case Block.lavastill: return Block.op_lava;
-                    
+
                 case Block.sand: return Block.op_sand;
                 case Block.op_sand: return Block.sand;
 
                 case Block.gravel: return Block.op_gravel;
                 case Block.op_gravel: return Block.gravel;
-                
+
                 case Block.goldrock: return Block.op_goldrock;
                 case Block.op_goldrock: return Block.goldrock;
 
@@ -509,7 +509,7 @@ namespace MCSharp
 
                 case Block.yellow: return Block.op_yellow;
                 case Block.op_yellow: return Block.yellow;
-                
+
                 case Block.lightgreen: return Block.op_lightgreen;
                 case Block.op_lightgreen: return Block.lightgreen;
 
@@ -595,7 +595,7 @@ namespace MCSharp
             }
         }
 
-        public static bool AdvPlacable(byte type)   //returns true if ADV Builder is allowed to use these unplacable blocks
+        public static bool AdvPlacable (byte type)   //returns true if ADV Builder is allowed to use these unplacable blocks
         {
             switch (type)
             {
@@ -655,7 +655,7 @@ namespace MCSharp
             return false;
         }
 
-        public static bool LightPass(byte type)
+        public static bool LightPass (byte type)
         {
             switch (type)
             {
@@ -689,7 +689,7 @@ namespace MCSharp
             }
         }
 
-        public static bool Physics(byte type)   //returns false if placing block cant actually cause any physics to happen
+        public static bool Physics (byte type)   //returns false if placing block cant actually cause any physics to happen
         {
             switch (type)
             {
@@ -826,7 +826,7 @@ namespace MCSharp
             }
         }
 
-        public static string Name(byte type)
+        public static string Name (byte type)
         {
             switch (type)
             {
@@ -921,12 +921,12 @@ namespace MCSharp
                 case 89: return "door_bookcase";
                 case 90: return "door_mossy_cobblestone";
                 case 100: return "op_glass";
-                case 101: return "opsidian";              //TODO Add command or just use bind?
-                case 102: return "op_brick";              //TODO
-                case 103: return "op_stone";              //TODO
-                case 104: return "op_cobblestone";        //TODO
-                case 105: return "op_air";                //TODO
-                case 106: return "op_water";              //TODO
+                case 101: return "opsidian";
+                case 102: return "op_brick";
+                case 103: return "op_stone";
+                case 104: return "op_cobblestone";
+                case 105: return "op_air";
+                case 106: return "op_water";
                 case 115: return "op_white";
                 case 116: return "op_grass";
                 case 117: return "op_dirt";
@@ -969,7 +969,7 @@ namespace MCSharp
                 case 154: return "op_mossy_cobblestone";
 
 
-                case 110: return "wood_float";            //TODO
+                case 110: return "wood_float";
                 case 111: return "door_tree";
                 case 112: return "lava_fast";
                 case 113: return "door_obsidian";
@@ -1030,7 +1030,7 @@ namespace MCSharp
                 default: return "unknown";
             }
         }
-        public static byte Byte(string type)
+        public static byte Byte (string type)
         {
             switch (type)
             {
@@ -1086,12 +1086,12 @@ namespace MCSharp
                 case "obsidian": return 49;
 
                 case "op_glass": return 100;
-                case "opsidian": return 101;              //TODO Add command or just use bind?
-                case "op_brick": return 102;              //TODO
-                case "op_stone": return 103;              //TODO
-                case "op_cobblestone": return 104;        //TODO
-                case "op_air": return 105;                //TODO
-                case "op_water": return 106;              //TODO
+                case "opsidian": return 101;
+                case "op_brick": return 102;
+                case "op_stone": return 103;
+                case "op_cobblestone": return 104;
+                case "op_air": return 105;
+                case "op_water": return 106;
                 case "op_white": return 115;
                 case "op_grass": return 116;
                 case "op_dirt": return 117;
@@ -1134,7 +1134,7 @@ namespace MCSharp
                 case "op_mossy_cobblestone": return 154;
 
 
-                case "wood_float": return 110;            //TODO
+                case "wood_float": return 110;
                 case "door_tree": return 111;
                 case "lava_fast": return 112;
                 case "door_obsidian": return 113;
@@ -1236,110 +1236,110 @@ namespace MCSharp
             }
         }
 
-        public static byte Convert(byte b)
+        public static byte Convert (byte b)
         {
             switch (b)
             {
-                case 100: return (byte)20; //Op_glass
-                case 101: return (byte)49; //Opsidian
-                case 102: return (byte)45; //Op_brick
-                case 103: return (byte)1; //Op_stone
-                case 104: return (byte)4; //Op_cobblestone
-                case 105: return (byte)0; //Op_air - Must be cuboided / replaced
-                case 106: return (byte)9; //Op_water
-                case 115: return (byte)36; //op_white
-                case 116: return (byte)2; // op_grass ~~~ various op_materials
-                case 117: return (byte)3;
-                case 118: return (byte)5;
-                case 119: return (byte)6;  // op_shrub / plant
-                case 120: return (byte)11; // op_lava  
-                case 121: return (byte)12;
-                case 122: return (byte)13;
-                case 123: return (byte)14;
-                case 124: return (byte)15;
-                case 125: return (byte)16;
-                case 126: return (byte)17;  //op_trunk / tree
-                case 127: return (byte)18;
-                case 128: return (byte)19;
-                case 129: return (byte)21;
-                case 130: return (byte)22;
-                case 131: return (byte)23;
-                case 132: return (byte)24;
-                case 133: return (byte)25;
-                case 134: return (byte)26;
-                case 135: return (byte)27;
-                case 136: return (byte)28;
-                case 137: return (byte)29;
-                case 138: return (byte)30;
-                case 139: return (byte)31;
-                case 140: return (byte)32;
-                case 141: return (byte)33;
-                case 142: return (byte)34;
-                case 143: return (byte)35;
-                case 144: return (byte)37;
-                case 145: return (byte)38;
-                case 146: return (byte)39;
-                case 147: return (byte)40;
-                case 148: return (byte)41;
-                case 149: return (byte)42;
-                case 150: return (byte)43;
-                case 151: return (byte)44;
-                case 152: return (byte)46;
-                case 153: return (byte)47;
-                case 154: return (byte)48; // ~~
+                case 100: return (byte) 20; //Op_glass
+                case 101: return (byte) 49; //Opsidian
+                case 102: return (byte) 45; //Op_brick
+                case 103: return (byte) 1; //Op_stone
+                case 104: return (byte) 4; //Op_cobblestone
+                case 105: return (byte) 0; //Op_air - Must be cuboided / replaced
+                case 106: return (byte) 9; //Op_water
+                case 115: return (byte) 36; //op_white
+                case 116: return (byte) 2; // op_grass ~~~ various op_materials
+                case 117: return (byte) 3;
+                case 118: return (byte) 5;
+                case 119: return (byte) 6;  // op_shrub / plant
+                case 120: return (byte) 11; // op_lava  
+                case 121: return (byte) 12;
+                case 122: return (byte) 13;
+                case 123: return (byte) 14;
+                case 124: return (byte) 15;
+                case 125: return (byte) 16;
+                case 126: return (byte) 17;  //op_trunk / tree
+                case 127: return (byte) 18;
+                case 128: return (byte) 19;
+                case 129: return (byte) 21;
+                case 130: return (byte) 22;
+                case 131: return (byte) 23;
+                case 132: return (byte) 24;
+                case 133: return (byte) 25;
+                case 134: return (byte) 26;
+                case 135: return (byte) 27;
+                case 136: return (byte) 28;
+                case 137: return (byte) 29;
+                case 138: return (byte) 30;
+                case 139: return (byte) 31;
+                case 140: return (byte) 32;
+                case 141: return (byte) 33;
+                case 142: return (byte) 34;
+                case 143: return (byte) 35;
+                case 144: return (byte) 37;
+                case 145: return (byte) 38;
+                case 146: return (byte) 39;
+                case 147: return (byte) 40;
+                case 148: return (byte) 41;
+                case 149: return (byte) 42;
+                case 150: return (byte) 43;
+                case 151: return (byte) 44;
+                case 152: return (byte) 46;
+                case 153: return (byte) 47;
+                case 154: return (byte) 48; // ~~
 
-                case 50: return (byte)45;
-                case 51: return (byte)1;
-                case 52: return (byte)4;
-                case 54: return (byte)2;
-                case 55: return (byte)3;
-                case 56: return (byte)5;
-                case 57: return (byte)6;
-                case 58: return (byte)12;
-                case 59: return (byte)13;
-                case 60: return (byte)14;
-                case 61: return (byte)15;
-                case 62: return (byte)16;
-                case 63: return (byte)18;
-                case 64: return (byte)19;
-                case 65: return (byte)21;
-                case 66: return (byte)22;
-                case 67: return (byte)23;
-                case 68: return (byte)24;
-                case 69: return (byte)25;
-                case 70: return (byte)26;
-                case 71: return (byte)27;
-                case 72: return (byte)28;
-                case 73: return (byte)29;
-                case 74: return (byte)30;
-                case 75: return (byte)31;
-                case 76: return (byte)32;
-                case 77: return (byte)33;
-                case 78: return (byte)34;
-                case 79: return (byte)35;
-                case 80: return (byte)37;
-                case 81: return (byte)38;
-                case 82: return (byte)39;
-                case 83: return (byte)40;
-                case 84: return (byte)41;
-                case 85: return (byte)42;
-                case 86: return (byte)43;
-                case 87: return (byte)44;
-                case 88: return (byte)46;
-                case 89: return (byte)47;
-                case 90: return (byte)48;
-
-
+                case 50: return (byte) 45;
+                case 51: return (byte) 1;
+                case 52: return (byte) 4;
+                case 54: return (byte) 2;
+                case 55: return (byte) 3;
+                case 56: return (byte) 5;
+                case 57: return (byte) 6;
+                case 58: return (byte) 12;
+                case 59: return (byte) 13;
+                case 60: return (byte) 14;
+                case 61: return (byte) 15;
+                case 62: return (byte) 16;
+                case 63: return (byte) 18;
+                case 64: return (byte) 19;
+                case 65: return (byte) 21;
+                case 66: return (byte) 22;
+                case 67: return (byte) 23;
+                case 68: return (byte) 24;
+                case 69: return (byte) 25;
+                case 70: return (byte) 26;
+                case 71: return (byte) 27;
+                case 72: return (byte) 28;
+                case 73: return (byte) 29;
+                case 74: return (byte) 30;
+                case 75: return (byte) 31;
+                case 76: return (byte) 32;
+                case 77: return (byte) 33;
+                case 78: return (byte) 34;
+                case 79: return (byte) 35;
+                case 80: return (byte) 37;
+                case 81: return (byte) 38;
+                case 82: return (byte) 39;
+                case 83: return (byte) 40;
+                case 84: return (byte) 41;
+                case 85: return (byte) 42;
+                case 86: return (byte) 43;
+                case 87: return (byte) 44;
+                case 88: return (byte) 46;
+                case 89: return (byte) 47;
+                case 90: return (byte) 48;
 
 
 
-                case 110: return (byte)5; //wood_float
-                case 111: return (byte)17;//door show by treetype
-                case 112: return (byte)10;
 
-                case 113: return (byte)49;//door show by obsidian
-                case 114: return (byte)20;//door show by glass
-                case 207: return (byte)36; //door_white
+
+                case 110: return (byte) 5; //wood_float
+                case 111: return (byte) 17;//door show by treetype
+                case 112: return (byte) 10;
+
+                case 113: return (byte) 49;//door show by obsidian
+                case 114: return (byte) 20;//door show by glass
+                case 207: return (byte) 36; //door_white
 
                 case 200: //air_flood
                 case 201: //door_air
@@ -1390,11 +1390,11 @@ namespace MCSharp
                 case 247:
                 case 248:
                 case 249:
-                    return (byte)0;
+                    return (byte) 0;
                 default: return b;
             }
         }
-        public static byte SaveConvert(byte b)
+        public static byte SaveConvert (byte b)
         {
             switch (b)
             {
@@ -1402,51 +1402,51 @@ namespace MCSharp
                 case 202:
                 case 203:
                 case 204:
-                    return (byte)0; //air_flood must be converted to air on save to prevent issues
-                case 201: return (byte)111; //door_air back into door
-                case 205: return (byte)113; //door_air back into door
-                case 206: return (byte)114; //door_air back into door
-                case 208: return (byte)207; //doorair_white to door_white
-                case 209: return (byte)50;
-                case 210: return (byte)51;
-                case 211: return (byte)52;
-                case 213: return (byte)54;
-                case 214: return (byte)55;
-                case 215: return (byte)56;
-                case 216: return (byte)57;
-                case 217: return (byte)58;
-                case 218: return (byte)59;
-                case 219: return (byte)60;
-                case 220: return (byte)61;
-                case 221: return (byte)62;
-                case 222: return (byte)63;
-                case 223: return (byte)64;
-                case 224: return (byte)65;
-                case 225: return (byte)66;
-                case 226: return (byte)67;
-                case 227: return (byte)68;
-                case 228: return (byte)69;
-                case 229: return (byte)70;
-                case 230: return (byte)71;
-                case 231: return (byte)72;
-                case 232: return (byte)73;
-                case 233: return (byte)74;
-                case 234: return (byte)75;
-                case 235: return (byte)76;
-                case 236: return (byte)77;
-                case 237: return (byte)78;
-                case 238: return (byte)79;
-                case 239: return (byte)80;
-                case 240: return (byte)81;
-                case 241: return (byte)82;
-                case 242: return (byte)83;
-                case 243: return (byte)84;
-                case 244: return (byte)85;
-                case 245: return (byte)87;
-                case 246: return (byte)86;
-                case 247: return (byte)88;
-                case 248: return (byte)89;
-                case 249: return (byte)90;
+                    return (byte) 0; //air_flood must be converted to air on save to prevent issues
+                case 201: return (byte) 111; //door_air back into door
+                case 205: return (byte) 113; //door_air back into door
+                case 206: return (byte) 114; //door_air back into door
+                case 208: return (byte) 207; //doorair_white to door_white
+                case 209: return (byte) 50;
+                case 210: return (byte) 51;
+                case 211: return (byte) 52;
+                case 213: return (byte) 54;
+                case 214: return (byte) 55;
+                case 215: return (byte) 56;
+                case 216: return (byte) 57;
+                case 217: return (byte) 58;
+                case 218: return (byte) 59;
+                case 219: return (byte) 60;
+                case 220: return (byte) 61;
+                case 221: return (byte) 62;
+                case 222: return (byte) 63;
+                case 223: return (byte) 64;
+                case 224: return (byte) 65;
+                case 225: return (byte) 66;
+                case 226: return (byte) 67;
+                case 227: return (byte) 68;
+                case 228: return (byte) 69;
+                case 229: return (byte) 70;
+                case 230: return (byte) 71;
+                case 231: return (byte) 72;
+                case 232: return (byte) 73;
+                case 233: return (byte) 74;
+                case 234: return (byte) 75;
+                case 235: return (byte) 76;
+                case 236: return (byte) 77;
+                case 237: return (byte) 78;
+                case 238: return (byte) 79;
+                case 239: return (byte) 80;
+                case 240: return (byte) 81;
+                case 241: return (byte) 82;
+                case 242: return (byte) 83;
+                case 243: return (byte) 84;
+                case 244: return (byte) 85;
+                case 245: return (byte) 87;
+                case 246: return (byte) 86;
+                case 247: return (byte) 88;
+                case 248: return (byte) 89;
+                case 249: return (byte) 90;
 
                 default: return b;
             }

@@ -390,60 +390,79 @@ namespace MCSharp
         /// <param name="message">The blockchange packet</param>
         void HandleBlockchange (byte[] message)
         {
-            int section = 0;
             try
             {
+                // Bots are not allows making block changes
+                if (group.Name == "bots") { return; }
 
-                if (group.Name == "bots") { return; } //connected bots cant do block changes
-
+                // Players who are not logged in cannot
                 if (!loggedIn)
                     return;
+
+                // Players who spam can't make block changes
                 if (CheckBlockSpam())
                     return;
 
-                section++;
+                // Get the packet information
                 ushort x = NTHO(message, 0);
                 ushort y = NTHO(message, 2);
                 ushort z = NTHO(message, 4);
                 byte action = message[6];
-                byte type = message[7];
+                byte newBlockType = message[7];
 
-                section++;
-                if (type > 49)
+                // If the client is trying to place a block > 49, it's either:
+                // - A new version (unlikely)
+                // - A hacked client (much more likely)
+                if (newBlockType > 49)
                 {
                     Kick("Unknown block type!");
                     return;
                 }
-                section++;
-                byte b = level.GetTile(x, y, z);
-                if (b == Block.Zero) { return; }
-                section++;
+
+                // Get the block that we're trying to change
+                byte targetBlockType = level.GetTile(x, y, z);
+
+                // Chan't changed a block type of Zero
+                if (targetBlockType == Block.Zero)
+                {
+                    return;
+                }
+
+                // Check to see if the player is allowed editing the map
                 if (group.Permission < level.permissionbuild)
                 {
                     SendMessage("Your not allowed to edit this map.");
-                    SendBlockchange(x, y, z, b);
+                    // Replace the block we just destroyed
+                    SendBlockchange(x, y, z, targetBlockType);
                     return;
                 }
-                section++;
-                if (Blockchange != null)    //Blockchange actions now have priority, allowing people to /about blocks they cant change
+
+                // Check to see if we have a block change to process
+                // Blockchange actions now have priority, allowing people to /about blocks they cant change
+                if (Blockchange != null)
                 {
-                    Blockchange(this, x, y, z, type);
+                    Blockchange(this, x, y, z, newBlockType);
                     return;
                 }
-                section++;
+
+                // Check to see if the permission on the level is guest
+                // If the permission is guest, then we check to make sure no hacked clients are messing with the map
+                // TODO: I'm not sure this should only apply to guests -- Voziv -- 
                 if (group.Permission == LevelPermission.Guest)
                 {
+                    // Let banned players greif
                     if (Rank == GroupEnum.Banned) //Just let them think theyre are griefing instead.
                     {
                         return;
                     }
 
+                    // Get the distance that the user is trying to place the block
                     int Diff = 0;
-
                     Diff = Math.Abs((int) (pos[0] / 32) - x);
                     Diff += Math.Abs((int) (pos[1] / 32) - y);
                     Diff += Math.Abs((int) (pos[2] / 32) - z);
 
+                    // TODO: This gets triggered by WOM and possible the normal minecraft client. I'm thinking we should just leave it at 10 blocks they get kicked
                     if (Diff > 9)   //Danger level compensation
                     {
                         if (Diff > 10)  //Too much distance
@@ -454,21 +473,24 @@ namespace MCSharp
                             return;
                         }
                         SendMessage("You cant build that far away.");
-                        SendBlockchange(x, y, z, b); return;
+                        SendBlockchange(x, y, z, targetBlockType); return;
                     }
 
+                    // Make sure kids aren't anti tunnelling
                     if (Properties.AntiTunnelEnabled)
                     {
                         if (y < level.depth / 2 - Properties.MaxDepth)     //Anti tunneling countermeasure
                         {
                             SendMessage("You're not allowed to build this far down!");
-                            SendBlockchange(x, y, z, b); return;
+                            SendBlockchange(x, y, z, targetBlockType); return;
                         }
                     }
                 }
-                section++;
-                if (b == 7)    //Check for client hacker trying to delete adminium
+
+                // More anti hax - Check to see if we are deleting adminium
+                if (targetBlockType == Block.blackrock)    //Check for client hacker trying to delete adminium
                 {
+                    // Ops are allowed to delete adminium
                     if (!checkOp())
                     {
                         Logger.Log(name + " attempted to delete an adminium block.", LogType.SuspiciousActivity);
@@ -477,42 +499,61 @@ namespace MCSharp
                         return;
                     }
                 }
-                section++;
-                if (b >= 100 && !doors.doorBlocks.Contains(b))    //Special blocks only deletable by ops
+
+                // Special Blocks that only operators can delete
+                if (targetBlockType >= 100 && !doors.doorBlocks.Contains(targetBlockType))
                 {
                     if (!checkOp())
                     {
                         SendMessage("You're not allowed to destroy this block!");
-                        SendBlockchange(x, y, z, b);
+                        SendBlockchange(x, y, z, targetBlockType);
                         return;
                     }
-                    if (b >= 200)    //Special blocks that should never be replaced until they are finished
+                    //Special blocks that should never be replaced until they are finished
+                    if (targetBlockType >= 200)
                     {
                         SendMessage("Block is active, you cant disturb it!");
-                        SendBlockchange(x, y, z, b);
+                        SendBlockchange(x, y, z, targetBlockType);
                         return;
                     }
                 }
 
-                section++;
-                if (!Block.Placable(type))
-                { // :3
+                // If the block is not placable by the current player, deny them
+                if (!Block.Placable(newBlockType))
+                {
                     SendMessage("You can't place this block type!");
-                    SendBlockchange(x, y, z, b); return;
+                    SendBlockchange(x, y, z, targetBlockType); return;
                 }
-                if (action > 1) { Kick("Unknown block action!"); }
-                type = bindings[type];
-                section++;
-                //Ignores updating blocks that are the same and send block only to the player
-                if (b == (byte) ((painting || action == 1) ? type : 0))
-                {
-                    if (painting || message[7] != type) { SendBlockchange(x, y, z, b); } return;
-                }
-                section++;
-                //else
 
-                if (!painting && action == 0)   //player is deleting a block
+                // Validate the action coming from the client
+                if (action > 1)
                 {
+                    Kick("Unknown block action!");
+                }
+
+                newBlockType = bindings[newBlockType];
+                
+
+                //Ignores updating blocks that are the same and send block only to the player
+                // If we are trying to place or paint a target block that is the same as the block
+                // that is there, then we ignore it
+                if (targetBlockType == (byte) ((painting || action == 1) ? newBlockType : 0))
+                {
+                    if (painting || message[7] != newBlockType)
+                    {
+                        SendBlockchange(x, y, z, targetBlockType);
+                    }
+                    return;
+                }
+                
+                // Action Processing
+                // 0 == Deletion
+                // 1 == Placement
+
+                // Delete block requests only go through if we are not painting
+                if (!painting && action == 0)
+                {
+                    // Warn the server if the player places a block around the spawn area
                     if ((x == level.spawnx) && (y == level.spawny - 1) && (z == level.spawnz)) // if player deletes the spawn block or adjacent-ish
                     {
                         Player.GlobalChat(this, (this.name + " has deleted a spawn block."), false);
@@ -523,7 +564,7 @@ namespace MCSharp
                         Player.GlobalChat(this, (this.name + " has deleted a spawn block."), false);
                         IRCBot.Say("Global: " + (this.name + " has deleted a spawn block."));
                     }
-                    deleteBlock(b, type, x, y, z);
+                    deleteBlock(targetBlockType, newBlockType, x, y, z);
                 }
                 else    //player is placing a block
                 {
@@ -537,10 +578,8 @@ namespace MCSharp
                         Player.GlobalChat(this, (this.name + " has deleted a spawn block."), false);
                         IRCBot.Say("Global: " + (this.name + " has deleted a spawn block."));
                     }
-                    placeBlock(b, type, x, y, z);
+                    placeBlock(targetBlockType, newBlockType, x, y, z);
                 }
-                section++;
-
             }
             catch (Exception e)
             {
@@ -548,7 +587,6 @@ namespace MCSharp
                 Logger.Log(e.Message, LogType.ErrorMessage);
                 GlobalMessageOps(name + " has triggered a block change error");
                 IRCBot.Say(name + " has triggered a block change error");
-                Player.GlobalMessage("An error occurred in section " + section + " : " + e.Message);
             }
         }
 

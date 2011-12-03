@@ -17,7 +17,8 @@ namespace MCSharp
 
         // Code to run when used by a player
 		public override void Use(Player p,string message)  
-        { // TODO
+        { 
+            // TODO: Get a better list of levels available. Possibly managed by the level loading facilities
             if (message == "")
             {
                 // Loaded Levels

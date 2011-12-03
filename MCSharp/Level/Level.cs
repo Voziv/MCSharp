@@ -1226,7 +1226,7 @@ namespace MCSharp
         
         public void PhysSpongeRemoved(int b)         //Reactivates near water
         {
-            //TODO Calc only edge
+            //TODO: Calculate only the edge area to activate the physics
             int temp = 0;
             for (int x = -3; x <= +3; ++x)
             {
