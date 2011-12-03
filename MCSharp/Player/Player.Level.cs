@@ -284,8 +284,7 @@ namespace MCSharp
                 case 7:    // sapling >> tree
                     if (type == Block.shrub)
                     {
-                        Random rand = new System.Random();
-                        AddTree2(this.level, x, y, z, rand);
+                        AddTree(x, y, z);
                     }
                     else
                     {
@@ -594,19 +593,17 @@ namespace MCSharp
         /// <summary>
         /// Handles adding a tree to the world when using the tree command
         /// </summary>
-        /// <param name="Lvl">The level the tree is being added to</param>
         /// <param name="x">The x coordinate of the block</param>
         /// <param name="y">The t coordinate of the block</param>
         /// <param name="z">The z coordinate of the block</param>
-        /// <param name="Rand">A random number generator?</param>
-        void AddTree2 (Level Lvl, ushort x, ushort z, ushort y, Random Rand)
+        void AddTree (ushort x, ushort z, ushort y)
         {
-            byte height = (byte) Rand.Next(4, 7);
+            byte height = (byte) rand.Next(4, 7);
             for (ushort zz = 0; zz < height; zz++)
             {
-                if (Lvl.GetTile(x, (ushort) (z + zz), y) == Block.air)   //Not likly to trigger anyway
+                if (level.GetTile(x, (ushort) (z + zz), y) == Block.air)   //Not likly to trigger anyway
                 {
-                    Lvl.Blockchange(x, (ushort) (z + zz), y, Block.trunk);
+                    level.Blockchange(x, (ushort) (z + zz), y, Block.trunk);
                 }
                 else
                 {
@@ -622,15 +619,15 @@ namespace MCSharp
                 {
                     for (short zz = (short) -top; zz <= top; ++zz)
                     {
-                        if (Lvl.GetTile((ushort) (x + xx), (ushort) (z + zz + height), (ushort) (y + yy)) == Block.air)   //Not likly to trigger anyway
+                        if (level.GetTile((ushort) (x + xx), (ushort) (z + zz + height), (ushort) (y + yy)) == Block.air)   //Not likly to trigger anyway
                         {
                             //short Dist = (short)(Math.Abs(xx) + Math.Abs(yy) + Math.Abs(zz));
                             short Dist = (short) (Math.Sqrt(xx * xx + yy * yy + zz * zz));
                             if (Dist < top + 1)
                             {
-                                if (Rand.Next((int) (Dist)) < 2)
+                                if (rand.Next((int) (Dist)) < 2)
                                 {
-                                    Lvl.Blockchange((ushort) (x + xx), (ushort) (z + zz + height), (ushort) (y + yy), Block.leaf);
+                                    level.Blockchange((ushort) (x + xx), (ushort) (z + zz + height), (ushort) (y + yy), Block.leaf);
                                 }
                             }
                         }
