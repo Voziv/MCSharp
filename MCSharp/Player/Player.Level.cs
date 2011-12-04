@@ -47,6 +47,10 @@ namespace MCSharp
 
         public Block doors = new Block();
 
+        /// <summary>
+        /// Sends the player to a new level
+        /// </summary>
+        /// <param name="strLevel">The name of the level</param>
         public void ChangeLevel (string strLevel)
         {
             foreach (Level level in Server.levels)
@@ -59,6 +63,10 @@ namespace MCSharp
             }
         }
 
+        /// <summary>
+        /// Sends the player to a new level
+        /// </summary>
+        /// <param name="lvlLevel">The level object to send the player to</param>
         public void ChangeLevel (Level lvlLevel)
         {
             Loading = true;
@@ -675,6 +683,7 @@ namespace MCSharp
             });
         }
         public static void GlobalUpdate () { players.ForEach(delegate(Player p) { if (!p.hidden) { p.UpdatePosition(); } }); }
+        
         #endregion
     }
 }
