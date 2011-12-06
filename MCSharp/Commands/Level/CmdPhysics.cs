@@ -23,23 +23,23 @@ namespace MCSharp
                     int temp = int.Parse(message);
                     if (temp >= 0 && temp <= 2)
                     {
-                        p.level.physics = temp;
-                        switch (temp)
+                        p.level.Physics = (Physics)temp;
+                        switch (p.level.Physics)
                         {
-                            case 0:
+                            case Physics.Off:
                                 p.level.ClearPhysics();
                                 Player.GlobalMessageLevel(p.level, "Physics is now &cOFF&e on &b" + p.level.name + "&e.");
                                 Logger.Log("Physics is now OFF on " + p.level.name + ".");
                                 IRCBot.Say("Physics is now OFF on " + p.level.name + ".");
                                 break;
 
-                            case 1:
+                            case Physics.Normal:
                                 Player.GlobalMessageLevel(p.level, "Physics is now &aNormal&e on &b" + p.level.name + "&e.");
                                 Logger.Log("Physics is now ON on " + p.level.name + ".");
                                 IRCBot.Say("Physics is now ON on " + p.level.name + ".");
                                 break;
 
-                            case 2:
+                            case Physics.Advanced:
                                 Player.GlobalMessageLevel(p.level, "Physics is now &aAdvanced&e on &b" + p.level.name + "&e.");
                                 Logger.Log("Physics is now ADVANCED on " + p.level.name + ".");
                                 IRCBot.Say("Physics is now ADVANCED on " + p.level.name + ".");

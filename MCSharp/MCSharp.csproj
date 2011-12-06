@@ -75,6 +75,8 @@
     <Compile Include="Heartbeat\WOMHeartbeat.cs" />
     <Compile Include="Heartbeat\Heartbeat.cs" />
     <Compile Include="Heartbeat\MinecraftHeartbeat.cs" />
+    <Compile Include="Level\Level.Physics.cs" />
+    <Compile Include="Level\Physics.cs" />
     <Compile Include="Player\Player.Chat.cs" />
     <Compile Include="Player\Player.Commands.cs" />
     <Compile Include="Player\Player.Level.cs" />

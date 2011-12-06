@@ -98,29 +98,32 @@ namespace MCSharp
             }
 
             p.SendMessage("Converting " + buffer.Count.ToString() + " blocks into door_material.");
-            int tempPhysics = p.level.physics; //Disable physics, turn it on after locking
-            p.level.physics = 0;
+            
+            // Disable physics before changing the blocks
+            Physics physicsSetting = p.level.Physics;
+            p.level.Physics = Physics.Off;
             p.level.ClearPhysics();
+
             // Because we are calling ClearPhysics() we do not need to account for doorair_material. These materials will be
             // converted back into door_material automatically.
 
             buffer.ForEach(delegate(Pos pos)
             {
-                byte bl = p.level.GetTile(pos.x, pos.y, pos.z); //Get the block that is there at the moment
-                byte newbl = Block.convertDoor(bl);
-                if (newbl != bl)  // if the block is doorifiable
-                {                    
-                    if (!opMats.doorBlocks.Contains(bl)) // if the block is not already a door
+                byte oldBlock = p.level.GetTile(pos.x, pos.y, pos.z); //Get the block that is there at the moment
+                byte newBlock = Block.convertDoor(oldBlock);
+                if (newBlock != oldBlock)  // if the block is doorifiable
+                {
+                    if (!opMats.doorBlocks.Contains(oldBlock)) // if the block is not already a door
                     {
-                        if (!ignoreList.Contains(newbl)) // if the new block is not being ignored
+                        if (!ignoreList.Contains(newBlock)) // if the new block is not being ignored
                         {
-                            p.level.Blockchange(p, pos.x, pos.y, pos.z, newbl); // send converted reg_material
+                            p.level.Blockchange(p, pos.x, pos.y, pos.z, newBlock); // send converted reg_material
                         }
                     }
                 }
             });
 
-            p.level.physics = tempPhysics;
+            p.level.Physics = physicsSetting;
             p.SendMessage("Conversion complete.");
         }
 

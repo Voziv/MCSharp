@@ -114,7 +114,7 @@ namespace MCSharp
 
 
                     // Init physics
-                    physThread = new Thread(new ThreadStart(Physics));
+                    physThread = new Thread(new ThreadStart(doPhysics));
                     physThread.Start();
 
                     // Autosaver init
@@ -402,7 +402,7 @@ namespace MCSharp
                                     int temp = int.Parse(value);
                                     if (temp >= 0 && temp <= 2)
                                     {
-                                        mainLevel.physics = temp;
+                                        mainLevel.Physics = (Physics)temp;
                                     }
                                 }
                                 catch
@@ -653,7 +653,7 @@ namespace MCSharp
             }
         }
 
-        public static void Physics()
+        public static void doPhysics()
         {
             int wait = 250;
             while (true)
@@ -677,7 +677,7 @@ namespace MCSharp
                         {
                             try
                             {
-                                L.physics = 0;
+                                L.Physics = Physics.Off;
                                 L.ClearPhysics();
                             }
                             catch

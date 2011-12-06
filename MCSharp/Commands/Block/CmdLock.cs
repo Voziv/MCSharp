@@ -99,8 +99,10 @@ namespace MCSharp
             }
 
             p.SendMessage("Locking " + buffer.Count.ToString() + " blocks.");
-            int tempPhysics = p.level.physics; //Disable physics, turn it on after locking
-            p.level.physics = 0;
+
+            // Disable physics before changing the blocks
+            Physics physicsSetting = p.level.Physics;
+            p.level.Physics = Physics.Off;
             p.level.ClearPhysics();
 
             buffer.ForEach(delegate(Pos pos)
@@ -114,8 +116,8 @@ namespace MCSharp
                     }
                 }
             });
-               
-            p.level.physics = tempPhysics;
+
+            p.level.Physics = physicsSetting;
             p.SendMessage("Locking complete.");
         }
 

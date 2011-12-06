@@ -41,7 +41,9 @@ namespace MCSharp
                             p.level.depth = temp.depth;
 
                             p.level.blocks = temp.blocks;
-                            p.level.physics = 0;
+
+                            // Disable physics before restoring
+                            p.level.Physics = Physics.Off;
                             p.level.ClearPhysics();
 
                             ushort x, y, z;

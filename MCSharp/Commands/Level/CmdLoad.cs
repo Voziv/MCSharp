@@ -86,7 +86,7 @@ namespace MCSharp
                                             int temp = int.Parse(phys);
                                             if (temp >= 0 && temp <= 2)
                                             {
-                                                level.physics = temp;
+                                                level.Physics = (Physics)temp;
                                             }
                                         }
                                         catch
@@ -193,7 +193,7 @@ namespace MCSharp
                                             int temp = int.Parse(phys);
                                             if (temp >= 0 && temp <= 2)
                                             {
-                                                level.physics = temp;
+                                                level.Physics = (Physics)temp;
                                             }
                                         }
                                         catch

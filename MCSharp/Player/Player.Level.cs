@@ -192,12 +192,15 @@ namespace MCSharp
             {
                 if (targetBlockType.Equals(doors.doorBlocks[i]))
                 {
-                    //this.SendMessage("block checked ok");
                     doorCheck = true;
-                    if (level.physics != 0)
-                    { level.Blockchange(this, x, y, z, (doors.doorAirBlocks[i])); }
+                    if (level.Physics != Physics.Off)
+                    { 
+                        level.Blockchange(this, x, y, z, (doors.doorAirBlocks[i]));
+                    }
                     else
-                    { SendBlockchange(x, y, z, targetBlockType); /*this.SendMessage("break1 out of loop");*/ }
+                    {
+                        SendBlockchange(x, y, z, targetBlockType);
+                    }
                 }
                 else if (targetBlockType.Equals(doors.doorAirBlocks[i]))
                 {
@@ -206,7 +209,9 @@ namespace MCSharp
                 }
 
             }
-            if (!doorCheck) //if the block hasn't been changed, add air
+
+            // If the block hasn't been changed, add air
+            if (!doorCheck) 
             {
                 //this.SendMessage("loop failed, regular delete");
                 level.Blockchange(this, x, y, z, (byte) (Block.air));
@@ -227,7 +232,7 @@ namespace MCSharp
             switch (BlockAction)
             {
                 case 0:     //normal
-                    if (level.physics == 0)
+                    if (level.Physics == Physics.Off)
                     {
                         switch (newBlockType)
                         {

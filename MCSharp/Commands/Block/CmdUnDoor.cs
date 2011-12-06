@@ -103,8 +103,10 @@ namespace MCSharp
             }
 
             p.SendMessage("Converting " + buffer.Count.ToString() + " blocks to reg_material");
-            int tempPhysics = p.level.physics; //Disable physics, turn it on after locking
-            p.level.physics = 0;
+
+            // Disable physics before changing the blocks
+            Physics physicsSetting = p.level.Physics;
+            p.level.Physics = Physics.Off;
             p.level.ClearPhysics();
             // Because we are calling ClearPhysics() we do not need to account for doorair_material. These materials will be
             // converted back into door_material automatically.
@@ -125,7 +127,7 @@ namespace MCSharp
                 }
             });
 
-            p.level.physics = tempPhysics;
+            p.level.Physics = physicsSetting;
             p.SendMessage("Conversion complete.");
         }
 

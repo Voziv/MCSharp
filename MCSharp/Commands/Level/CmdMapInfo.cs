@@ -19,17 +19,17 @@ namespace MCSharp
             if (message == "")
             {
                 p.SendMessage("Currently on &b" + p.level.name + "&e X:" + p.level.width.ToString() + " Y:" + p.level.depth.ToString() + " Z:" + p.level.height.ToString());
-                switch (p.level.physics)
+                switch (p.level.Physics)
                 {
-                    case 0:
+                    case Physics.Off:
                         p.SendMessage("Physics is &cOFF&e.");
                         break;
 
-                    case 1:
+                    case Physics.Normal:
                         p.SendMessage("Physics is &aNormal&e.");
                         break;
 
-                    case 2:
+                    case Physics.Advanced:
                         p.SendMessage("Physics is &aAdvanced&e.");
                         break;
                 }
