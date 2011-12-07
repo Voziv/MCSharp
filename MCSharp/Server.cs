@@ -667,7 +667,7 @@ namespace MCSharp
         {
             if (input[0] != '/')
             {
-                Player.GlobalMessage(input);
+                Player.GlobalMessage("[Console]: &f" + input);
                 Logger.Log(input, LogType.GlobalChat);
             }
             else
@@ -698,8 +698,8 @@ namespace MCSharp
                                     {
                                         output += "/" + command.Name + ", ";
                                     }
-                                    Logger.Log(output, LogType.ConsoleOutput);
                                 }
+                                Logger.Log(output, LogType.ConsoleOutput);
                             }
                             catch (Exception e)
                             {
