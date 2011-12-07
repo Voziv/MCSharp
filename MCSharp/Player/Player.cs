@@ -7,12 +7,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using System.Threading;
 
 namespace MCSharp
 {
     public sealed partial class Player
     {
-        public static BindingList<Player> players = new BindingList<Player>();
+        public static ThreadedBindingList<Player> players = new ThreadedBindingList<Player>();
 
         /// <summary>
         /// This needs a better description. What does left do?
@@ -485,6 +486,11 @@ Next: message = message.Substring(lines[lines.Count - 1].Length);
             }
             spamBlockLog.Enqueue(DateTime.Now);
             return false;
+        }
+
+        public override string ToString ()
+        {
+            return name;
         }
     }
 }

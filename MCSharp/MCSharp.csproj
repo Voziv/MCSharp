@@ -70,6 +70,7 @@
     <Compile Include="Global\GlobalFunctions.cs" />
     <Compile Include="Global\Pos.cs" />
     <Compile Include="Global\SolidType.cs" />
+    <Compile Include="Global\ThreadedBindingList.cs" />
     <Compile Include="Global\UndoBuffer.cs" />
     <Compile Include="Heartbeat\MCSharpUpdateHeartbeat.cs" />
     <Compile Include="Heartbeat\WOMHeartbeat.cs" />
