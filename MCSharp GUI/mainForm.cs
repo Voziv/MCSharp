@@ -17,10 +17,6 @@ namespace MCSharp_GUI
 {
     public partial class mainForm : Form
     {
-
-        bool shutdownComplete = false;
-        bool shuttingDown = false;
-        string CurrentHash = "";
         BindingList<string> playerList = new BindingList<string>();
         Server server;
         LogType LogTypes;
