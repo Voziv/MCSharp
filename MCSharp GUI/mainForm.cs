@@ -207,6 +207,11 @@ namespace MCSharp_GUI
             chatTextbox.Text = String.Empty;
         }
 
+        private void playNowButton_Click (object sender, EventArgs e)
+        {
+            Process.Start(externalURLTextbox.Text);
+        }
+
 
     }
 }
