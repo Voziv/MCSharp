@@ -42,7 +42,6 @@
             this.PCTimer = new System.Windows.Forms.Timer(this.components);
             this.BGWorker1 = new System.ComponentModel.BackgroundWorker();
             this.playerListbox = new System.Windows.Forms.ListBox();
-            this.resetButton = new System.Windows.Forms.Button();
             this.playNowButton = new System.Windows.Forms.Button();
             this.externalURLTextbox = new System.Windows.Forms.RichTextBox();
             this.mainTabControl = new System.Windows.Forms.TabControl();
@@ -158,16 +157,6 @@
             this.playerListbox.Size = new System.Drawing.Size(121, 368);
             this.playerListbox.TabIndex = 5;
             // 
-            // resetButton
-            // 
-            this.resetButton.Location = new System.Drawing.Point(646, 27);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(121, 23);
-            this.resetButton.TabIndex = 7;
-            this.resetButton.Text = "ResetBindings( )";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
-            // 
             // playNowButton
             // 
             this.playNowButton.Enabled = false;
@@ -177,6 +166,7 @@
             this.playNowButton.TabIndex = 13;
             this.playNowButton.Text = "Play Now";
             this.playNowButton.UseVisualStyleBackColor = true;
+            this.playNowButton.Click += new System.EventHandler(this.playNowButton_Click);
             // 
             // externalURLTextbox
             // 
@@ -275,7 +265,6 @@
             this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.externalURLTextbox);
             this.Controls.Add(this.playNowButton);
-            this.Controls.Add(this.resetButton);
             this.Controls.Add(this.playerListbox);
             this.Controls.Add(this.mainFormStatusStrip);
             this.Controls.Add(this.mainFormMenuStrip);
@@ -310,7 +299,6 @@
         internal System.Windows.Forms.Timer PCTimer;
         private System.ComponentModel.BackgroundWorker BGWorker1;
         private System.Windows.Forms.ListBox playerListbox;
-        private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Button playNowButton;
         private System.Windows.Forms.RichTextBox externalURLTextbox;
         private System.Windows.Forms.ToolStripStatusLabel serverStatusLabel;

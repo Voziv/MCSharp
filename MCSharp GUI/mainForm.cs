@@ -192,11 +192,6 @@ namespace MCSharp_GUI
             server.Start();
         }
 
-        private void resetButton_Click(object sender, EventArgs e)
-        {
-            Player.players.ResetBindings();
-        }
-
         private void autoScrollCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (consoleLogAutoScrollCheckbox.Checked)
