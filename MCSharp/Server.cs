@@ -665,75 +665,78 @@ namespace MCSharp
 
         public void ParseInput (string input)        //Handle console commands
         {
-            if (input[0] != '/')
+            if (input.Length > 0)
             {
-                Player.GlobalMessage("[Console]: &f" + input);
-                Logger.Log(input, LogType.GlobalChat);
-            }
-            else
-            {
-                input = input.Substring(1).Trim();
-                string cmd;
-                string[] splitInput;
-                string msg;
-                string output = "";
-
-                splitInput = input.Split(' ');
-                cmd = splitInput[0];
-                if (splitInput.Length > 1)
-                    msg = input.Substring(input.IndexOf(' ')).Trim();
-                else
-                    msg = "";
-                try
+                if (input[0] != '/')
                 {
-                    switch (cmd)
+                    Player.GlobalMessage("[Console]: &f" + input);
+                    Logger.Log(input, LogType.GlobalChat);
+                }
+                else
+                {
+                    input = input.Substring(1).Trim();
+                    string cmd;
+                    string[] splitInput;
+                    string msg;
+                    string output = "";
+
+                    splitInput = input.Split(' ');
+                    cmd = splitInput[0];
+                    if (splitInput.Length > 1)
+                        msg = input.Substring(input.IndexOf(' ')).Trim();
+                    else
+                        msg = "";
+                    try
                     {
-                        case "help":
-                            output = "Commands that the console can use: \n";
-                            try
-                            {
-                                foreach (Command command in Command.all.All())
+                        switch (cmd)
+                        {
+                            case "help":
+                                output = "Commands that the console can use: \n";
+                                try
                                 {
-                                    if (command.ConsoleSupport)
+                                    foreach (Command command in Command.all.All())
                                     {
-                                        output += "/" + command.Name + ", ";
+                                        if (command.ConsoleSupport)
+                                        {
+                                            output += "/" + command.Name + ", ";
+                                        }
                                     }
+                                    Logger.Log(output, LogType.ConsoleOutput);
                                 }
-                                Logger.Log(output, LogType.ConsoleOutput);
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.Log(e.Message, LogType.ErrorMessage);
-                            }
-                            output = output.Remove(output.Length - 2);
-                            break;
-                        default:
-                            Command runCmd = Command.all.Find(cmd);
-                            if (runCmd != null)
-                            {
-                                if (runCmd.ConsoleSupport)
+                                catch (Exception e)
                                 {
-                                    Logger.Log("/" + input, LogType.ConsoleOutput);
-                                    runCmd.Use(msg);
+                                    Logger.Log(e.Message, LogType.ErrorMessage);
+                                }
+                                output = output.Remove(output.Length - 2);
+                                break;
+                            default:
+                                Command runCmd = Command.all.Find(cmd);
+                                if (runCmd != null)
+                                {
+                                    if (runCmd.ConsoleSupport)
+                                    {
+                                        Logger.Log("/" + input, LogType.ConsoleOutput);
+                                        runCmd.Use(msg);
+                                    }
+                                    else
+                                    {
+                                        Logger.Log("This command is not supported by the console!", LogType.ConsoleOutput);
+                                    }
                                 }
                                 else
                                 {
-                                    Logger.Log("This command is not supported by the console!", LogType.ConsoleOutput);
+                                    Logger.Log("No such command!", LogType.ConsoleOutput);
                                 }
-                            }
-                            else
-                            {
-                                Logger.Log("No such command!", LogType.ConsoleOutput);
-                            }
-                            break;
+                                break;
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    Logger.Log(e.Message, LogType.ErrorMessage);
-                }
-                //Thread.Sleep(10);
+                    catch (Exception e)
+                    {
+                        Logger.Log(e.Message, LogType.ErrorMessage);
+                    }
+                    //Thread.Sleep(10);
 
+                }
             }
         }
 
