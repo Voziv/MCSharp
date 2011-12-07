@@ -6,13 +6,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-
+using System.ComponentModel;
 
 namespace MCSharp
 {
     public sealed partial class Player
     {
-        public static List<Player> players = new List<Player>(64);
+        public static BindingList<Player> players = new BindingList<Player>();
 
         /// <summary>
         /// This needs a better description. What does left do?

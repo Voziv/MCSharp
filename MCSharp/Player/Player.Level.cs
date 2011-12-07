@@ -654,7 +654,13 @@ namespace MCSharp
 
         public static void GlobalBlockchange (Map level, ushort x, ushort y, ushort z, byte type)
         {
-            players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
+            foreach (var player in Player.players)
+            {
+                if (player.level == level)
+                {
+                    player.SendBlockchange(x, y, z, type);
+                }
+            }
         }
 
         public static void GlobalRespawn (Player respawnTarget)
@@ -665,29 +671,65 @@ namespace MCSharp
 
         public static void GlobalSpawn (Player from, ushort x, ushort y, ushort z, byte rotx, byte roty, bool self)
         {
-            players.ForEach(delegate(Player p)
+            foreach (var player in Player.players)
             {
-                if (p.Loading && p != from) { return; }
-                if (p.level != from.level || (from.hidden && !self)) { return; }
-                if (p != from) { p.SendSpawn(from.id, from.color + from.name, x, y, z, rotx, roty); }
+                if (player.Loading && player != from)
+                {
+                    return;
+                }
+                if (player.level != from.level || (from.hidden && !self))
+                {
+                    return;
+                }
+                if (player != from)
+                {
+                    player.SendSpawn(from.id, from.color + from.name, x, y, z, rotx, roty);
+                }
                 else if (self)
                 {
-                    p.pos = new ushort[3] { x, y, z }; p.rot = new byte[2] { rotx, roty };
-                    p.oldpos = p.pos; p.basepos = p.pos; p.oldrot = p.rot;
-                    unchecked { p.SendSpawn((byte) -1, from.color + from.name, x, y, z, rotx, roty); }
+                    player.pos = new ushort[3] { x, y, z }; 
+                    player.rot = new byte[2] { rotx, roty };
+                    player.oldpos = player.pos; 
+                    player.basepos = player.pos; 
+                    player.oldrot = player.rot;
+                    unchecked
+                    {
+                        player.SendSpawn((byte) -1, from.color + from.name, x, y, z, rotx, roty);
+                    }
                 }
-            });
+            }
         }
         public static void GlobalDie (Player from, bool self)
         {
-            players.ForEach(delegate(Player p)
+            foreach (var player in Player.players)
             {
-                if (p.level != from.level || (from.hidden && !self)) { return; }
-                if (p != from) { p.SendDie(from.id); }
-                else if (self) { unchecked { p.SendDie((byte) -1); } }
-            });
+                if (player.level != from.level || (from.hidden && !self))
+                {
+                    return;
+                }
+                if (player != from)
+                {
+                    player.SendDie(from.id);
+                }
+                else if (self)
+                {
+                    unchecked
+                    {
+                        player.SendDie((byte) -1);
+                    }
+                }
+            }
         }
-        public static void GlobalUpdate () { players.ForEach(delegate(Player p) { if (!p.hidden) { p.UpdatePosition(); } }); }
+        public static void GlobalUpdate ()
+        {
+            foreach (var player in Player.players)
+            {
+                if (!player.hidden)
+                {
+                    player.UpdatePosition();
+                }
+            }
+        }
         
         #endregion
     }

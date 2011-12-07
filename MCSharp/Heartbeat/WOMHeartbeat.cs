@@ -17,11 +17,14 @@ namespace MCSharp.Heartbeat
 
         public static void Init ()
         {
-            instance = new WOMHeartbeat();
-            worker = new BackgroundWorker();
-            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
-            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-            worker.RunWorkerAsync();
+            if (instance == null)
+            {
+                instance = new WOMHeartbeat();
+                worker = new BackgroundWorker();
+                worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+                worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
+                worker.RunWorkerAsync();
+            }
         }
         static void worker_DoWork (object sender, DoWorkEventArgs e)
         {

@@ -10,15 +10,36 @@ namespace MCSharp.Heartbeat
     public class MCSharpUpdateHeartbeat : Heartbeat
     {
         static BackgroundWorker worker;
-        static MCSharpUpdateHeartbeat instance;
+        private static MCSharpUpdateHeartbeat instance;
+
+        public static MCSharpUpdateHeartbeat Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    Init();
+                }
+                return instance;
+            }
+
+            set { instance = value; }
+        }
+
+
+        public bool UpdateAvailable { get { return _updateAvailable; } }
+        private bool _updateAvailable = false;
 
         public static void Init ()
         {
-            instance = new MCSharpUpdateHeartbeat();
-            worker = new BackgroundWorker();
-            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
-            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-            worker.RunWorkerAsync();
+            if (instance == null)
+            {
+                instance = new MCSharpUpdateHeartbeat();
+                worker = new BackgroundWorker();
+                worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+                worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
+                worker.RunWorkerAsync();
+            }
         }
         static void worker_DoWork (object sender, DoWorkEventArgs e)
         {

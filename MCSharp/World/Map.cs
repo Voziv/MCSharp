@@ -138,7 +138,7 @@ namespace MCSharp.World
                 {
                     Directory.CreateDirectory("levels/backups/" + name + "/1");
                 }
-                Backup("levels/backups/" + name + "/1");
+                Backup();
             }
         }
 

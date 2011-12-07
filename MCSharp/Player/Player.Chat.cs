@@ -195,36 +195,67 @@ namespace MCSharp
         }
         public static void GlobalChat (Player from, string message, bool showname)
         {
-            if (showname) { message = from.color + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { p.SendChat(from, message); });
+            if (showname)
+            {
+                message = from.color + from.name + ": &f" + message;
+            }
+
+            foreach (var pl in players)
+            {
+                pl.SendChat(from, message);
+            }
         }
         public static void GlobalChatLevel (Player from, string message, bool showname)
         {
-            if (showname) { message = "<Map>" + from.color + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level)p.SendChat(from, message); });
+            if (showname)
+            {
+                message = "<Map>" + from.color + from.name + ": &f" + message;
+            }
+            foreach (var pl in players)
+            {
+                if (pl.level == from.level)
+                {
+                    pl.SendChat(from, message);
+                }
+            }
         }
         public static void GlobalChatWorld (Player from, string message, bool showname)
         {
-            if (showname) { message = "<World>" + from.color + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { p.SendChat(from, message); });
+            if (showname)
+            {
+                message = "<World>" + from.color + from.name + ": &f" + message;
+            }
+            foreach (var pl in players)
+            {
+                pl.SendChat(from, message);
+            }
         }
         public static void GlobalMessage (string message)
         {
-            players.ForEach(delegate(Player p) { p.SendMessage(message); });
+            foreach (var player in Player.players)
+            {
+                player.SendMessage(message);
+            }
         }
         public static void GlobalMessageLevel (Map l, string message)
         {
-            players.ForEach(delegate(Player p) { if (p.level == l) p.SendMessage(message); });
+            foreach (var player in Player.players)
+            {
+                if (player.level == l)
+                {
+                    player.SendMessage(message);
+                }
+            }
         }
         public static void GlobalMessageOps (string message)     //Send a global messege to ops only
         {
-            players.ForEach(delegate(Player p)
+            foreach (var player in Player.players)
             {
-                if (p.Rank >= GroupEnum.Moderator)
+                if (player.Rank >= GroupEnum.Moderator)
                 {
-                    p.SendMessage(message);
+                    player.SendMessage(message);
                 }
-            });
+            }
         }
 
         #endregion

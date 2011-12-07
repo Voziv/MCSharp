@@ -6,27 +6,27 @@ namespace MCSharp
     public class CmdOps : Command
     {
         // Constructor
-        public CmdOps(CommandGroup g, GroupEnum group, string name) : base(g, group, name) { blnConsoleSupported = false; /* By default no console support*/ }
+        public CmdOps (CommandGroup g, GroupEnum group, string name) : base(g, group, name) { blnConsoleSupported = false; /* By default no console support*/ }
 
         // Command usage help
-        public override void Help(Player p)
+        public override void Help (Player p)
         {
             p.SendMessage("/ops - Lists all online operators.");
         }
-        
+
         // Code to run when used by a player
-        public override void Use(Player p, string message)
+        public override void Use (Player p, string message)
         {
             if (message == "")
             {
                 string strOperators = "";
-                Player.players.ForEach(delegate(Player pl)
+                foreach (var pl in Player.players)
                 {
                     if (pl.Rank == GroupEnum.Operator && (!pl.hidden || p.Rank >= pl.Rank))
                     {
                         strOperators += pl.color + pl.name + ", ";
                     }
-                });
+                }
                 if (strOperators == "")
                 {
                     strOperators = "No operators currently online";

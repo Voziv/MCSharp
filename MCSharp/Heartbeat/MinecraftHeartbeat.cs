@@ -9,19 +9,40 @@ namespace MCSharp.Heartbeat
 {
     public class MinecraftHeartbeat : Heartbeat
     {
+        
+        public static int MissedBeats { get { return Instance.Attempts; } }
+
         static BackgroundWorker worker;
+
         static MinecraftHeartbeat instance;
+        public static MinecraftHeartbeat Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    Init();
+                }
+                return instance;
+            }
+
+            set { instance = value; }
+        }
+        
         static string _hash = null;
         static string externalURL = "";
         public static string Hash { get { return _hash; } }
 
         public static void Init ()
         {
-            instance = new MinecraftHeartbeat();
-            worker = new BackgroundWorker();
-            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
-            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-            worker.RunWorkerAsync();
+            if (instance == null)
+            {
+                instance = new MinecraftHeartbeat();
+                worker = new BackgroundWorker();
+                worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+                worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
+                worker.RunWorkerAsync();
+            }
         }
         static void worker_DoWork (object sender, DoWorkEventArgs e)
         {
@@ -54,6 +75,9 @@ namespace MCSharp.Heartbeat
 
         public bool DoHeartBeat ()
         {
+            // Increment the attempts
+            _attempts++;
+
             bool success = false;
             byte[] formData = { };
 
@@ -104,6 +128,9 @@ namespace MCSharp.Heartbeat
                         externalURL = line;
                         Server.s.UpdateUrl(externalURL);
                         File.WriteAllText("externalurl.txt", externalURL);
+
+                        // We have success, write to the file!
+                        _attempts = 0;
                         Logger.Log(line, LogType.Debug);
                     }
                 }

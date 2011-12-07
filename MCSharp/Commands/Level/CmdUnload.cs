@@ -2,53 +2,53 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using MCSharp.World;
-namespace MCSharp 
+namespace MCSharp
 {
-	public class CmdUnload : Command 
+    public class CmdUnload : Command
     {
-		// Constructor 
-        public CmdUnload(CommandGroup g, GroupEnum group, string name) : base(g, group, name) { blnConsoleSupported = true; /* By default no console support*/ }
-        
+        // Constructor 
+        public CmdUnload (CommandGroup g, GroupEnum group, string name) : base(g, group, name) { blnConsoleSupported = true; /* By default no console support*/ }
+
         // Command usage help
-        public override void Help(Player p)
+        public override void Help (Player p)
         {
             p.SendMessage("/unload [level] - Unloads a level.");
         }
 
         // Code to run when used by a player
-		public override void Use(Player p,string message)  
+        public override void Use (Player p, string message)
         {
             bool blnLevelFound = false;
             Map targetLevel = null;
 
 			foreach (Map level in Server.levels) 
             {
-				if (level.name.ToLower() == message.ToLower()) 
+                if (level.name.ToLower() == message.ToLower())
                 {
                     targetLevel = level;
                     blnLevelFound = true;
-				}
-			}
+                }
+            }
 
 
             if (blnLevelFound)
             {
                 if (targetLevel != Server.mainLevel)
                 {
-                    Player.players.ForEach(delegate(Player pl)
+                    foreach (var pl in Player.players)
                     {
                         if (pl.level == targetLevel)
                         {
                             Player.GlobalDie(pl, true);
                         }
-                    });
+                    }
 
-                   
 
-                    Player.players.ForEach(delegate(Player pl) { if (pl.level == targetLevel) { pl.SendMotd(); } });
-                    ushort x = (ushort)((0.5 + Server.mainLevel.spawnx) * 32);
-                    ushort y = (ushort)((1 + Server.mainLevel.spawny) * 32);
-                    ushort z = (ushort)((0.5 + Server.mainLevel.spawnz) * 32);
+
+                    foreach (var pl in Player.players) { if (pl.level == targetLevel) { pl.SendMotd(); } }
+                    ushort x = (ushort) ((0.5 + Server.mainLevel.spawnx) * 32);
+                    ushort y = (ushort) ((1 + Server.mainLevel.spawny) * 32);
+                    ushort z = (ushort) ((0.5 + Server.mainLevel.spawnz) * 32);
 
                     List<Player> userList = new List<Player>();
 
@@ -80,10 +80,10 @@ namespace MCSharp
             {
                 p.SendMessage("There is no level \"" + message + "\" loaded.");
             }
-		}
+        }
 
         // Code to run when used by console
-        public override void Use(string message)
+        public override void Use (string message)
         {
             bool blnLevelFound = false;
             Map targetLevel = null;
@@ -102,18 +102,24 @@ namespace MCSharp
             {
                 if (targetLevel != Server.mainLevel)
                 {
-                    Player.players.ForEach(delegate(Player pl)
+                    foreach (var pl in Player.players)
                     {
                         if (pl.level == targetLevel)
                         {
                             Player.GlobalDie(pl, true);
                         }
-                    });
+                    }
 
-                    Player.players.ForEach(delegate(Player pl) { if (pl.level == targetLevel) { pl.SendMotd(); } });
-                    ushort x = (ushort)((0.5 + Server.mainLevel.spawnx) * 32);
-                    ushort y = (ushort)((1 + Server.mainLevel.spawny) * 32);
-                    ushort z = (ushort)((0.5 + Server.mainLevel.spawnz) * 32);
+                    foreach (var pl in Player.players)
+                    {
+                        if (pl.level == targetLevel)
+                        {
+                            pl.SendMotd();
+                        }
+                    }
+                    ushort x = (ushort) ((0.5 + Server.mainLevel.spawnx) * 32);
+                    ushort y = (ushort) ((1 + Server.mainLevel.spawny) * 32);
+                    ushort z = (ushort) ((0.5 + Server.mainLevel.spawnz) * 32);
 
                     List<Player> userList = new List<Player>();
 
@@ -146,5 +152,5 @@ namespace MCSharp
                 Logger.Log("There is no level \"" + message + "\" loaded.", LogType.ConsoleOutput);
             }
         }
-	}
+    }
 }

@@ -8,16 +8,16 @@ namespace MCSharp
     class CmdRestore : Command
     {
         // Constructor
-        public CmdRestore(CommandGroup g, GroupEnum group, string name) : base(g, group, name) { blnConsoleSupported = false; /* By default no console support*/ }
+        public CmdRestore (CommandGroup g, GroupEnum group, string name) : base(g, group, name) { blnConsoleSupported = false; /* By default no console support*/ }
 
         // Command usage help
-        public override void Help(Player p)
+        public override void Help (Player p)
         {
             p.SendMessage("/restore <number> - restores a previous backup of the current map");
         }
 
         // Code to run when used by a player
-        public override void Use(Player p, string message)
+        public override void Use (Player p, string message)
         {
             if (message != "")
             {
@@ -47,10 +47,10 @@ namespace MCSharp
                             p.level.ClearPhysics();
 
                             ushort x, y, z;
-                            
-                            Player.players.ForEach(delegate(Player pl) 
+
+                            foreach (var pl in Player.players)
                             {
-                                if (pl.level == p.level) 
+                                if (pl.level == p.level)
                                 {
                                     pl.Loading = true;
 
@@ -59,11 +59,11 @@ namespace MCSharp
                                     {
                                         if (pl.level == pl2.level && pl != pl2)
                                         {
-                                            pl.SendDie(pl2.id); 
+                                            pl.SendDie(pl2.id);
                                         }
                                     }
 
-                                    
+
 
                                     pl.ClearBlockchange();
                                     pl.BlockAction = 0;
@@ -71,16 +71,16 @@ namespace MCSharp
                                     Player.GlobalDie(pl, true);
                                     pl.SendMotd();
                                     pl.SendMap();
-                                    x = (ushort)((0.5 + pl.level.spawnx) * 32);
-                                    y = (ushort)((1 + pl.level.spawny) * 32);
-                                    z = (ushort)((0.5 + pl.level.spawnz) * 32);
+                                    x = (ushort) ((0.5 + pl.level.spawnx) * 32);
+                                    y = (ushort) ((1 + pl.level.spawny) * 32);
+                                    z = (ushort) ((0.5 + pl.level.spawnz) * 32);
                                     if (!pl.hidden)
                                     {
                                         Player.GlobalSpawn(pl, x, y, z, pl.level.rotx, pl.level.roty, true);
                                     }
                                     else unchecked
                                         {
-                                            pl.SendPos((byte)-1, x, y, z, pl.level.rotx, pl.level.roty);
+                                            pl.SendPos((byte) -1, x, y, z, pl.level.rotx, pl.level.roty);
                                         }
                                     foreach (Player pl2 in Player.players)
                                     {
@@ -89,12 +89,13 @@ namespace MCSharp
                                             pl.SendSpawn(pl2.id, pl2.color + pl2.name, pl2.pos[0], pl2.pos[1], pl2.pos[2], pl2.rot[0], pl2.rot[1]);
                                         }
                                     }
-                                    
+
                                     pl.Loading = false;
                                 }
                                 GC.Collect();
                                 GC.WaitForPendingFinalizers();
-                            });
+
+                            }
                         }
                         else
                         {

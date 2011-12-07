@@ -22,13 +22,13 @@ namespace MCSharp
             if (message == "")
             {
                 playerList = "";
-                Player.players.ForEach(delegate(Player pl)
+                foreach (var pl in Player.players)
                 {
                     if (pl.hidden && p.Rank >= pl.Rank)
                     {
                         playerList += pl.color + pl.name + "&e, ";
                     }
-                });
+                }
 
                 if (playerList == "")
                 {

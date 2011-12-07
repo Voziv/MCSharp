@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -18,11 +19,11 @@ namespace MCSharp
         public static double LatestVersion = VersionNumber;
 
 
-        public delegate void LogHandler(string message);
-        public delegate void HeartBeatHandler();
-        public delegate void MessageEventHandler(string message);
-        public delegate void PlayerListHandler(List<Player> playerList);
-        public delegate void VoidHandler();
+        public delegate void LogHandler (string message);
+        public delegate void HeartBeatHandler ();
+        public delegate void MessageEventHandler (string message);
+        public delegate void PlayerListHandler (BindingList<Player> playerList);
+        public delegate void VoidHandler ();
 
         public event MessageEventHandler OnURLChange;
         public event PlayerListHandler OnPlayerListChange;
@@ -72,13 +73,13 @@ namespace MCSharp
         private bool running;
 
         // Constructor
-        public Server()
+        public Server ()
         {
             //ml = new MainLoop("server");
             Server.s = this;
         }
 
-        public void Start()
+        public void Start ()
         {
             Logger.Log("Starting Server");
             running = true;
@@ -132,10 +133,13 @@ namespace MCSharp
 
         public void Stop ()
         {
-            List<Player> kickList = Player.players;
-            kickList.ForEach(delegate(Player p) { p.Kick("Server shutdown."); });
-            kickList = Player.connections;
-            kickList.ForEach(delegate(Player p) { p.Kick("Server shutdown."); });
+            BindingList<Player> kickList = Player.players;
+            foreach (var pl in Player.players)
+            {
+                pl.Kick("Server Shutdown.");
+            }
+            List<Player> connKickList = Player.connections;
+            connKickList.ForEach(delegate(Player p) { p.Kick("Server shutdown."); });
 
             if (physThread != null)
                 physThread.Abort();
@@ -152,7 +156,7 @@ namespace MCSharp
         /// Checks the MCSharp environment to ensure everything is ready to launch
         /// </summary>
         /// <returns>Returns if all the checks passed</returns>
-        bool SanityCheck()
+        bool SanityCheck ()
         {
             bool blnSane = true;
             try
@@ -224,7 +228,7 @@ namespace MCSharp
             return blnSane;
         }
 
-        bool hasWriteAccessToFolder(string path)
+        bool hasWriteAccessToFolder (string path)
         {
             bool hasAccess = true;
             try
@@ -248,13 +252,13 @@ namespace MCSharp
             return hasAccess;
         }
 
-        void SetupIRC()
+        void SetupIRC ()
         {
             if (Properties.IRCEnabled)
                 new IRCBot();
         }
 
-        void SetupGeneral()
+        void SetupGeneral ()
         {
             // Setup Position Updates
             updateTimer.Elapsed += delegate
@@ -323,7 +327,7 @@ namespace MCSharp
 
         }
 
-        void SetupLevels()
+        void SetupLevels ()
         {
             levels = new List<Map>(Properties.MaxMaps);
             MapGen = new MapGenerator();
@@ -402,7 +406,7 @@ namespace MCSharp
                                     int temp = int.Parse(value);
                                     if (temp >= 0 && temp <= 2)
                                     {
-                                        mainLevel.Physics = (Physics)temp;
+                                        mainLevel.Physics = (Physics) temp;
                                     }
                                 }
                                 catch
@@ -433,7 +437,7 @@ namespace MCSharp
             }
         }
 
-        bool SetupNetwork()
+        bool SetupNetwork ()
         {
             bool success = true;
             try
@@ -443,7 +447,7 @@ namespace MCSharp
                 listen = new Socket(endpoint.Address.AddressFamily,
                                     SocketType.Stream, ProtocolType.Tcp);
                 listen.Bind(endpoint);
-                listen.Listen((int)SocketOptionName.MaxConnections);
+                listen.Listen((int) SocketOptionName.MaxConnections);
 
                 listen.BeginAccept(new AsyncCallback(Accept), null);
             }
@@ -466,7 +470,7 @@ namespace MCSharp
             return success;
         }
 
-        void SetupRanks()
+        void SetupRanks ()
         {
             if (File.Exists("ranks/admins.txt"))
             {
@@ -499,13 +503,13 @@ namespace MCSharp
         /// </summary>
         /// <returns>True if port is open</returns>
         /// <remarks>Based on an example given by Fragmer (me at matvei dot org)</remarks>
-        public static bool doPortCheck()
+        public static bool doPortCheck ()
         {
             bool portOpen = false;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.utorrent.com/testport?plain=1&port=" + Properties.ServerPort);
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                HttpWebRequest request = (HttpWebRequest) WebRequest.Create("http://www.utorrent.com/testport?plain=1&port=" + Properties.ServerPort);
+                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -536,7 +540,7 @@ namespace MCSharp
             return portOpen;
         }
 
-        static void Accept(IAsyncResult result)
+        static void Accept (IAsyncResult result)
         {
             // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
             // -Descention
@@ -544,7 +548,7 @@ namespace MCSharp
             {
                 Logger.Log("Accepting New Connection", LogType.Debug);
                 new Player(listen.EndAccept(result));
-                
+
                 listen.BeginAccept(new AsyncCallback(Accept), null);
             }
             catch (SocketException e)
@@ -557,10 +561,16 @@ namespace MCSharp
             }
         }
 
-        public static void ForceExit()
+        public static void ForceExit ()
         {
-            Player.players.ForEach(delegate(Player p) { p.Kick("Server shutdown."); });
-            Player.connections.ForEach(delegate(Player p) { p.Kick("Server shutdown."); });
+            foreach (var player in Player.players)
+            {
+                player.Kick("Server shutdown.");
+            }
+            Player.connections.ForEach(delegate(Player p)
+            {
+                p.Kick("Server shutdown.");
+            });
 
             if (physThread != null)
                 physThread.Abort();
@@ -572,12 +582,12 @@ namespace MCSharp
 
         }
 
-        public void PlayerListUpdate()
+        public void PlayerListUpdate ()
         {
             if (Server.s.OnPlayerListChange != null) Server.s.OnPlayerListChange(Player.players);
         }
 
-        public void UpdateUrl(string url)
+        public void UpdateUrl (string url)
         {
             if (OnURLChange != null) OnURLChange(url);
         }
@@ -586,7 +596,7 @@ namespace MCSharp
         /// This function parses input from the server console. In reality the server console should handle the wait for input
         /// and call a function within the library to parse a specific command.
         /// </summary>
-        public void ParseInput()        //Handle console commands
+        public void ParseInput ()        //Handle console commands
         {
             string cmd;
             string msg;
@@ -653,7 +663,81 @@ namespace MCSharp
             }
         }
 
-        public static void doPhysics()
+        public void ParseInput (string input)        //Handle console commands
+        {
+            if (input[0] != '/')
+            {
+                Player.GlobalMessage(input);
+                Logger.Log(input, LogType.GlobalChat);
+            }
+            else
+            {
+                input = input.Substring(1).Trim();
+                string cmd;
+                string[] splitInput;
+                string msg;
+                string output = "";
+
+                splitInput = input.Split(' ');
+                cmd = splitInput[0];
+                if (splitInput.Length > 1)
+                    msg = input.Substring(input.IndexOf(' ')).Trim();
+                else
+                    msg = "";
+                try
+                {
+                    switch (cmd)
+                    {
+                        case "help":
+                            output = "Commands that the console can use: \n";
+                            try
+                            {
+                                foreach (Command command in Command.all.All())
+                                {
+                                    if (command.ConsoleSupport)
+                                    {
+                                        output += "/" + command.Name + ", ";
+                                    }
+                                    Logger.Log(output, LogType.ConsoleOutput);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.Log(e.Message, LogType.ErrorMessage);
+                            }
+                            output = output.Remove(output.Length - 2);
+                            break;
+                        default:
+                            Command runCmd = Command.all.Find(cmd);
+                            if (runCmd != null)
+                            {
+                                if (runCmd.ConsoleSupport)
+                                {
+                                    Logger.Log("/" + input, LogType.ConsoleOutput);
+                                    runCmd.Use(msg);
+                                }
+                                else
+                                {
+                                    Logger.Log("This command is not supported by the console!", LogType.ConsoleOutput);
+                                }
+                            }
+                            else
+                            {
+                                Logger.Log("No such command!", LogType.ConsoleOutput);
+                            }
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(e.Message, LogType.ErrorMessage);
+                }
+                //Thread.Sleep(10);
+
+            }
+        }
+
+        public static void doPhysics ()
         {
             int wait = 250;
             while (true)
@@ -670,7 +754,7 @@ namespace MCSharp
                         L.CalcPhysics();
                     });
                     TimeSpan Took = DateTime.Now - Start;
-                    wait = (int)250 - (int)Took.TotalMilliseconds;
+                    wait = (int) 250 - (int) Took.TotalMilliseconds;
                     if (wait < -Properties.PhysicsOverload)
                     {
                         levels.ForEach(delegate(Map L)    //update every level
@@ -689,7 +773,7 @@ namespace MCSharp
                         Player.GlobalMessage("!PHYSICS SHUTDOWN!");
                         wait = 250;
                     }
-                    else if (wait < (int)(-Properties.PhysicsOverload * 0.75f))
+                    else if (wait < (int) (-Properties.PhysicsOverload * 0.75f))
                     {
                         Logger.Log("Physics is getting a bit overloaded...", LogType.Debug);
                     }
@@ -704,19 +788,19 @@ namespace MCSharp
             }
         }
 
-        public static void RandomMessage()
+        public static void RandomMessage ()
         {
             if (Player.number != 0 && messages.Count > 0)
                 Player.GlobalMessage(messages[new Random().Next(0, messages.Count)]);
         }
 
-        internal void SettingsUpdate()
+        internal void SettingsUpdate ()
         {
             if (OnSettingsUpdate != null) OnSettingsUpdate();
         }
 
         //Added by bman
-        public static void SaveLastSeen()
+        public static void SaveLastSeen ()
         {
             List<string> saveList = new List<string>();
             foreach (KeyValuePair<string, DateTime> kvp in Player.lastSeen)
@@ -732,13 +816,13 @@ namespace MCSharp
         }
 
         //Added by bman
-        public static void LoadLastSeen()
+        public static void LoadLastSeen ()
         {
             // Deserialization
             List<string> loadList = new List<string>();
             XmlSerializer xs = new XmlSerializer(typeof(List<string>));
             TextReader xr = new StreamReader("lastseen.xml");
-            loadList = (List<string>)xs.Deserialize(xr);
+            loadList = (List<string>) xs.Deserialize(xr);
             xr.Close();
 
             Dictionary<string, DateTime> dict = new Dictionary<string, DateTime>();

@@ -6,6 +6,9 @@ namespace MCSharp.Heartbeat
     {
         protected HttpWebRequest request;
 
+        public int Attempts { get { return _attempts; } }
+        protected int _attempts = 0;
+
         protected int _timeout = 20000; // 20 * 1000 = 20 seconds
         public int Timeout { get { return _timeout; } }
 
@@ -15,7 +18,6 @@ namespace MCSharp.Heartbeat
 
         public Heartbeat ()
         {
-
         }
     }
 }
