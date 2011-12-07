@@ -2,7 +2,7 @@
 using System;
 
 
-namespace MCSharp
+namespace MCSharp.World
 {
 
     public class MapGenerator
@@ -18,7 +18,7 @@ namespace MCSharp
 
         }
 
-        public bool GenerateMap(Level Lvl, string type)
+        public bool GenerateMap(Map Lvl, string type)
         {
             Logger.Log("Attemping to generate a map. Type: " + type);
             if (Inuse) 
@@ -218,7 +218,7 @@ namespace MCSharp
 
         //condensed fault generator
         #region ==FaultGen==
-        void GenerateFault(float[] array,Level Lvl, string type, Random rand)
+        void GenerateFault(float[] array,Map Lvl, string type, Random rand)
         {
             float startheight = 0.5f;
             float dispAux;
@@ -310,7 +310,7 @@ namespace MCSharp
 
         //hur hur, more copy pasted code :/
         #region ==PerlinGen==
-        void GeneratePerlinNoise(float[] array, Level Lvl, string type, Random rand)
+        void GeneratePerlinNoise(float[] array, Map Lvl, string type, Random rand)
         {
             GenerateNormalized(array, 0.7f, 8, Lvl.width, Lvl.height, rand.Next(), 64);
         }
@@ -399,7 +399,7 @@ namespace MCSharp
         #endregion
 
         //
-        void AddTree(Level Lvl, ushort x, ushort z, ushort y, Random Rand)
+        void AddTree(Map Lvl, ushort x, ushort z, ushort y, Random Rand)
         {
             byte height = (byte)Rand.Next(4, 7);
             for (ushort zz = 0; zz < height; zz++)
@@ -439,7 +439,7 @@ namespace MCSharp
             }
         }
 
-        private bool TreeCheck(Level Lvl, ushort x, ushort z, ushort y, short dist)         //return true if tree is near
+        private bool TreeCheck(Map Lvl, ushort x, ushort z, ushort y, short dist)         //return true if tree is near
         {
             for (short xx = (short)-dist; xx <= +dist; ++xx)
             {
@@ -470,7 +470,7 @@ namespace MCSharp
         }
 
         //converts the float into a ushort for map height
-        ushort Evaluate(Level lvl, float height)
+        ushort Evaluate(Map lvl, float height)
         {
             ushort temp = (ushort)(height * lvl.depth);
             if (temp < 0) return 0;
@@ -479,7 +479,7 @@ namespace MCSharp
         }
 
         //applys the average filter
-        void FilterAverage(Level Lvl)
+        void FilterAverage(Map Lvl)
         {
             Logger.Log("Applying average filtering", LogType.Debug);
 
@@ -499,7 +499,7 @@ namespace MCSharp
         }
 
         //Averages over 5 points
-        float GetAverage5(ushort x, ushort y, Level Lvl)
+        float GetAverage5(ushort x, ushort y, Map Lvl)
         {
             divide = 0.0f;
             float temp = GetPixel(x, y, Lvl);
@@ -511,7 +511,7 @@ namespace MCSharp
             return temp / divide;
         }
         //Averages over 9 points
-        float GetAverage9(ushort x, ushort y, Level Lvl)
+        float GetAverage9(ushort x, ushort y, Map Lvl)
         {
             divide = 0.0f;
             float temp = GetPixel(x, y, Lvl);
@@ -529,7 +529,7 @@ namespace MCSharp
         }
 
         //returns the valve of a x,y terrain coordinate
-        float GetPixel(ushort x, ushort y, Level Lvl)
+        float GetPixel(ushort x, ushort y, Map Lvl)
         {
             if (x < 0) { return 0.0f; }
             if (x >= Lvl.width) { return 0.0f; }
@@ -547,7 +547,7 @@ namespace MCSharp
         }
 
         //Forces the edge of a map to slope lower for island map types
-        float NegateEdge(ushort x, ushort y, Level Lvl)
+        float NegateEdge(ushort x, ushort y, Map Lvl)
         {
             float tempx = 0.0f, tempy = 0.0f;
             float temp;

@@ -6,7 +6,7 @@ using System.IO;
 using System.ComponentModel;
 
 
-namespace MCSharp
+namespace MCSharp.World
 {
 	class AutoSaver
 	{
@@ -39,7 +39,7 @@ namespace MCSharp
 			{
 				count--;
 
-				Server.levels.ForEach(delegate(Level l)
+				Server.levels.ForEach(delegate(Map l)
 				{
 					try
 					{

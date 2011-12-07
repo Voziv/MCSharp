@@ -19,7 +19,7 @@ namespace MCSharp
         Chat,
         Information,
         IRC,
-        Level,
+        Map,
         Block
     }
 }

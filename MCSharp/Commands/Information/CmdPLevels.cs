@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using MCSharp.World;
 namespace MCSharp
 {
     class CmdPLevels : Command
@@ -20,7 +20,7 @@ namespace MCSharp
         public override void Use(Player p, string message)
         {
             string strPlayers;
-            foreach (Level level in Server.levels)
+            foreach (Map level in Server.levels)
             {
                 strPlayers = "";
                 foreach (Player pl in Player.players)

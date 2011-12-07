@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public sealed partial class Player
@@ -200,7 +200,7 @@ namespace MCSharp
         }
         public static void GlobalChatLevel (Player from, string message, bool showname)
         {
-            if (showname) { message = "<Level>" + from.color + from.name + ": &f" + message; }
+            if (showname) { message = "<Map>" + from.color + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.level == from.level)p.SendChat(from, message); });
         }
         public static void GlobalChatWorld (Player from, string message, bool showname)
@@ -212,7 +212,7 @@ namespace MCSharp
         {
             players.ForEach(delegate(Player p) { p.SendMessage(message); });
         }
-        public static void GlobalMessageLevel (Level l, string message)
+        public static void GlobalMessageLevel (Map l, string message)
         {
             players.ForEach(delegate(Player p) { if (p.level == l) p.SendMessage(message); });
         }

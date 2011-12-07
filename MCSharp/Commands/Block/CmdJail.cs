@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 using System.Collections.Generic;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdJail : Command
@@ -103,7 +103,7 @@ namespace MCSharp
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (Level l in Server.levels)  //Check each level
+            foreach (Map l in Server.levels)  //Check each level
             {
                 if (l.jailedPlayers.Count > 0)  //Make sure level has jailed players
                 {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdLoad : Command
@@ -38,7 +38,7 @@ namespace MCSharp
                     }
 
                     // Make sure the level isn't already loaded
-                    foreach (Level l in Server.levels)
+                    foreach (Map l in Server.levels)
                     {
                         if (l.name == message)
                         {
@@ -56,14 +56,14 @@ namespace MCSharp
                                 if (File.Exists("levels/" + message + ".lvl"))
                                 {
                                     // Attempt to load the level
-                                    Level level = Level.Load(message);
+                                    Map level = Map.Load(message);
                                     if (level == null)
                                     {
                                         if (File.Exists("levels/" + message + ".lvl.backup"))
                                         {
                                             Logger.Log("Atempting to load backup.");
                                             File.Copy("levels/" + message + ".lvl.backup", "levels/" + message + ".lvl", true);
-                                            level = Level.Load(message);
+                                            level = Map.Load(message);
 
                                         }
                                         else
@@ -80,7 +80,7 @@ namespace MCSharp
                                         {
                                             Server.levels.Add(level);
                                         }
-                                        Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
+                                        Player.GlobalMessage("Map \"" + level.name + "\" loaded.");
                                         try
                                         {
                                             int temp = int.Parse(phys);
@@ -101,7 +101,7 @@ namespace MCSharp
                                 }
                                 else
                                 {
-                                    p.SendMessage("Level \"" + message + "\" doesn't exist!");
+                                    p.SendMessage("Map \"" + message + "\" doesn't exist!");
                                 }
                             }
                             else
@@ -111,7 +111,7 @@ namespace MCSharp
                         }
                         else
                         {
-                            p.SendMessage("Level capacity is 1 or lower, you can't load any levels!");
+                            p.SendMessage("Map capacity is 1 or lower, you can't load any levels!");
                         }
 
                     }
@@ -154,23 +154,23 @@ namespace MCSharp
                         message = message.ToLower();
                     }
 
-                    if (!Level.Loaded(message))
+                    if (!Map.Loaded(message))
                     {
                         if (Server.levels.Capacity > 1)
                         {
                             if (Server.levels.Count < Server.levels.Capacity)
                             {
-                                if (Level.Exists(message))
+                                if (Map.Exists(message))
                                 {
                                     // Attempt to load the level
-                                    Level level = Level.Load(message);
+                                    Map level = Map.Load(message);
                                     if (level == null)
                                     {
                                         if (File.Exists("levels/" + message + ".lvl.backup"))
                                         {
                                             Logger.Log("Atempting to load backup.", LogType.ConsoleOutput);
                                             File.Copy("levels/" + message + ".lvl.backup", "levels/" + message + ".lvl", true);
-                                            level = Level.Load(message);
+                                            level = Map.Load(message);
 
                                         }
                                         else
@@ -187,7 +187,7 @@ namespace MCSharp
                                         {
                                             Server.levels.Add(level);
                                         }
-                                        Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
+                                        Player.GlobalMessage("Map \"" + level.name + "\" loaded.");
                                         try
                                         {
                                             int temp = int.Parse(phys);
@@ -208,7 +208,7 @@ namespace MCSharp
                                 }
                                 else
                                 {
-                                    Logger.Log("Level \"" + message + "\" doesn't exist!", LogType.ConsoleOutput);
+                                    Logger.Log("Map \"" + message + "\" doesn't exist!", LogType.ConsoleOutput);
                                 }
                             }
                             else
@@ -218,7 +218,7 @@ namespace MCSharp
                         }
                         else
                         {
-                            Logger.Log("Level capacity is 1 or lower, you can't load any levels!", LogType.ConsoleOutput);
+                            Logger.Log("Map capacity is 1 or lower, you can't load any levels!", LogType.ConsoleOutput);
                         }
                     }
                     else

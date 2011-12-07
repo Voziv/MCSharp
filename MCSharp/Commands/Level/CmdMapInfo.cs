@@ -1,5 +1,5 @@
 using System;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdMapInfo : Command
@@ -34,7 +34,7 @@ namespace MCSharp
                         break;
                 }
 
-                p.SendMessage("Build rank = " + Level.PermissionToName(p.level.permissionbuild) + " : Visit rank = " + Level.PermissionToName(p.level.permissionvisit) + ".");
+                p.SendMessage("Build rank = " + Map.PermissionToName(p.level.permissionbuild) + " : Visit rank = " + Map.PermissionToName(p.level.permissionvisit) + ".");
             }
             else
             { 

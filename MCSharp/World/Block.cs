@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MCSharp
+namespace MCSharp.World
 {
     public class Block
     {

@@ -1,5 +1,5 @@
 using System;
-
+using MCSharp.World;
 namespace MCSharp 
 {
 	public class CmdGoto : Command 
@@ -17,13 +17,13 @@ namespace MCSharp
         public override void Use(Player p,string message)  
         {
             bool blnLevelFound = false;
-            Level targetLevel = null;
+            Map targetLevel = null;
             if (message != "")
             {
                 message = message.ToLower();
                 if (p.level.name.ToLower() != message)
                 {
-                    foreach (Level level in Server.levels)
+                    foreach (Map level in Server.levels)
                     {
                         if (level.name.ToLower() == message)
                         {
@@ -49,7 +49,7 @@ namespace MCSharp
                     }
                     else
                     {
-                        // Level either not found or non-existant
+                        // Map either not found or non-existant
                         
                         p.SendMessage("There is no level \"" + message + "\" loaded.");
                     }

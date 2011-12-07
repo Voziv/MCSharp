@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdCopy : Command
@@ -72,7 +72,7 @@ namespace MCSharp
             dimY++;
             dimZ++;
 
-            Level copyLevel = p.level;
+            Map copyLevel = p.level;
 
             // Now that we have the positions, check the size
             // If it's too big, cancel

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCSharp
+
+namespace MCSharp.World
 {
-    public sealed partial class Level
+    public sealed partial class Map
     {
         public Physics Physics { get; set; }
 
@@ -313,7 +314,7 @@ namespace MCSharp
             }
             catch
             {
-                Logger.Log("Level physics error", LogType.Error);
+                Logger.Log("Map physics error", LogType.Error);
             }
         }
 

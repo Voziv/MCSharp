@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-
+using MCSharp.World;
 namespace MCSharp
 {
 	public class CmdLevels : Command 
@@ -27,7 +27,7 @@ namespace MCSharp
                 string message2 = "";
                 levels.Add(Server.mainLevel.name.ToLower());
                 bool Once = false;
-                Server.levels.ForEach(delegate(Level level)
+                Server.levels.ForEach(delegate(Map level)
                 {
                     if (level != Server.mainLevel)
                     {

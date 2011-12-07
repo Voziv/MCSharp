@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public sealed partial class Player
@@ -43,7 +43,7 @@ namespace MCSharp
         public static int spamBlockCount = 55;
         public static int spamBlockTimer = 5;
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
-        public Level level = Server.mainLevel; // Do we need a reference here? Maybe.
+        public Map level = Server.mainLevel; // Do we need a reference here? Maybe.
 
         public Block doors = new Block();
 
@@ -53,7 +53,7 @@ namespace MCSharp
         /// <param name="strLevel">The name of the level</param>
         public void ChangeLevel (string strLevel)
         {
-            foreach (Level level in Server.levels)
+            foreach (Map level in Server.levels)
             {
                 if (level.name.ToLower() == strLevel.ToLower())
                 {
@@ -67,7 +67,7 @@ namespace MCSharp
         /// Sends the player to a new level
         /// </summary>
         /// <param name="lvlLevel">The level object to send the player to</param>
-        public void ChangeLevel (Level lvlLevel)
+        public void ChangeLevel (Map lvlLevel)
         {
             Loading = true;
 
@@ -652,7 +652,7 @@ namespace MCSharp
 
         #region == GLOBAL MESSAGES ==
 
-        public static void GlobalBlockchange (Level level, ushort x, ushort y, ushort z, byte type)
+        public static void GlobalBlockchange (Map level, ushort x, ushort y, ushort z, byte type)
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
         }

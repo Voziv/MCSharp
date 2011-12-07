@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using MCSharp.World;
 namespace MCSharp
 {
     class CmdNewLvl : Command
@@ -43,7 +43,7 @@ namespace MCSharp
                     // create a new level...
                     try
                     {
-                        Level lvl = new Level(name,
+                        Map lvl = new Map(name,
                                               Convert.ToUInt16(parameters[1]),
                                               Convert.ToUInt16(parameters[2]),
                                               Convert.ToUInt16(parameters[3]),
@@ -56,7 +56,7 @@ namespace MCSharp
                         GC.WaitForPendingFinalizers();
 
                     }
-                    Player.GlobalMessage("Level " + name + " created");
+                    Player.GlobalMessage("Map " + name + " created");
                 }
                 else
                 {

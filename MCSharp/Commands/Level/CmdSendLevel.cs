@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdSendLevel : Command
@@ -33,7 +33,7 @@ namespace MCSharp
                 }
                 else
                 {
-                    foreach (Level l in Server.levels)
+                    foreach (Map l in Server.levels)
                     {
                         if (l.name == levelName)
                         {
@@ -60,7 +60,7 @@ namespace MCSharp
                         {
                             if (file.Name.Replace(".lvl", "").ToLower() == levelName.ToLower())
                             {
-                                p.SendMessage("That Level is not loaded yet!");
+                                p.SendMessage("That Map is not loaded yet!");
                             }
                         }
                         p.SendMessage("No such level!");

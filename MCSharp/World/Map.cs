@@ -6,12 +6,10 @@ using System.IO.Compression;
 ///You MUST make it able to save and load as a new version other wise you will make old levels incompatible!
 
 
-namespace MCSharp
+namespace MCSharp.World
 {
-    public sealed partial class Level
+    public sealed partial class Map
     {
-
-
 
         /// <summary>
         /// Old public class variables
@@ -52,7 +50,7 @@ namespace MCSharp
         public bool changed = false;
         private bool backedup = false;
         //public List<Edit> edits = new List<Edit>(1024);
-        public Level(string n, ushort x, ushort y, ushort z, string type)
+        public Map(string n, ushort x, ushort y, ushort z, string type)
         {
             this.Physics = Physics.Off;
 
@@ -130,7 +128,7 @@ namespace MCSharp
             spawny = (ushort)(depth * 0.75f);
             spawnz = (ushort)(height / 2);
             rotx = 0; roty = 0;
-            Logger.Log("Level initialized.");
+            Logger.Log("Map initialized.");
 
             if (type != "empty")
             {
@@ -212,7 +210,7 @@ namespace MCSharp
             }
             catch (Exception e)
             {
-                Logger.Log(p.name + " has triggered a block change error in Level on " + name, LogType.Error);
+                Logger.Log(p.name + " has triggered a block change error in Map on " + name, LogType.Error);
                 Logger.Log(e.Message, LogType.ErrorMessage);
                 Player.GlobalMessageOps(p.name + " has triggered a block change error in level.cs on " + name);
                 IRCBot.Say(p.name + " has triggered a block change error in level.cs on " + name);
@@ -291,7 +289,7 @@ namespace MCSharp
                     gs.Write(level, 0, level.Length);
                     gs.Close();
 
-                    Logger.Log("SAVED: Level \"" + name + "\". " + Player.players.Count + "/" + Properties.MaxPlayers);
+                    Logger.Log("SAVED: Map \"" + name + "\". " + Player.players.Count + "/" + Properties.MaxPlayers);
 
                     // Set changed to false as we've saved
                     // And backup to false because it now needs to be backed up!
@@ -346,7 +344,7 @@ namespace MCSharp
             }
             else
             {
-                Logger.Log("Level unchanged, skipping backup", LogType.Debug);
+                Logger.Log("Map unchanged, skipping backup", LogType.Debug);
                 return false;
             }
         }
@@ -398,16 +396,16 @@ namespace MCSharp
             }
             else
             {
-                Logger.Log("Level unchanged, skipping backup", LogType.Debug);
+                Logger.Log("Map unchanged, skipping backup", LogType.Debug);
             }
             return backedup;
         }
 
-        public static Level Load(string name) { return Load(name, Physics.Off); }
+        public static Map Load(string name) { return Load(name, Physics.Off); }
 
-        public static Level Load(string name, Physics phys)
+        public static Map Load(string name, Physics phys)
         {
-            Level level = null;
+            Map level = null;
             string path = "levels/" + name + ".lvl";
             if (File.Exists(path))
             {
@@ -429,7 +427,7 @@ namespace MCSharp
                         ushort width = BitConverter.ToUInt16(header, 0);
                         ushort height = BitConverter.ToUInt16(header, 2);
                         ushort depth = BitConverter.ToUInt16(header, 4);
-                        level = new Level(name, width, depth, height, "empty");
+                        level = new Map(name, width, depth, height, "empty");
                         level.spawnx = BitConverter.ToUInt16(header, 6);
                         level.spawnz = BitConverter.ToUInt16(header, 8);
                         level.spawny = BitConverter.ToUInt16(header, 10);
@@ -443,7 +441,7 @@ namespace MCSharp
                         ushort width = version;
                         ushort height = BitConverter.ToUInt16(header, 0);
                         ushort depth = BitConverter.ToUInt16(header, 2);
-                        level = new Level(name, width, depth, height, "empty");
+                        level = new Map(name, width, depth, height, "empty");
                         level.spawnx = BitConverter.ToUInt16(header, 4);
                         level.spawnz = BitConverter.ToUInt16(header, 6);
                         level.spawny = BitConverter.ToUInt16(header, 8);
@@ -459,7 +457,7 @@ namespace MCSharp
                         level.blocks[i] = blocks[i];
                     }
                     gs.Close();
-                    Logger.Log("LOADED: Level \"" + name + "\".");
+                    Logger.Log("LOADED: Map \"" + name + "\".");
                     level.backedup = true;
                 }
                 catch (Exception ex)
@@ -561,7 +559,7 @@ namespace MCSharp
         public static bool Loaded(string name)
         {
             bool blnLoaded = false;
-            foreach (Level level in Server.levels)
+            foreach (Map level in Server.levels)
             {
                 if (level.name == name)
                 {

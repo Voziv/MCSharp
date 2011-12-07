@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdCuboid : Command

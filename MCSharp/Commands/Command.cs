@@ -171,21 +171,21 @@ namespace MCSharp
             // IRC
             all.Add(new CmdResetBot(CommandGroup.IRC, GroupEnum.Operator, "resetbot"));
 
-            // Level Related           
-            all.Add(new CmdDeleteLvl(CommandGroup.Level, GroupEnum.Administrator, "deletelvl"));
-            all.Add(new CmdGoto(CommandGroup.Level, GroupEnum.Guest, "goto"));            
-            all.Add(new CmdLevels(CommandGroup.Level, GroupEnum.Guest, "levels"));
-            all.Add(new CmdLoad(CommandGroup.Level, GroupEnum.Moderator, "load"));            
-            all.Add(new CmdMapInfo(CommandGroup.Level, GroupEnum.Guest, "mapinfo"));
-            all.Add(new CmdNewLvl(CommandGroup.Level, GroupEnum.Moderator, "newlvl"));
-            all.Add(new CmdPermissionBuild(CommandGroup.Level, GroupEnum.Operator, "perbuild"));
-            all.Add(new CmdPermissionVisit(CommandGroup.Level, GroupEnum.Operator, "pervisit"));
-            all.Add(new CmdPhysics(CommandGroup.Level, GroupEnum.Moderator, "physics"));
-            all.Add(new CmdRestore(CommandGroup.Level, GroupEnum.Moderator, "restore"));
-            all.Add(new CmdSave(CommandGroup.Level, GroupEnum.Moderator, "save"));
-            all.Add(new CmdSendLevel(CommandGroup.Level, GroupEnum.Moderator, "sendlevel"));
-            all.Add(new CmdSetspawn(CommandGroup.Level, GroupEnum.Moderator, "setspawn"));
-            all.Add(new CmdUnload(CommandGroup.Level, GroupEnum.Moderator, "unload"));
+            // Map Related           
+            all.Add(new CmdDeleteLvl(CommandGroup.Map, GroupEnum.Administrator, "deletelvl"));
+            all.Add(new CmdGoto(CommandGroup.Map, GroupEnum.Guest, "goto"));            
+            all.Add(new CmdLevels(CommandGroup.Map, GroupEnum.Guest, "levels"));
+            all.Add(new CmdLoad(CommandGroup.Map, GroupEnum.Moderator, "load"));            
+            all.Add(new CmdMapInfo(CommandGroup.Map, GroupEnum.Guest, "mapinfo"));
+            all.Add(new CmdNewLvl(CommandGroup.Map, GroupEnum.Moderator, "newlvl"));
+            all.Add(new CmdPermissionBuild(CommandGroup.Map, GroupEnum.Operator, "perbuild"));
+            all.Add(new CmdPermissionVisit(CommandGroup.Map, GroupEnum.Operator, "pervisit"));
+            all.Add(new CmdPhysics(CommandGroup.Map, GroupEnum.Moderator, "physics"));
+            all.Add(new CmdRestore(CommandGroup.Map, GroupEnum.Moderator, "restore"));
+            all.Add(new CmdSave(CommandGroup.Map, GroupEnum.Moderator, "save"));
+            all.Add(new CmdSendLevel(CommandGroup.Map, GroupEnum.Moderator, "sendlevel"));
+            all.Add(new CmdSetspawn(CommandGroup.Map, GroupEnum.Moderator, "setspawn"));
+            all.Add(new CmdUnload(CommandGroup.Map, GroupEnum.Moderator, "unload"));
         }
     }
 }

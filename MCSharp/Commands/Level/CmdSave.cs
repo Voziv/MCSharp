@@ -1,5 +1,5 @@
 using System;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdSave : Command
@@ -19,7 +19,7 @@ namespace MCSharp
                 if (message == "")
                 {
                     p.level.Save();
-                    p.SendMessage("Level \"" + p.level.name + "\" saved.");
+                    p.SendMessage("Map \"" + p.level.name + "\" saved.");
                 }
                 else
                 {
@@ -31,7 +31,7 @@ namespace MCSharp
         public override void Use(string message)
         {
             Logger.Log("Forcing all loaded levels to save");
-            foreach (Level l in Server.levels)
+            foreach (Map l in Server.levels)
             {
                 l.Save();
             }

@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Xml.Serialization;
 using MCSharp.Heartbeat;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class Server
@@ -53,8 +53,8 @@ namespace MCSharp
 
         public static PlayerList ircControllers;
 
-        public static Level mainLevel;
-        public static List<Level> levels;
+        public static Map mainLevel;
+        public static List<Map> levels;
         public static List<string> afkset = new List<string>();
         public static List<string> messages = new List<string>();
 
@@ -325,21 +325,21 @@ namespace MCSharp
 
         void SetupLevels()
         {
-            levels = new List<Level>(Properties.MaxMaps);
+            levels = new List<Map>(Properties.MaxMaps);
             MapGen = new MapGenerator();
 
             Random random = new Random();
 
             if (File.Exists("levels/" + Properties.MainLevel + ".lvl"))
             {
-                mainLevel = Level.Load(Properties.MainLevel);
+                mainLevel = Map.Load(Properties.MainLevel);
                 if (mainLevel == null)
                 {
                     if (File.Exists("levels/" + Properties.MainLevel + ".lvl.backup"))
                     {
                         Logger.Log("Atempting to load backup.", LogType.Debug);
                         File.Copy("levels/" + Properties.MainLevel + ".lvl.backup", "levels/" + Properties.MainLevel + ".lvl", true);
-                        mainLevel = Level.Load(Properties.MainLevel);
+                        mainLevel = Map.Load(Properties.MainLevel);
                         if (mainLevel == null)
                         {
                             Logger.Log("BACKUP FAILED!", LogType.Error);
@@ -356,7 +356,7 @@ namespace MCSharp
             {
                 Logger.Log("Warning: No main.lvl found.", LogType.Debug);
                 Logger.Log("Creating Default main.lvl", LogType.Debug);
-                mainLevel = new Level(Properties.MainLevel, 128, 64, 128, "flat");
+                mainLevel = new Map(Properties.MainLevel, 128, 64, 128, "flat");
 
                 mainLevel.permissionvisit = LevelPermission.Guest;
                 mainLevel.permissionbuild = LevelPermission.Guest;
@@ -665,7 +665,7 @@ namespace MCSharp
                         Thread.Sleep(wait);
                     }
                     DateTime Start = DateTime.Now;
-                    levels.ForEach(delegate(Level L)    //update every level
+                    levels.ForEach(delegate(Map L)    //update every level
                     {
                         L.CalcPhysics();
                     });
@@ -673,7 +673,7 @@ namespace MCSharp
                     wait = (int)250 - (int)Took.TotalMilliseconds;
                     if (wait < -Properties.PhysicsOverload)
                     {
-                        levels.ForEach(delegate(Level L)    //update every level
+                        levels.ForEach(delegate(Map L)    //update every level
                         {
                             try
                             {

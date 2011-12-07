@@ -1,5 +1,5 @@
 using System;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdBind : Command

@@ -1,5 +1,5 @@
 using System;
-
+using MCSharp.World;
 namespace MCSharp
 {
     public class CmdPermissionVisit : Command
@@ -20,7 +20,7 @@ namespace MCSharp
             string strLevelName;
             string strPermission = message;
             bool blnLevelLoaded = false;
-            Level targetLevel;
+            Map targetLevel;
             LevelPermission lvlPermission;
 
             if (message != "" || number <= 2)
@@ -29,7 +29,7 @@ namespace MCSharp
                 strLevelName = targetLevel.name;
                 if (number == 1)
                 {
-                    lvlPermission = Level.PermissionFromName(message);
+                    lvlPermission = Map.PermissionFromName(message);
                     if (lvlPermission != LevelPermission.Null)
                     {
                         targetLevel.permissionvisit = lvlPermission;
@@ -47,11 +47,11 @@ namespace MCSharp
                     int pos = message.IndexOf(' ');
                     strLevelName = message.Substring(0, pos).ToLower();
                     strPermission = message.Substring(pos + 1).ToLower();
-                    lvlPermission = Level.PermissionFromName(strPermission);
+                    lvlPermission = Map.PermissionFromName(strPermission);
 
                     if (lvlPermission != LevelPermission.Null)
                     {
-                        foreach (Level level in Server.levels)
+                        foreach (Map level in Server.levels)
                         {
                             if (level.name.ToLower() == strLevelName.ToLower())
                             {

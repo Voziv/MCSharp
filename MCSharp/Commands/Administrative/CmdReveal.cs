@@ -46,7 +46,7 @@ namespace MCSharp
                         }
 
                         target.SendMessage("Oops, looks like all your greifing was for nothing!");
-                        p.SendMessage("Level revealed for: " + target.color + target.name);
+                        p.SendMessage("Map revealed for: " + target.color + target.name);
                         Player.GlobalMessageOps("-" + p.color + p.name + "&e just revealed the map to: " + target.color + target.name);
                         target.Loading = false;
                         GC.Collect();

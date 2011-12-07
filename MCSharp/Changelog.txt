@@ -205,7 +205,7 @@ Revision 213 (June 20th, 2010)
 
 Revision 212 (June 19th, 2010)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Raised Level Hard Cap to 200
+- Raised Map Hard Cap to 200
 - When restoring a map, all players reload the map instead of being kicked.
 - The way /hide works is a bit different now. While hidden you cannot recieve 
 private messages, get summoned, be teleported to, and so on.

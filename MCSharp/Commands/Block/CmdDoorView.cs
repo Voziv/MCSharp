@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MCSharp.World;
+
 namespace MCSharp
 {
     public class CmdDoorView : Command

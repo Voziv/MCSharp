@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-
+using MCSharp.World;
 namespace MCSharp
 {
     class CmdRestore : Command
@@ -29,7 +29,7 @@ namespace MCSharp
                     try
                     {
                         File.Copy(strBackupLevel, strCurrentLevel, true);
-                        Level temp = Level.Load(p.level.name);
+                        Map temp = Map.Load(p.level.name);
                         if (temp != null)
                         {
                             p.level.spawnx = temp.spawnx;

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-
+using MCSharp.World;
 namespace MCSharp 
 {
 	public class CmdUnload : Command 
@@ -19,9 +19,9 @@ namespace MCSharp
 		public override void Use(Player p,string message)  
         {
             bool blnLevelFound = false;
-            Level targetLevel = null;
+            Map targetLevel = null;
 
-			foreach (Level level in Server.levels) 
+			foreach (Map level in Server.levels) 
             {
 				if (level.name.ToLower() == message.ToLower()) 
                 {
@@ -63,13 +63,13 @@ namespace MCSharp
                     foreach (Player pl in userList)
                     {
                         Command.all.Find("goto").Use(pl, "main");
-                        pl.SendMessage("Level unloaded, you were sent back to the main level.");
+                        pl.SendMessage("Map unloaded, you were sent back to the main level.");
                     }
                     targetLevel.Save();
                     Server.levels.Remove(targetLevel);
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
-                    p.SendMessage("Level \"" + targetLevel.name + "\" unloaded.");
+                    p.SendMessage("Map \"" + targetLevel.name + "\" unloaded.");
                 }
                 else
                 {
@@ -86,9 +86,9 @@ namespace MCSharp
         public override void Use(string message)
         {
             bool blnLevelFound = false;
-            Level targetLevel = null;
+            Map targetLevel = null;
 
-            foreach (Level level in Server.levels)
+            foreach (Map level in Server.levels)
             {
                 if (level.name.ToLower() == message.ToLower())
                 {
@@ -128,13 +128,13 @@ namespace MCSharp
                     foreach (Player pl in userList)
                     {
                         Command.all.Find("goto").Use(pl, "main");
-                        pl.SendMessage("Level unloaded, you were sent back to the main level.");
+                        pl.SendMessage("Map unloaded, you were sent back to the main level.");
                     }
                     targetLevel.Save();
                     Server.levels.Remove(targetLevel);
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
-                    Logger.Log("Level \"" + targetLevel.name + "\" unloaded.", LogType.ConsoleOutput);
+                    Logger.Log("Map \"" + targetLevel.name + "\" unloaded.", LogType.ConsoleOutput);
                 }
                 else
                 {

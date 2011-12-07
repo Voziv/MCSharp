@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-
+using MCSharp.World;
 namespace MCSharp
 {
     class CmdDeleteLvl : Command
@@ -41,7 +41,7 @@ namespace MCSharp
                 if (levelfound)
                 {
                     // Is the level loaded?
-                    foreach (Level l in Server.levels)
+                    foreach (Map l in Server.levels)
                     {
                         if (l.name.ToLower() == levelName)
                         {
@@ -62,7 +62,7 @@ namespace MCSharp
                             File.Move("levels/" + levelName + ".lvl.backup", "levels/deleted/" + levelName + ".lvl.backup");
                         }
 
-                        // Delete Level file
+                        // Delete Map file
                         File.Delete("levels/" + levelName + ".lvl");
 
                         // And backup folders

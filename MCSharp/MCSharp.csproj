@@ -75,7 +75,7 @@
     <Compile Include="Heartbeat\WOMHeartbeat.cs" />
     <Compile Include="Heartbeat\Heartbeat.cs" />
     <Compile Include="Heartbeat\MinecraftHeartbeat.cs" />
-    <Compile Include="World\Level.Physics.cs" />
+    <Compile Include="World\Map.Physics.cs" />
     <Compile Include="World\Physics.cs" />
     <Compile Include="Player\Player.Chat.cs" />
     <Compile Include="Player\Player.Commands.cs" />
@@ -105,10 +105,9 @@
     <Compile Include="World\AutoSaver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="World\Blocks\Block.cs">
+    <Compile Include="World\Block.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="World\Blocks\BlockFlag.cs" />
     <Compile Include="World\LevelPermission.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\LogSource.cs" />
@@ -188,7 +187,7 @@
     <Compile Include="IRC\IRCBot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="World\Level.cs" />
+    <Compile Include="World\Map.cs" />
     <Compile Include="World\MapGenerator.cs" />
     <Compile Include="Misc.cs">
       <SubType>Code</SubType>
