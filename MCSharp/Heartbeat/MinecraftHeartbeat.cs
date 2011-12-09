@@ -126,7 +126,6 @@ namespace MCSharp.Heartbeat
                         string line = responseReader.ReadToEnd().Trim();
                         _hash = line.Substring(line.LastIndexOf('/') + 1);
                         externalURL = line;
-                        Server.s.UpdateUrl(externalURL);
                         File.WriteAllText("externalurl.txt", externalURL);
 
                         // We have success, write to the file!

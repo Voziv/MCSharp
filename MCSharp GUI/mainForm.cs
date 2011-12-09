@@ -66,7 +66,7 @@ namespace MCSharp_GUI
             if (MCSharpUpdateHeartbeat.Instance.UpdateAvailable)
             {
                 updateAvailableLabel.DisplayStyle = ToolStripItemDisplayStyle.Text;
-                updateAvailableLabel.Text = String.Format("NEW Version {0} available!", Server.LatestVersion);
+                updateAvailableLabel.Text = String.Format("NEW - Version {0} available!", Server.LatestVersion);
             }
             else
             {
@@ -99,7 +99,6 @@ namespace MCSharp_GUI
             
             server = new Server();
             server.OnSettingsUpdate += SettingsUpdate;
-            server.OnURLChange += UpdateUrl;
 
             playerListbox.DataSource = Player.players;
             Player.players.ListChanged += new ListChangedEventHandler(players_ListChanged);

@@ -15,6 +15,12 @@ namespace MCSharp
 {
     public sealed partial class Player
     {
+        /// <summary>
+        /// This is the byte that the client sends to identify the 
+        /// protocol version
+        /// </summary>
+        public const byte MinecraftClassicProtocolVersion = 7; 
+
         // Variables
         Socket socket;
         public string ip;
@@ -270,7 +276,7 @@ namespace MCSharp
 
                 if (Server.banned.Contains(name)) { Kick("You're banned!"); return; }
                 if (Player.players.Count >= Properties.MaxPlayers) { Kick("Server full!"); return; }
-                if (version != Server.version) { Kick("Wrong version!"); return; }
+                if (version != MinecraftClassicProtocolVersion) { Kick("Wrong version!"); return; }
                 if (name.Length > 16 || !ValidName(name)) { Kick("Illegal name!"); return; }
 
                 if (Properties.VerifyNames)
@@ -326,7 +332,7 @@ namespace MCSharp
                 players.Add(this);
                 connections.Remove(this);
 
-                Server.s.PlayerListUpdate();
+                
 
                 GlobalChat(this, "&a+ " + color + name + "&e joined the game.", false);
 
@@ -617,7 +623,6 @@ namespace MCSharp
                 IRCBot.Say(name + " left the game.");
                 Logger.Log(name + " disconnected.");
                 players.Remove(this);
-                Server.s.PlayerListUpdate();
                 /*if (!Server.console && Server.win != null)
                     Server.win.UpdateClientList(players);*/
                 left.Add(this.name.ToLower(), this.ip);
@@ -666,7 +671,6 @@ namespace MCSharp
                 GlobalChat(this, "&c- " + color + name + "&e kicked (" + message + ").", false);
                 Logger.Log(name + " was kicked. (" + message + ").");
                 players.Remove(this);
-                Server.s.PlayerListUpdate();
                 left.Add(this.name.ToLower(), this.ip);
             }
             else
@@ -724,7 +728,6 @@ namespace MCSharp
                 GlobalChat(this, "&c- " + color + name + "&e kicked (" + message + ").", false);
                 Logger.Log(name + " was kicked. (" + message + ").");
                 players.Remove(this);
-                Server.s.PlayerListUpdate();
                 left.Add(this.name.ToLower(), this.ip);
             }
             else
@@ -801,7 +804,7 @@ namespace MCSharp
         public void SendMotd ()
         {
             byte[] buffer = new byte[130];
-            buffer[0] = Server.version;
+            buffer[0] = MinecraftClassicProtocolVersion;
             StringFormat(Properties.ServerName, 64).CopyTo(buffer, 1);
             StringFormat(Properties.ServerMOTD, 64).CopyTo(buffer, 65);
             if (checkOp())

@@ -18,15 +18,10 @@ namespace MCSharp
         public static double VersionNumber { get { return 0.94; } }
         public static double LatestVersion = VersionNumber;
 
-
-        public delegate void LogHandler (string message);
-        public delegate void HeartBeatHandler ();
-        public delegate void MessageEventHandler (string message);
-        public delegate void PlayerListHandler (BindingList<Player> playerList);
+        /// <summary>
+        /// Used to
+        /// </summary>
         public delegate void VoidHandler ();
-
-        public event MessageEventHandler OnURLChange;
-        public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
 
         static Socket listen;
@@ -36,6 +31,9 @@ namespace MCSharp
 
         static Thread physThread;
 
+        /// <summary>
+        /// Player Lists
+        /// </summary>
         public static PlayerList administrators;
         public static PlayerList operators;
         public static PlayerList moderators;
@@ -44,8 +42,18 @@ namespace MCSharp
         public static PlayerList builders;
         public static PlayerList advbuilders;
         public static PlayerList bot;
-        public static MapGenerator MapGen;
+       
         public static PlayerList griefExempted;
+        public static List<string> griefExemption = new List<string>(); // Names not to be kicked from grief timer
+
+
+        /// <summary>
+        /// TODO: Bring the new map generator that isn't static in from the xmap branch
+        /// This declaration is deprecated
+        /// </summary>
+        public static MapGenerator MapGen;
+
+        
 
 
         public static PerformanceCounter PCCounter;
@@ -61,21 +69,15 @@ namespace MCSharp
 
         public static List<string> jokerMessages = new List<string>();
 
-        public static List<string> griefExemption = new List<string>(); // Names not to be kicked from grief timer
-
-
-        public const byte version = 7; // Need to figure out what this is for
         public static string salt = "";
 
-        //public static MainLoop ml;
         public static Server s;
 
-        private bool running;
+        private bool running = false;
 
         // Constructor
         public Server ()
         {
-            //ml = new MainLoop("server");
             Server.s = this;
         }
 
@@ -582,15 +584,6 @@ namespace MCSharp
 
         }
 
-        public void PlayerListUpdate ()
-        {
-            if (Server.s.OnPlayerListChange != null) Server.s.OnPlayerListChange(Player.players);
-        }
-
-        public void UpdateUrl (string url)
-        {
-            if (OnURLChange != null) OnURLChange(url);
-        }
 
         /// <summary>
         /// This function parses input from the server console. In reality the server console should handle the wait for input

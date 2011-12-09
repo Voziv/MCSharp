@@ -271,7 +271,6 @@ namespace MCSharp
                     }
                 }
                 Logger.Log("LOADED: server.properties");
-                Server.s.SettingsUpdate();
                 Save();
             }
             else
