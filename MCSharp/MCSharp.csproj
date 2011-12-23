@@ -190,9 +190,6 @@
     </Compile>
     <Compile Include="World\Map.cs" />
     <Compile Include="World\MapGenerator.cs" />
-    <Compile Include="Misc.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\PlayerList.cs" />
     <Compile Include="Properties.cs">
