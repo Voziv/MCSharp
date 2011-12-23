@@ -92,7 +92,7 @@ namespace MCSharp
                         allAvailableCommands += cmd.Name + ", ";
                     }
                 });
-                p.SendMessage("Commands available for " + p.group.Color + p.group.Name + "s" + c.yellow + ": ");
+                p.SendMessage("Commands available for " + p.group.Color + p.group.Name + "s" + ChatColor.Yellow + ": ");
                 allAvailableCommands = allAvailableCommands.Remove(allAvailableCommands.Length - 2);
                 p.SendMessage(allAvailableCommands);
             }

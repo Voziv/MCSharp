@@ -30,12 +30,12 @@ namespace MCSharp
                 if (Server.griefExempted.Contains(tempName))
                 {
                     Server.griefExempted.Remove(tempName);
-                    p.SendMessage(tempName + " was " + c.red + "removed" + c.yellow + " from anti-grief exemption");
+                    p.SendMessage(tempName + " was " + ChatColor.Red + "removed" + ChatColor.Yellow + " from anti-grief exemption");
                 }
                 else
                 {
                     Server.griefExempted.Add(tempName);
-                    p.SendMessage(tempName + " was " + c.green + "added" + c.yellow + " to anti-grief exemption");
+                    p.SendMessage(tempName + " was " + ChatColor.Green + "added" + ChatColor.Yellow + " to anti-grief exemption");
                 }
 
             }

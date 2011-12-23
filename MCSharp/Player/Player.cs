@@ -474,7 +474,7 @@ Next: message = message.Substring(lines[lines.Count - 1].Length);
                     if (spamTimer < spamBlockTimer)
                     {
                         this.Kick("You were kicked by antigrief system. Slow down.");
-                        SendMessage(c.red + name + " was kicked for suspected griefing.");
+                        SendMessage(ChatColor.Red + name + " was kicked for suspected griefing.");
                         Logger.Log(name + " was kicked for block spam (" + spamBlockCount + " blocks in " + spamTimer + " seconds)");
                         return true;
                     }

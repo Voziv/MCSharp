@@ -33,7 +33,7 @@ namespace MCSharp
                     else
                     {
 
-                        string color = c.Parse(message.Substring(pos + 1));
+                        string color = ChatColor.Parse(message.Substring(pos + 1));
                         if (color == "")
                         {
                             p.SendMessage("There is no color \"" + message + "\".");
@@ -44,7 +44,7 @@ namespace MCSharp
                         }
                         else
                         {
-                            Player.GlobalChat(target, target.color + "*" + FormatName(target.name) + " color changed to " + color + c.Name(color) + "&e.", false);
+                            Player.GlobalChat(target, target.color + "*" + FormatName(target.name) + " color changed to " + color + ChatColor.Name(color) + "&e.", false);
                             target.color = color;
 
                             Player.GlobalDie(target, false);
@@ -54,14 +54,14 @@ namespace MCSharp
                 }
                 else
                 {
-                    string color = c.Parse(message);
+                    string color = ChatColor.Parse(message);
                     if (color == "") { p.SendMessage("There is no color \"" + message + "\"."); }
                     else if (color == p.color) { p.SendMessage("You already have that color."); }
                     else
                     {
                         Player.GlobalChat(p, p.color + "*" + FormatName(p.name) +
                                           " color changed to " + color +
-                                          c.Name(color) + "&e.", false);
+                                          ChatColor.Name(color) + "&e.", false);
                         p.color = color; Player.GlobalDie(p, false);
                         Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
                     }
