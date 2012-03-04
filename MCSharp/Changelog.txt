@@ -1,6 +1,7 @@
 ﻿MCSharp 0.94
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - Now open source with cookies!
+- Disabled the automatic update checker. I don't have a reliable way to check github for new versions yet.
 
 MCSharp 0.93
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
